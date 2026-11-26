@@ -25,7 +25,7 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [x] Proyecto Rojo creado y subido a GitHub
 - [x] Selene, StyLua y Wally agregados con Rokit
 - [x] Estructura de carpetas: `Services/` (servidor), `Controllers/` (cliente), `Data/` y `Remotes` (compartido)
-- [ ] Remotos con límite de llamadas por segundo por jugador
+- [x] Remotos con límite de llamadas por segundo por jugador (`RateLimiter` + `Remotes.OnServerEvent`)
 
 ### Combate
 - [ ] Ataque básico del Warrior validado en servidor (distancia, cooldown, daño)
@@ -72,3 +72,4 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Proyecto Rojo subido a GitHub; creado este archivo de estado |
 | 26 nov 2026 | Selene, StyLua y Wally instalados; estructura de Services, Controllers, Data y Remotes con cargador Init/Start |
 | 26 nov 2026 | Documentos movidos a `docs/`; plantillas de fichas y borradores del jefe de prueba y 3 mobs |
+| 26 nov 2026 | Límite por jugador en remotos (cubeta de fichas): UseAbility 10/s, Dodge 3/s; probado en Studio |

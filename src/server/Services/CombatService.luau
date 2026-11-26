@@ -9,7 +9,7 @@ local Remotes = require(ReplicatedStorage.Shared.Remotes)
 local CombatService = {}
 
 function CombatService:Start()
-	Remotes.Event("UseAbility").OnServerEvent:Connect(function(player: Player, abilityId: unknown)
+	Remotes.OnServerEvent("UseAbility", function(player: Player, abilityId: unknown)
 		if typeof(abilityId) ~= "string" then
 			return
 		end
