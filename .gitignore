@@ -1,3 +1,12 @@
+# Project place file
+/eternia.rbxlx
+
+# Roblox Studio lock files
+/*.rbxlx.lock
+/*.rbxl.lock
+
+sourcemap.json
+
 # A fast, small, safe, gradually typed embeddable scripting language derived from Lua
 #
 # https://github.com/luau-lang/luau
