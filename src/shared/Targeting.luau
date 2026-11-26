@@ -73,4 +73,52 @@ function Targeting.InCone(origin: CFrame, range: number, arcDot: number): { Mode
 	return result
 end
 
+-- Enemigos vivos a menos de `radius` studs (desde su borde) de un punto, sin mirar dirección.
+function Targeting.InRadius(position: Vector3, radius: number): { Model }
+	local result: { Model } = {}
+	for _, instance in CollectionService:GetTagged("Enemy") do
+		if Targeting.IsAlive(instance) then
+			local enemy = instance :: Model
+			local offset = enemy:GetPivot().Position - position
+			if
+				math.abs(offset.Y) <= MAX_HEIGHT_DIFF
+				and (offset * FLAT).Magnitude - Targeting.Radius(enemy) <= radius
+			then
+				table.insert(result, enemy)
+			end
+		end
+	end
+	return result
+end
+
+-- Enemigos vivos en una franja recta al frente de `origin`: `length` de largo y
+-- `halfWidth` a cada lado. Devuelve cada uno con la distancia a la que queda.
+function Targeting.InLine(origin: CFrame, length: number, halfWidth: number): { { enemy: Model, along: number } }
+	local look = origin.LookVector * FLAT
+	if look.Magnitude < 1e-3 then
+		return {}
+	end
+	look = look.Unit
+	local result: { { enemy: Model, along: number } } = {}
+	for _, instance in CollectionService:GetTagged("Enemy") do
+		if Targeting.IsAlive(instance) then
+			local enemy = instance :: Model
+			local offset = enemy:GetPivot().Position - origin.Position
+			local flat = offset * FLAT
+			local along = flat:Dot(look)
+			local side = (flat - look * along).Magnitude
+			local radius = Targeting.Radius(enemy)
+			if
+				math.abs(offset.Y) <= MAX_HEIGHT_DIFF
+				and along > -radius
+				and along - radius <= length
+				and side - radius <= halfWidth
+			then
+				table.insert(result, { enemy = enemy, along = math.max(along, 0) })
+			end
+		end
+	end
+	return result
+end
+
 return Targeting

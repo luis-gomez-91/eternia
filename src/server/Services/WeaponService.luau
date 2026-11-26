@@ -1,6 +1,6 @@
 --!strict
--- Arma provisoria en la mano derecha según la clase (Data/Feedback.Weapons):
--- un bloque con forma de espada para que los tajos se entiendan. Se crea en
+-- Arma provisoria según la clase (Data/Feedback.Weapons): piezas simples pegadas
+-- a las manos para que cada clase se reconozca y sus golpes se entiendan. Se crea en
 -- el servidor para que todos la vean. Se reemplaza por el modelo final del arma.
 
 local Players = game:GetService("Players")
@@ -14,12 +14,13 @@ local GRIP_OFFSET = CFrame.new(0, -0.15, -0.3)
 
 local WeaponService = {}
 
-local function newPiece(name: string, size: Vector3, color: Color3, material: Enum.Material): Part
+local function newPiece(def: Feedback.WeaponPart, index: number): Part
 	local part = Instance.new("Part")
-	part.Name = name
-	part.Size = size
-	part.Color = color
-	part.Material = material
+	part.Name = `Piece{index}`
+	part.Size = def.Size
+	part.Color = def.Color
+	part.Material = def.Material or Enum.Material.SmoothPlastic
+	part.Shape = def.Shape or Enum.PartType.Block
 	part.CanCollide = false
 	part.CanQuery = false
 	part.CanTouch = false
@@ -28,41 +29,32 @@ local function newPiece(name: string, size: Vector3, color: Color3, material: En
 	return part
 end
 
-local function weld(part: BasePart, hand: BasePart, offset: CFrame)
-	local joint = Instance.new("Weld")
-	joint.Part0 = hand
-	joint.Part1 = part
-	joint.C0 = offset
-	joint.Parent = part
-end
-
 local function equip(player: Player, character: Model)
 	local classId = player:GetAttribute("Class")
-	local def = if typeof(classId) == "string" then Feedback.Weapons[classId] else nil
+	local parts = if typeof(classId) == "string" then Feedback.Weapons[classId] else nil
 	local existing = character:FindFirstChild(WEAPON_NAME)
 	if existing then
 		existing:Destroy()
 	end
-	if not def then
-		return
-	end
-	local hand = character:WaitForChild("RightHand", 10)
-	if not hand or not hand:IsA("BasePart") then
+	if not parts then
 		return
 	end
 
 	local model = Instance.new("Model")
 	model.Name = WEAPON_NAME
-
-	local hilt = newPiece("Hilt", def.HiltSize, def.HiltColor, Enum.Material.Wood)
-	weld(hilt, hand, GRIP_OFFSET)
-	hilt.Parent = model
-
-	local blade = newPiece("Blade", def.BladeSize, def.BladeColor, Enum.Material.Metal)
-	local bladeOffset = def.HiltSize.Z / 2 + def.BladeSize.Z / 2
-	weld(blade, hand, GRIP_OFFSET * CFrame.new(0, 0, -bladeOffset))
-	blade.Parent = model
-
+	for index, def in parts do
+		local hand = character:WaitForChild(def.Hand, 10)
+		if not hand or not hand:IsA("BasePart") then
+			continue
+		end
+		local piece = newPiece(def, index)
+		local joint = Instance.new("Weld")
+		joint.Part0 = hand
+		joint.Part1 = piece
+		joint.C0 = GRIP_OFFSET * def.Offset
+		joint.Parent = piece
+		piece.Parent = model
+	end
 	model.Parent = character
 end
 

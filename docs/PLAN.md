@@ -299,6 +299,17 @@ El ataque básico no gasta recurso ni tiene espera: con Energía la genera y con
 
 Las habilidades de clase del Warrior son Tajo (golpe amplio a todos los enemigos al frente), Grito de batalla (más daño por unos segundos y Energía al instante) y Embestida (carga hasta un enemigo y lo golpea).
 
+Las de las otras clases (las 3 primeras, iguales para sus 3 especializaciones):
+
+|   |   |   |   |
+|---|---|---|---|
+|Clase|Nivel 1|Nivel 3|Nivel 6|
+|Paladín|Golpe sagrado: golpe fuerte con luz sobre el objetivo|Consagración: suelo sagrado que daña alrededor durante 6 s|Luz sanadora: cura 25% de vida a uno mismo y aliados cercanos|
+|Ranger|Disparo potente: flecha tensada que hace mucho daño|Lluvia de flechas: área en el objetivo con 3 pulsos|Retirada: salto hacia atrás|
+|Mage|Orbe arcano|Parpadeo|Barrera de maná (en el prototipo se prueba Bola de fuego en su lugar)|
+|Sacerdote|Castigo: luz que cae sobre el objetivo|Curación: cura 30% a uno mismo y aliados cercanos|Nova sagrada: daña alrededor y cura un poco al grupo|
+|Brujo|Corrupción: daño en el tiempo|Drenar vida: daño en el tiempo que cura al que lo lanza|Explosión de sombra: área en el objetivo|
+
 Las otras 2 ramas del Mage usan las mismas 3 habilidades de clase y cambian el resto. Escarcha usa Lanza de hielo, Nova helada y Ventisca, con pasivas que hacen más daño a enemigos ralentizados o congelados. Arcano usa Explosión arcana, Misiles arcanos y Poder arcano, con pasivas de cargas arcanas: cada Explosión suma una carga que sube el daño y el costo de maná, y los Misiles las gastan.
 
 ### Controles

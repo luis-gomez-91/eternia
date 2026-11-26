@@ -61,5 +61,160 @@
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A heavy critical sword hit, crunchy powerful impact with a bright metallic ring and a short sparkling shimmer.",
     "duration": 0.8,
     "assetId": "125109039614338"
+  },
+  "ArcaneOrb": {
+    "variant": "mage/ArcaneOrb_c",
+    "folder": "mage",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A slow humming arcane orb launched, deep magical pulsing whoosh with crystalline shimmer.",
+    "duration": 1.2,
+    "assetId": "110861100635255"
+  },
+  "ArrowRain": {
+    "variant": "ranger/ArrowRain_d",
+    "folder": "ranger",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A dense volley of arrows whistling overhead, followed by a continuous rapid series of arrows thudding into the ground all around, lasting the whole clip.",
+    "duration": 2.0,
+    "assetId": "93857486191598",
+    "trimmed_start": 0.5
+  },
+  "Blink": {
+    "variant": "mage/Blink_c",
+    "folder": "mage",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A magical teleport, quick bright pop and reversed shimmer, instant blink.",
+    "duration": 0.6,
+    "assetId": "101376722293859"
+  },
+  "Consecration": {
+    "variant": "paladin/Consecration_b",
+    "folder": "paladin",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. Holy ground ignites in a circle around the hero, warm radiant hum with sparkling chimes.",
+    "duration": 2.0,
+    "assetId": "95021981650169"
+  },
+  "Corruption": {
+    "variant": "warlock/Corruption_b",
+    "folder": "warlock",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A dark curse applied to an enemy, sinister low hiss with dark crackling energy.",
+    "duration": 1.0,
+    "assetId": "87196410508863"
+  },
+  "Disengage": {
+    "variant": "ranger/Disengage_a",
+    "folder": "ranger",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A quick acrobatic backward leap, cloth flutter and light air whoosh.",
+    "duration": 0.5,
+    "assetId": "90439571976116"
+  },
+  "DrainLife": {
+    "variant": "warlock/DrainLife_b",
+    "folder": "warlock",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A dark life-draining spell, eerie sucking energy stream with low pulsing hum.",
+    "duration": 1.4,
+    "assetId": "127601950191336"
+  },
+  "FireballCast": {
+    "variant": "mage/FireballCast_c",
+    "folder": "mage",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A fireball spell cast, roaring flame whoosh launching forward.",
+    "duration": 0.8,
+    "assetId": "129423200161204"
+  },
+  "FireballExplosion": {
+    "variant": "mage/FireballExplosion_b",
+    "folder": "mage",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A fiery magical explosion impact, punchy burst of flames with crackling embers.",
+    "duration": 1.0,
+    "assetId": "128669217440977"
+  },
+  "HealingLight": {
+    "variant": "paladin/HealingLight_b",
+    "folder": "paladin",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A gentle healing spell, soft warm shimmering chimes rising, soothing magical sparkle.",
+    "duration": 1.4,
+    "assetId": "114515546991936"
+  },
+  "HolyNova": {
+    "variant": "priest/HolyNova_a",
+    "folder": "priest",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A burst of holy light radiating outward, bright whoosh with ringing chimes.",
+    "duration": 1.0,
+    "assetId": "138263651658995"
+  },
+  "HolyStrike": {
+    "variant": "paladin/HolyStrike_c",
+    "folder": "paladin",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A powerful holy mace strike, deep impact with a bright angelic shimmer and bell tone.",
+    "duration": 1.0,
+    "assetId": "111709778313341"
+  },
+  "LightRay": {
+    "variant": "priest/LightRay_b",
+    "folder": "priest",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A quick holy light beam spell, bright shimmering zap with a soft angelic tone.",
+    "duration": 0.5,
+    "assetId": "76696059392740"
+  },
+  "MagicBolt": {
+    "variant": "mage/MagicBolt_c",
+    "folder": "mage",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A small magic missile cast, bright arcane zap with a quick sparkling whoosh.",
+    "duration": 0.5,
+    "assetId": "77777840439447"
+  },
+  "PaladinSmash": {
+    "variant": "paladin/PaladinSmash_c",
+    "folder": "paladin",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A heavy mace overhead smash with a holy chime ring on impact.",
+    "duration": 0.9,
+    "assetId": "117518788295543"
+  },
+  "PaladinSwing": {
+    "variant": "paladin/PaladinSwing_a",
+    "folder": "paladin",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A heavy one-handed mace swing, blunt deep whoosh.",
+    "duration": 0.6,
+    "assetId": "129001422905314"
+  },
+  "PowerShot": {
+    "variant": "ranger/PowerShot_b",
+    "folder": "ranger",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A powerful longbow shot, deep heavy string twang and a piercing arrow whoosh flying away fast.",
+    "duration": 0.9,
+    "assetId": "77676074139895"
+  },
+  "PriestHeal": {
+    "variant": "priest/PriestHeal_b",
+    "folder": "priest",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A healing prayer spell, rising warm angelic synth pad and soft chimes.",
+    "duration": 1.4,
+    "assetId": "105090647961010"
+  },
+  "RangerShot": {
+    "variant": "ranger/RangerShot_b",
+    "folder": "ranger",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A bow string release, quick arrow shot with a sharp twang and fast whoosh.",
+    "duration": 0.5,
+    "assetId": "70897685493016"
+  },
+  "ShadowBlast": {
+    "variant": "warlock/ShadowBlast_a",
+    "folder": "warlock",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A dark shadow explosion, deep booming void burst with eerie crackle.",
+    "duration": 1.0,
+    "assetId": "102715922573898"
+  },
+  "ShadowBolt": {
+    "variant": "warlock/ShadowBolt_a",
+    "folder": "warlock",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A dark shadow magic bolt cast, low eerie whoosh with a crackling void zap.",
+    "duration": 0.6,
+    "assetId": "122949372827472"
+  },
+  "Smite": {
+    "variant": "priest/Smite_b",
+    "folder": "priest",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A powerful holy smite, bright divine impact with a heavenly bell strike.",
+    "duration": 0.9,
+    "assetId": "115490442257201"
   }
 }

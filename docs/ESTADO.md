@@ -34,15 +34,23 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [x] Muñeco de práctica con barra de vida, números de daño y reacción al golpe
 - [x] Esquivar: dash con 2 cargas que se recuperan en 4 s (Q; 16 studs, 0,3 s de invulnerabilidad)
 - [x] Warrior: 3 habilidades — Tajo (1), Grito de batalla (2), Embestida (3); Energía generada por el ataque básico
-- [ ] Mage: ataque básico, Orbe arcano, Parpadeo y Bola de fuego
-- [ ] Fijar objetivo automático y botón para cambiar
+- [x] Las otras 5 clases con su ataque básico y sus 3 activas de clase, validadas en servidor:
+  - Paladín: maza (2 golpes), Golpe sagrado, Consagración, Luz sanadora
+  - Ranger: disparo rápido, Disparo potente, Lluvia de flechas, Retirada
+  - Mage: proyectil mágico, Orbe arcano, Parpadeo, Bola de fuego (se usa en vez de Barrera de maná para probar daño en área y quemadura)
+  - Sacerdote: rayo de luz, Castigo, Curación, Nova sagrada
+  - Brujo: descarga de sombra, Corrupción, Drenar vida, Explosión de sombra
+- [x] Maná: empieza lleno, se recupera 2% por segundo y un poco con el ataque básico; la barra muestra Energía o Maná según la clase
+- [x] Selector de clase provisorio (arriba a la izquierda) hasta que exista la selección de personaje
+- [x] Fijar objetivo automático (enemigo visible más cerca del centro de la pantalla) y T para cambiar; anillo rojo bajo el objetivo
 
 ### Feedback de combate (provisorio, se cambia por el arte final)
 - [x] Sistema por datos: cada ataque y habilidad indica su animación, efecto y sonido (`Data/Feedback`, `Data/Poses`)
 - [x] Warrior: animaciones del combo, Tajo, Grito, Embestida y esquivar (poses en código, sin assets)
 - [x] Warrior: efectos (arco del tajo, onda del grito, estelas, chispa de impacto) y sonidos
 - [x] Sonidos propios del Warrior, esquivar e impactos generados con ElevenLabs y subidos a Roblox
-- [ ] Mage: animaciones, efectos y sonidos (ElevenLabs) al hacer sus habilidades
+- [x] Las otras 5 clases: poses, efectos (proyectiles, rayos, columnas de luz, explosiones, zona en el suelo, lluvia de flechas), arma provisoria y 22 sonidos con ElevenLabs
+- [x] Impactos por tipo (arma, maza, flecha, arcano, fuego, sombra) y números verdes de curación
 
 ### Enemigos y zona
 - [ ] Subárea de prueba en caja gris
@@ -92,4 +100,5 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Sacudida de cámara al acertar golpes propios (más fuerte en crítico); grupos de volumen SFX, Música, Ambiente y Voces |
 | 26 nov 2026 | Plan: fuentes de audio (ElevenLabs para sonidos propios, Creator Store solo con licencia, APM para música de prueba) y reglas de subida |
 | 26 nov 2026 | Plan: todos los sonidos del juego por categoría con su fuente y su fase; catálogo nuevo [AUDIO.md](AUDIO.md) con guía de estilo; sección "Sonidos" en las fichas |
+| 26 nov 2026 | Fijar objetivo automático con T para cambiar. Las 6 clases jugables con sus 3 activas de clase, Maná, curación, daño en el tiempo, proyectiles y selector de clase provisorio; 22 sonidos nuevos con ElevenLabs (unos 360 créditos). Las activas de clase del Paladín, Ranger, Sacerdote y Brujo se definieron ahora (ver PLAN.md) |
 | 26 nov 2026 | Primeros sonidos propios con ElevenLabs (combo, Tajo, Grito, Embestida, esquivar, impacto y crítico) subidos a Roblox; place guardado en Roblox para poder subir assets; la precarga deja los sonidos vivos para que suenen sin retraso (de ~330 ms a 1 frame) |

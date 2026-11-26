@@ -68,7 +68,10 @@ local function playAnimation(character: Model, animationId: string, speed: numbe
 	track:Play(0.05, 1, speed)
 end
 
-local function playSound(def: Feedback.SoundDef, parent: Instance)
+local function playSoundNow(def: Feedback.SoundDef, parent: Instance)
+	if not parent.Parent then
+		return
+	end
 	local sound = Instance.new("Sound")
 	sound.SoundId = def.Id
 	sound.Volume = def.Volume or 0.5
@@ -83,20 +86,95 @@ local function playSound(def: Feedback.SoundDef, parent: Instance)
 	sound:Play()
 end
 
+local function playSound(def: Feedback.SoundDef, parent: Instance)
+	if def.Delay and def.Delay > 0 then
+		task.delay(def.Delay, playSoundNow, def, parent)
+	else
+		playSoundNow(def, parent)
+	end
+end
+
+-- Punto fijo en el mundo para que suene algo (se borra solo).
+local function anchorAt(position: Vector3): Attachment
+	local anchor = Instance.new("Attachment")
+	anchor.WorldPosition = position
+	anchor.Parent = workspace.Terrain
+	task.delay(4, anchor.Destroy, anchor)
+	return anchor
+end
+
+-- Mirando desde el que lanza hacia el objetivo, a la altura del objetivo.
+local function targetOrigin(target: Model, from: Vector3): CFrame
+	local position = target:GetPivot().Position
+	local away = (position - from) * Vector3.new(1, 0, 1)
+	if away.Magnitude < 1e-3 then
+		return CFrame.new(position)
+	end
+	return CFrame.lookAt(position, position + away)
+end
+
 local function playEffectsAndSound(cue: Feedback.Cue, ctx: Effects.Context, soundParent: Instance)
+	local target = ctx.target
+	local targetCtx: Effects.Context? = nil
+	if target and target.Parent then
+		targetCtx = {
+			character = target,
+			caster = ctx.caster,
+			target = target,
+			origin = targetOrigin(target, ctx.origin.Position),
+		}
+	end
 	if cue.Effects then
 		for _, effect in cue.Effects do
-			Effects.Play(effect, ctx)
+			if not effect.AtTarget then
+				Effects.Play(effect, ctx)
+			elseif targetCtx then
+				Effects.Play(effect, targetCtx)
+			end
 		end
 	end
 	if cue.Sound then
-		playSound(cue.Sound, soundParent)
+		if cue.Sound.AtTarget and targetCtx then
+			playSound(cue.Sound, anchorAt(targetCtx.origin.Position))
+		else
+			playSound(cue.Sound, soundParent)
+		end
+	end
+	local projectile = cue.Projectile
+	if projectile then
+		local function launch()
+			Effects.Projectile(projectile, ctx, function(position)
+				local impact = projectile.Impact
+				if not impact then
+					return
+				end
+				local impactCtx: Effects.Context = {
+					caster = ctx.caster,
+					target = ctx.target,
+					origin = CFrame.new(position) * ctx.origin.Rotation,
+				}
+				if impact.Effects then
+					for _, effect in impact.Effects do
+						Effects.Play(effect, impactCtx)
+					end
+				end
+				if impact.Sound then
+					playSound(impact.Sound, anchorAt(position))
+				end
+			end)
+		end
+		if projectile.Delay and projectile.Delay > 0 then
+			task.delay(projectile.Delay, launch)
+		else
+			launch()
+		end
 	end
 end
 
 -- Reproduce una señal sobre un personaje. `replicated` es true si el personaje es
 -- de otro jugador: sus animaciones finales ya llegan solas por el Animator.
-function FeedbackController.Play(character: Model, cueId: string, replicated: boolean?)
+-- `target` es el enemigo al que apunta (proyectiles, rayos, efectos en el objetivo).
+function FeedbackController.Play(character: Model, cueId: string, replicated: boolean?, target: Model?)
 	local cue = Feedback.Cues[cueId]
 	if not cue then
 		warn(`[Feedback] Señal desconocida: {cueId}`)
@@ -115,14 +193,16 @@ function FeedbackController.Play(character: Model, cueId: string, replicated: bo
 	elseif cue.Pose then
 		Poser.Play(character, cue.Pose, speed)
 	end
-	playEffectsAndSound(cue, { character = character, origin = flatOrigin(root) }, root)
+	local ctx: Effects.Context =
+		{ character = character, caster = character, target = target, origin = flatOrigin(root) }
+	playEffectsAndSound(cue, ctx, root)
 end
 
 -- Señal del propio personaje.
-function FeedbackController.PlayLocal(cueId: string?)
+function FeedbackController.PlayLocal(cueId: string?, target: Model?)
 	local character = player.Character
 	if cueId and character then
-		FeedbackController.Play(character, cueId, false)
+		FeedbackController.Play(character, cueId, false, target)
 	end
 end
 
@@ -132,11 +212,7 @@ function FeedbackController.PlayAt(position: Vector3, cueId: string)
 	if not cue then
 		return
 	end
-	local anchor = Instance.new("Attachment")
-	anchor.WorldPosition = position
-	anchor.Parent = workspace.Terrain
-	playEffectsAndSound(cue, { origin = CFrame.new(position) }, anchor)
-	task.delay(3, anchor.Destroy, anchor)
+	playEffectsAndSound(cue, { origin = CFrame.new(position) }, anchorAt(position))
 end
 
 local function impactPosition(target: Model): Vector3
@@ -193,14 +269,18 @@ local function preload()
 	folder.Parent = SoundService
 	local sounds: { Instance } = {}
 	local seen: { [string]: boolean } = {}
-	for _, cue in Feedback.Cues do
-		if cue.Sound and not seen[cue.Sound.Id] then
-			seen[cue.Sound.Id] = true
+	local function add(def: Feedback.SoundDef?)
+		if def and not seen[def.Id] then
+			seen[def.Id] = true
 			local sound = Instance.new("Sound")
-			sound.SoundId = cue.Sound.Id
+			sound.SoundId = def.Id
 			sound.Parent = folder
 			table.insert(sounds, sound)
 		end
+	end
+	for _, cue in Feedback.Cues do
+		add(cue.Sound)
+		add(cue.Projectile and cue.Projectile.Impact and cue.Projectile.Impact.Sound)
 	end
 	ContentProvider:PreloadAsync(sounds)
 end
@@ -213,14 +293,15 @@ function FeedbackController:Start()
 	task.spawn(preload)
 	RunService:BindToRenderStep("CombatShake", Enum.RenderPriority.Camera.Value + 1, applyShake)
 
-	Remotes.Event("CombatCue").OnClientEvent:Connect(function(character: unknown, cueId: unknown)
+	Remotes.Event("CombatCue").OnClientEvent:Connect(function(character: unknown, cueId: unknown, target: unknown)
 		if typeof(character) ~= "Instance" or not character:IsA("Model") or typeof(cueId) ~= "string" then
 			return
 		end
 		if character == player.Character then
 			return -- la propia ya se reprodujo al apretar
 		end
-		FeedbackController.Play(character, cueId, true)
+		local enemy = if typeof(target) == "Instance" and target:IsA("Model") then target else nil
+		FeedbackController.Play(character, cueId, true, enemy)
 	end)
 
 	Remotes.Event("CombatFeedback").OnClientEvent:Connect(function(batch: unknown)
@@ -229,15 +310,19 @@ function FeedbackController:Start()
 		end
 		for _, entry in batch :: { any } do
 			local target = entry.Target
-			if typeof(target) == "Instance" and target:IsA("Model") then
-				local crit = entry.Crit == true
-				FeedbackController.PlayAt(
-					impactPosition(target),
-					if crit then Feedback.ImpactCritCue else Feedback.ImpactCue
-				)
-				if entry.Source == player then
-					shake(if crit then Feedback.Shakes.Crit else Feedback.Shakes.Hit)
-				end
+			if typeof(target) ~= "Instance" or not target:IsA("Model") or entry.Heal then
+				continue -- las curaciones ya se ven en la señal que las lanzó
+			end
+			local crit = entry.Crit == true
+			if entry.Tick then
+				FeedbackController.PlayAt(impactPosition(target), Feedback.ImpactTickCue)
+				continue
+			end
+			local set = Feedback.Impacts[if typeof(entry.Impact) == "string" then entry.Impact else "Melee"]
+				or Feedback.Impacts.Melee
+			FeedbackController.PlayAt(impactPosition(target), if crit then set.Crit else set.Hit)
+			if entry.Source == player then
+				shake(if crit then Feedback.Shakes.Crit else Feedback.Shakes.Hit)
 			end
 		end
 	end)

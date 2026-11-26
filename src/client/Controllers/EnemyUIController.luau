@@ -1,6 +1,7 @@
 --!strict
 -- Lo que se ve de los enemigos (tag "Enemy"): barra de vida con nombre,
--- números de daño flotantes y un destello al recibir un golpe.
+-- números de daño flotantes y un destello al recibir un golpe. También los
+-- números verdes de curación sobre los jugadores.
 -- Todo es visual; la vida real la decide el servidor en los atributos.
 
 local CollectionService = game:GetService("CollectionService")
@@ -100,7 +101,10 @@ local function attachHealthBar(model: Model)
 	end)
 end
 
-local function showNumber(model: Model, amount: number, crit: boolean)
+local HEAL_COLOR = Color3.fromRGB(110, 255, 130)
+
+-- `kind`: "Hit" (golpe), "Tick" (daño en el tiempo, más chico) o "Heal" (verde, con +).
+local function showNumber(model: Model, amount: number, crit: boolean, kind: "Hit" | "Tick" | "Heal")
 	local primary = model.PrimaryPart
 	if not primary then
 		return
@@ -118,10 +122,17 @@ local function showNumber(model: Model, amount: number, crit: boolean)
 	label.BackgroundTransparency = 1
 	label.Size = UDim2.fromScale(1, 1)
 	label.Font = Enum.Font.GothamBlack
-	label.TextSize = if crit then 30 else 22
-	label.TextColor3 = if crit then Color3.fromRGB(255, 210, 60) else Color3.new(1, 1, 1)
+	label.TextSize = if crit then 30 elseif kind == "Tick" then 16 else 22
+	label.TextColor3 = if kind == "Heal"
+		then HEAL_COLOR
+		elseif crit then Color3.fromRGB(255, 210, 60)
+		elseif kind == "Tick" then Color3.fromRGB(215, 190, 255)
+		else Color3.new(1, 1, 1)
 	label.TextStrokeTransparency = 0.3
-	label.Text = if crit then `{math.floor(amount)}!` else tostring(math.floor(amount))
+	label.Text = if kind == "Heal"
+		then `+{math.floor(amount)}`
+		elseif crit then `{math.floor(amount)}!`
+		else tostring(math.floor(amount))
 	label.Parent = gui
 	gui.Parent = screenFolder
 
@@ -170,8 +181,12 @@ function EnemyUIController:Start()
 		for _, entry in batch :: { any } do
 			local target = entry.Target
 			if typeof(target) == "Instance" and target:IsA("Model") and typeof(entry.Amount) == "number" then
-				showNumber(target, entry.Amount, entry.Crit == true)
-				flash(target)
+				if entry.Heal then
+					showNumber(target, entry.Amount, false, "Heal")
+				else
+					showNumber(target, entry.Amount, entry.Crit == true, if entry.Tick then "Tick" else "Hit")
+					flash(target)
+				end
 			end
 		end
 	end)

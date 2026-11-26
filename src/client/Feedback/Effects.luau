@@ -9,11 +9,17 @@ local TweenService = game:GetService("TweenService")
 
 local Feedback = require(ReplicatedStorage.Shared.Data.Feedback)
 
--- Contexto de una señal: quién la hace y dónde.
+-- Contexto de una señal: quién la hace, dónde y contra quién.
 export type Context = {
-	character: Model?,
+	character: Model?, -- el que la hace (o el objetivo, en efectos AtTarget)
 	origin: CFrame, -- centro del personaje mirando al frente (sin inclinación)
+	caster: Model?, -- el que la hace, siempre (para los rayos)
+	target: Model?, -- enemigo al que apunta, si hay
 }
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Targeting = require(ReplicatedStorage.Shared.Targeting)
 
 local SLASH_SEGMENTS = 12
 local SLASH_SWEEP_TIME = 0.08 -- lo que tarda el arco en dibujarse
@@ -82,7 +88,7 @@ local function ring(def: Feedback.EffectDef, ctx: Context)
 	local duration = def.Duration or 0.4
 	local radius = (def.Size or 10) / 2
 	local startRadius = 1
-	local center = ctx.origin * CFrame.new(0, def.Height or -2.8, 0)
+	local center = ctx.origin * CFrame.new(0, def.Height or (if def.Ground then 0.15 else -2.8), 0)
 	local step = 2 * math.pi / RING_SEGMENTS
 	local function chordAt(r: number): number
 		return 2 * r * math.sin(step / 2) * 1.1
@@ -209,25 +215,316 @@ local function spark(def: Feedback.EffectDef, ctx: Context)
 	end
 end
 
+-- Punto del suelo bajo `position` (sin contar personajes, enemigos ni efectos).
+function Effects.Ground(position: Vector3): Vector3
+	local exclude: { Instance } = { folder }
+	local enemies = workspace:FindFirstChild("Enemies")
+	if enemies then
+		table.insert(exclude, enemies)
+	end
+	for _, other in Players:GetPlayers() do
+		if other.Character then
+			table.insert(exclude, other.Character)
+		end
+	end
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+	params.FilterDescendantsInstances = exclude
+	local hit = workspace:Raycast(position + Vector3.new(0, 2, 0), Vector3.new(0, -60, 0), params)
+	return if hit then hit.Position else position - Vector3.new(0, 3, 0)
+end
+
+-- Posición de una parte del personaje (la mano que lanza), o delante del pecho.
+function Effects.PartPosition(character: Model?, partName: string?): Vector3?
+	if not character then
+		return nil
+	end
+	local part = partName and character:FindFirstChild(partName)
+	if part and part:IsA("BasePart") then
+		return part.Position
+	end
+	local root = character:FindFirstChild("HumanoidRootPart")
+	if root and root:IsA("BasePart") then
+		return (root.CFrame * CFrame.new(0, 0.5, -1.5)).Position
+	end
+	return nil
+end
+
+-- Columna de luz que baja del cielo al punto y se adelgaza.
+local function column(def: Feedback.EffectDef, ctx: Context)
+	local duration = def.Duration or 0.5
+	local height = def.Size or 14
+	local base = ctx.origin.Position
+	local function piece(width: number, transparency: number, color: Color3): Part
+		local part = newPart(color)
+		part.Shape = Enum.PartType.Cylinder
+		-- El eje del cilindro es X: se gira para que quede vertical.
+		part.CFrame = CFrame.new(base + Vector3.new(0, height / 2, 0)) * CFrame.Angles(0, 0, math.rad(90))
+		part.Size = Vector3.new(height, width, width)
+		part.Transparency = transparency
+		part.Parent = folder
+		fade(part, duration, { Size = Vector3.new(height, width * 0.15, width * 0.15), Transparency = 1 })
+		Debris:AddItem(part, duration + 0.05)
+		return part
+	end
+	piece(3.2, 0.45, def.Color)
+	piece(1.2, 0.05, Color3.new(1, 1, 1):Lerp(def.Color, 0.3))
+end
+
+-- Esfera que se expande y se desvanece (explosiones, novas, parpadeo).
+local function burst(def: Feedback.EffectDef, ctx: Context)
+	local duration = def.Duration or 0.35
+	local size = def.Size or 6
+	local center = ctx.origin.Position + Vector3.new(0, def.Height or 0, 0)
+	for i, settings in { { 0.15, 1 }, { 0.6, 1.25 } } do
+		local part = newPart(if i == 1 then def.Color else Color3.new(1, 1, 1):Lerp(def.Color, 0.5))
+		part.Shape = Enum.PartType.Ball
+		part.Size = Vector3.one * math.min(1.2, size * 0.2)
+		part.CFrame = CFrame.new(center)
+		part.Transparency = settings[1]
+		part.Parent = folder
+		fade(
+			part,
+			duration * settings[2],
+			{ Size = Vector3.one * size * (if i == 1 then 1 else 0.6), Transparency = 1 }
+		)
+		Debris:AddItem(part, duration * settings[2] + 0.05)
+	end
+	local light = Instance.new("PointLight")
+	light.Color = def.Color
+	light.Range = size * 0.9
+	light.Brightness = 1.5
+	local holder = newPart(def.Color)
+	holder.Transparency = 1
+	holder.Size = Vector3.one * 0.1
+	holder.CFrame = CFrame.new(center)
+	light.Parent = holder
+	holder.Parent = folder
+	fade(light, duration, { Brightness = 0 })
+	Debris:AddItem(holder, duration + 0.05)
+end
+
+-- Círculo en el suelo que dura y late (Consagración).
+local function field(def: Feedback.EffectDef, ctx: Context)
+	local duration = def.Duration or 3
+	local size = def.Size or 16
+	local disc = newPart(def.Color)
+	disc.Shape = Enum.PartType.Cylinder
+	disc.Size = Vector3.new(0.12, size, size)
+	disc.CFrame = CFrame.new(ctx.origin.Position + Vector3.new(0, 0.1, 0)) * CFrame.Angles(0, 0, math.rad(90))
+	disc.Transparency = 0.6
+	disc.Parent = folder
+	local start = os.clock()
+	local connection
+	connection = RunService.Heartbeat:Connect(function()
+		local t = os.clock() - start
+		if t >= duration or not disc.Parent then
+			connection:Disconnect()
+			fade(disc, 0.3, { Transparency = 1 })
+			Debris:AddItem(disc, 0.35)
+			return
+		end
+		disc.Transparency = 0.62 + 0.12 * math.sin(t * 6)
+	end)
+end
+
+-- Flechas que caen al azar dentro del círculo mientras dura.
+local function rain(def: Feedback.EffectDef, ctx: Context)
+	local duration = def.Duration or 1
+	local radius = (def.Size or 16) / 2
+	local base = ctx.origin.Position
+	task.spawn(function()
+		local start = os.clock()
+		while os.clock() - start < duration do
+			local angle = math.random() * 2 * math.pi
+			local r = radius * math.sqrt(math.random())
+			local landing = base + Vector3.new(math.cos(angle) * r, 0, math.sin(angle) * r)
+			local top = landing + Vector3.new(-3, 22, -3)
+			local arrow = newPart(def.Color)
+			arrow.Size = Vector3.new(0.12, 0.12, 2.6)
+			arrow.CFrame = CFrame.lookAt(top, landing)
+			arrow.Transparency = 0.1
+			arrow.Parent = folder
+			local fall = 0.22
+			TweenService:Create(arrow, TweenInfo.new(fall, Enum.EasingStyle.Linear), {
+				CFrame = CFrame.lookAt(landing, landing + (landing - top).Unit),
+			}):Play()
+			task.delay(fall, function()
+				fade(arrow, 0.25, { Transparency = 1 })
+			end)
+			Debris:AddItem(arrow, fall + 0.3)
+			task.wait(0.035)
+		end
+	end)
+end
+
+-- Rayo de la mano del que lanza al objetivo mientras dura.
+local function beam(def: Feedback.EffectDef, ctx: Context)
+	local caster = ctx.caster
+	local target = ctx.target
+	local handName = def.From or "RightHand"
+	local hand = caster and caster:FindFirstChild(handName)
+	local targetPart = target and (target.PrimaryPart or target:FindFirstChildWhichIsA("BasePart"))
+	if not hand or not hand:IsA("BasePart") or not targetPart then
+		return
+	end
+	local duration = def.Duration or 0.3
+	local a0 = Instance.new("Attachment")
+	a0.Parent = hand
+	local a1 = Instance.new("Attachment")
+	a1.Parent = targetPart
+	local effect = Instance.new("Beam")
+	effect.Attachment0 = a0
+	effect.Attachment1 = a1
+	effect.FaceCamera = true
+	effect.LightEmission = 1
+	effect.LightInfluence = 0
+	effect.Segments = 1
+	effect.Width0 = 0.5
+	effect.Width1 = 0.8
+	effect.Color = ColorSequence.new(def.Color, def.EndColor or def.Color)
+	effect.Parent = a0
+	local start = os.clock()
+	local connection
+	connection = RunService.RenderStepped:Connect(function()
+		local t = os.clock() - start
+		if t >= duration or not a0.Parent or not a1.Parent then
+			connection:Disconnect()
+			a0:Destroy()
+			a1:Destroy()
+			return
+		end
+		-- Late un poco y se apaga al final.
+		local fadeOut = math.clamp((duration - t) / 0.12, 0, 1)
+		local pulse = 0.15 + 0.15 * math.sin(t * 30)
+		effect.Transparency = NumberSequence.new(1 - fadeOut * (1 - pulse))
+	end)
+end
+
 local builders: { [Feedback.EffectKind]: (Feedback.EffectDef, Context) -> () } = {
 	Slash = slash,
 	Ring = ring,
 	Trail = trail,
 	Aura = aura,
 	Spark = spark,
+	Column = column,
+	Burst = burst,
+	Field = field,
+	Rain = rain,
+	Beam = beam,
 }
 
-function Effects.Play(def: Feedback.EffectDef, ctx: Context)
-	local build = builders[def.Kind]
-	if not build then
+local function build(def: Feedback.EffectDef, ctx: Context)
+	local builder = builders[def.Kind]
+	if not builder then
 		warn(`[Effects] Tipo de efecto desconocido: {def.Kind}`)
 		return
 	end
+	if def.Ground then
+		-- Se calcula al dibujarse: el objetivo pudo moverse durante el retraso.
+		local position = ctx.origin.Position
+		if def.AtTarget and ctx.target and ctx.target.Parent then
+			position = ctx.target:GetPivot().Position
+		end
+		local ground = Effects.Ground(position)
+		ctx = {
+			character = ctx.character,
+			caster = ctx.caster,
+			target = ctx.target,
+			origin = CFrame.new(ground) * ctx.origin.Rotation,
+		}
+	end
+	builder(def, ctx)
+end
+
+function Effects.Play(def: Feedback.EffectDef, ctx: Context)
 	if def.Delay and def.Delay > 0 then
 		task.delay(def.Delay, build, def, ctx)
 	else
 		build(def, ctx)
 	end
+end
+
+-- Proyectil desde la mano hasta el objetivo (lo sigue si se mueve) o recto hacia
+-- adelante. Llama a `onArrive` con el punto de llegada si alcanzó a un objetivo.
+function Effects.Projectile(def: Feedback.ProjectileDef, ctx: Context, onArrive: ((Vector3) -> ())?)
+	local start = Effects.PartPosition(ctx.caster, def.From or "RightHand")
+	if not start then
+		return
+	end
+	local target = ctx.target
+	local forward = ctx.origin.LookVector
+	local maxDistance = def.Distance or 45
+
+	local part = newPart(def.Color)
+	if def.Shape == "Orb" then
+		part.Shape = Enum.PartType.Ball
+		part.Size = Vector3.one * def.Size
+		local light = Instance.new("PointLight")
+		light.Color = def.Color
+		light.Range = 2 + def.Size * 2
+		light.Brightness = 1
+		light.Parent = part
+	else
+		part.Size = Vector3.new(0.14, 0.14, 1.6 * def.Size)
+	end
+	part.CFrame = CFrame.lookAt(start, start + forward)
+	part.Parent = folder
+
+	local a0 = Instance.new("Attachment")
+	a0.Position = if def.Shape == "Orb" then Vector3.new(0, def.Size * 0.3, 0) else Vector3.new(0, 0.07, 0)
+	a0.Parent = part
+	local a1 = Instance.new("Attachment")
+	a1.Position = -a0.Position
+	a1.Parent = part
+	local streak = Instance.new("Trail")
+	streak.Attachment0 = a0
+	streak.Attachment1 = a1
+	streak.Color = ColorSequence.new(def.Color)
+	streak.LightEmission = 1
+	streak.Lifetime = if def.Shape == "Orb" then 0.25 else 0.12
+	streak.Transparency = NumberSequence.new(0.2, 1)
+	streak.WidthScale = NumberSequence.new(1, 0)
+	streak.Parent = part
+
+	local travelled = 0
+	local position = start
+	local connection
+	local function finish(arrived: boolean)
+		connection:Disconnect()
+		part.Transparency = 1
+		streak.Enabled = false
+		Debris:AddItem(part, streak.Lifetime + 0.05)
+		if arrived and onArrive then
+			onArrive(position)
+		end
+	end
+	connection = RunService.RenderStepped:Connect(function(dt)
+		local step = def.Speed * dt
+		if target then
+			if not target.Parent then
+				finish(false)
+				return
+			end
+			local goal = target:GetPivot().Position
+			local offset = goal - position
+			local remaining = offset.Magnitude - Targeting.Radius(target) * 0.6
+			if remaining <= step then
+				position = goal - offset.Unit * Targeting.Radius(target) * 0.6
+				finish(true)
+				return
+			end
+			position += offset.Unit * step
+			part.CFrame = CFrame.lookAt(position, goal)
+		else
+			position += forward * step
+			travelled += step
+			part.CFrame = CFrame.lookAt(position, position + forward)
+			if travelled >= maxDistance then
+				finish(false)
+			end
+		end
+	end)
 end
 
 return Effects
