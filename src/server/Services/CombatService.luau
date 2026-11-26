@@ -1,28 +1,80 @@
 --!strict
--- Combate validado en servidor. El cliente solo dice "quiero usar X";
--- el servidor elige el objetivo, revisa distancia y ritmo, y aplica el daño.
+-- Combate validado en servidor. El cliente solo dice "quiero usar X" (y, si hace
+-- falta, a quién); el servidor revisa clase, distancia, ritmo, tiempos de espera
+-- y Energía, y aplica el resultado.
+--
+-- Energía: atributos Energy y MaxEnergy del jugador. La genera el ataque básico
+-- y la gastan las activas.
 
-local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local AbilityData = require(ReplicatedStorage.Shared.Data.Abilities)
 local Classes = require(ReplicatedStorage.Shared.Data.Classes)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
+local Targeting = require(ReplicatedStorage.Shared.Targeting)
 local DamageService = require(script.Parent.DamageService)
 
--- Margen para el jitter de red entre dos golpes del combo.
+-- Margen para el jitter de red en ritmos y tiempos de espera.
 local TIMING_TOLERANCE = 0.1
--- Diferencia de altura máxima para pegar cuerpo a cuerpo.
-local MAX_HEIGHT_DIFF = 8
+-- Margen de distancia para objetivos que elige el cliente (se movieron un poco).
+local TARGET_RANGE_TOLERANCE = 3
+-- La Embestida se detiene a esta distancia del borde del objetivo.
+local CHARGE_STOP_DISTANCE = 2.5
 -- Clase por defecto hasta que exista la selección de personaje.
 local DEFAULT_CLASS = "Warrior"
 
-type ComboState = { index: number, lastSwing: number }
+type PlayerState = {
+	comboIndex: number,
+	lastSwing: number,
+	readyAt: { [string]: number }, -- tiempo de espera de cada activa
+	globalReadyAt: number,
+	buffUntil: number,
+	buffBonus: number,
+}
 
 local CombatService = {}
 
-local comboStates: { [Player]: ComboState } = {}
+local states: { [Player]: PlayerState } = {}
+
+local function getState(player: Player): PlayerState
+	local state = states[player]
+	if not state then
+		state = {
+			comboIndex = 0,
+			lastSwing = -math.huge,
+			readyAt = {},
+			globalReadyAt = 0,
+			buffUntil = 0,
+			buffBonus = 0,
+		}
+		states[player] = state
+	end
+	return state
+end
+
+local function getClass(player: Player): Classes.ClassDef?
+	local classId = player:GetAttribute("Class")
+	return if typeof(classId) == "string" then Classes[classId] else nil
+end
+
+local function setClass(player: Player, classId: string)
+	local class = Classes[classId]
+	player:SetAttribute("Class", classId)
+	player:SetAttribute("MaxEnergy", class.MaxResource)
+	player:SetAttribute("Energy", 0)
+end
+
+local function getEnergy(player: Player): number
+	local energy = player:GetAttribute("Energy")
+	return if typeof(energy) == "number" then energy else 0
+end
+
+local function addEnergy(player: Player, amount: number)
+	local max = player:GetAttribute("MaxEnergy")
+	local cap = if typeof(max) == "number" then max else 0
+	player:SetAttribute("Energy", math.clamp(getEnergy(player) + amount, 0, cap))
+end
 
 local function getAliveRoot(player: Player): BasePart?
 	local character = player.Character
@@ -37,102 +89,142 @@ local function getAliveRoot(player: Player): BasePart?
 	return root
 end
 
--- El enemigo vivo más cercano dentro del alcance y del cono frontal.
-local function findMeleeTarget(root: BasePart, range: number, arcDot: number): Model?
-	local flat = Vector3.new(1, 0, 1)
-	local look = root.CFrame.LookVector * flat
-	if look.Magnitude < 1e-3 then
-		return nil
-	end
-	look = look.Unit
-
-	local best: Model? = nil
-	local bestDist = math.huge
-	for _, enemy in CollectionService:GetTagged("Enemy") do
-		if not enemy:IsA("Model") or not enemy:IsDescendantOf(workspace) then
-			continue
-		end
-		local health = enemy:GetAttribute("Health")
-		if typeof(health) ~= "number" or health <= 0 then
-			continue
-		end
-		local offset = enemy:GetPivot().Position - root.Position
-		if math.abs(offset.Y) > MAX_HEIGHT_DIFF then
-			continue
-		end
-		local radius = enemy:GetAttribute("HitRadius")
-		local r = if typeof(radius) == "number" then radius else 2
-		local horizontal = offset * flat
-		local dist = horizontal.Magnitude
-		if dist - r > range then
-			continue
-		end
-		-- Si estás encima del objetivo cuenta como de frente.
-		if dist > r and horizontal.Unit:Dot(look) < arcDot then
-			continue
-		end
-		if dist < bestDist then
-			best = enemy
-			bestDist = dist
-		end
-	end
-	return best
+-- Daño base con bonos activos y tirada de crítico.
+local function hit(state: PlayerState, target: Model, base: number): number
+	local multiplier = if os.clock() < state.buffUntil then 1 + state.buffBonus else 1
+	local crit = math.random() < AbilityData.BaseCritChance
+	local amount = base * multiplier * (if crit then 2 else 1)
+	return DamageService.Apply(target, math.floor(amount + 0.5), crit)
 end
 
 local function basicAttack(player: Player)
+	local root = getAliveRoot(player)
+	local class = getClass(player)
+	local ability = class and AbilityData.Abilities[class.BasicAttack]
+	if not root or not ability then
+		return -- p. ej. el ataque del Mage todavía no existe
+	end
+
+	local state = getState(player)
+	local now = os.clock()
+	local elapsed = now - state.lastSwing
+	if state.comboIndex > 0 and elapsed < ability.Hits[state.comboIndex].Recovery - TIMING_TOLERANCE then
+		return -- demasiado pronto: se ignora sin avanzar el combo
+	end
+	if elapsed > ability.ComboReset then
+		state.comboIndex = 0
+	end
+	state.comboIndex = state.comboIndex % #ability.Hits + 1
+	state.lastSwing = now
+
+	-- Un golpe al aire también avanza el combo.
+	local target = Targeting.InCone(root.CFrame, ability.Range, ability.ArcDot)[1]
+	if target and hit(state, target, ability.Hits[state.comboIndex].Damage) > 0 then
+		addEnergy(player, ability.EnergyPerHit)
+	end
+end
+
+-- Cada tipo de activa: devuelve true si se usó (entonces se cobra y empieza la espera).
+local activeHandlers: {
+	[AbilityData.ActiveKind]: (
+		player: Player,
+		state: PlayerState,
+		root: BasePart,
+		def: AbilityData.ActiveDef,
+		target: unknown
+	) -> boolean,
+} =
+	{
+		Cleave = function(_player, state, root, def)
+			for _, enemy in Targeting.InCone(root.CFrame, def.Range :: number, def.ArcDot :: number) do
+				hit(state, enemy, def.Damage :: number)
+			end
+			return true -- al aire también gasta: es un golpe que se ve
+		end,
+
+		SelfBuff = function(player, state, _root, def)
+			state.buffUntil = os.clock() + (def.Duration :: number)
+			state.buffBonus = def.DamageBonus or 0
+			addEnergy(player, def.EnergyGain or 0)
+			return true
+		end,
+
+		Charge = function(_player, state, root, def, target)
+			-- El cliente elige el objetivo y se mueve; el servidor revisa que fuera válido.
+			if typeof(target) ~= "Instance" or not Targeting.IsAlive(target) then
+				return false
+			end
+			local enemy = target :: Model
+			local dist = Targeting.Distance(
+				enemy,
+				root.CFrame,
+				(def.Range :: number) + TARGET_RANGE_TOLERANCE,
+				(def.ArcDot :: number) - 0.2
+			)
+			if not dist then
+				return false
+			end
+			-- El golpe llega cuando termina el recorrido.
+			local travel = math.max(0, dist - Targeting.Radius(enemy) - CHARGE_STOP_DISTANCE)
+			task.delay(travel / (def.Speed :: number), function()
+				if Targeting.IsAlive(enemy) then
+					hit(state, enemy, def.Damage :: number)
+				end
+			end)
+			return true
+		end,
+	}
+
+local function useActive(player: Player, abilityId: string, target: unknown)
+	local class = getClass(player)
+	local def = AbilityData.Actives[abilityId]
+	if not class or not def or not table.find(class.Actives, abilityId) then
+		return
+	end
 	local root = getAliveRoot(player)
 	if not root then
 		return
 	end
 
-	local classId = player:GetAttribute("Class")
-	local class = Classes[if typeof(classId) == "string" then classId else DEFAULT_CLASS]
-	local ability = class and AbilityData.Abilities[class.BasicAttack]
-	if not ability then
-		return -- p. ej. el ataque del Mage todavía no existe
-	end
-
-	local state = comboStates[player]
-	if not state then
-		state = { index = 0, lastSwing = -math.huge }
-		comboStates[player] = state
-	end
-
+	local state = getState(player)
 	local now = os.clock()
-	local elapsed = now - state.lastSwing
-	if state.index > 0 and elapsed < ability.Hits[state.index].Recovery - TIMING_TOLERANCE then
-		return -- demasiado pronto: se ignora sin avanzar el combo
-	end
-	if elapsed > ability.ComboReset then
-		state.index = 0
-	end
-	state.index = state.index % #ability.Hits + 1
-	state.lastSwing = now
-
-	-- Un golpe al aire también avanza el combo.
-	local target = findMeleeTarget(root, ability.Range, ability.ArcDot)
-	if not target then
+	if now < state.globalReadyAt - TIMING_TOLERANCE then
 		return
 	end
-	local hit = ability.Hits[state.index]
-	local crit = math.random() < AbilityData.BaseCritChance
-	DamageService.Apply(target, if crit then hit.Damage * 2 else hit.Damage, crit)
+	if now < (state.readyAt[abilityId] or 0) - TIMING_TOLERANCE then
+		return
+	end
+	if getEnergy(player) < def.Cost then
+		return
+	end
+
+	if not activeHandlers[def.Kind](player, state, root, def, target) then
+		return
+	end
+	addEnergy(player, -def.Cost)
+	state.readyAt[abilityId] = now + def.Cooldown
+	state.globalReadyAt = now + AbilityData.GlobalCooldown
 end
 
 function CombatService:Start()
 	Players.PlayerAdded:Connect(function(player)
-		player:SetAttribute("Class", DEFAULT_CLASS)
+		setClass(player, DEFAULT_CLASS)
 	end)
 	for _, player in Players:GetPlayers() do
-		player:SetAttribute("Class", DEFAULT_CLASS)
+		setClass(player, DEFAULT_CLASS)
 	end
 	Players.PlayerRemoving:Connect(function(player)
-		comboStates[player] = nil
+		states[player] = nil
 	end)
 
-	Remotes.OnServerEvent("UseAbility", function(player: Player, abilityId: unknown)
+	Remotes.OnServerEvent("UseAbility", function(player: Player, abilityId: unknown, target: unknown)
+		if typeof(abilityId) ~= "string" then
+			return
+		end
 		if abilityId == "BasicAttack" then
 			basicAttack(player)
+		else
+			useActive(player, abilityId, target)
 		end
 	end)
 end

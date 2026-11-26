@@ -12,6 +12,7 @@ local UserInputService = game:GetService("UserInputService")
 local AbilityData = require(ReplicatedStorage.Shared.Data.Abilities)
 local Charges = require(ReplicatedStorage.Shared.Charges)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
+local Dash = require(script.Parent.Parent.Util.Dash)
 
 local DODGE = AbilityData.Dodge
 local KEY = Enum.KeyCode.Q
@@ -24,39 +25,11 @@ local meter = Charges.new(DODGE.Charges, DODGE.Recharge)
 local dashing = false
 
 local function dash(root: BasePart, humanoid: Humanoid)
-	local direction = humanoid.MoveDirection * Vector3.new(1, 0, 1)
+	local direction = humanoid.MoveDirection
 	if direction.Magnitude < 0.1 then
-		direction = root.CFrame.LookVector * Vector3.new(1, 0, 1)
+		direction = root.CFrame.LookVector
 	end
-	if direction.Magnitude < 1e-3 then
-		return
-	end
-	direction = direction.Unit
-	local speed = DODGE.Distance / DODGE.Duration
-
-	-- Velocidad horizontal fija; la vertical queda libre para la gravedad.
-	local attachment = Instance.new("Attachment")
-	attachment.Name = "DodgeAttachment"
-	attachment.Parent = root
-	local velocity = Instance.new("LinearVelocity")
-	velocity.Name = "DodgeVelocity"
-	velocity.Attachment0 = attachment
-	velocity.RelativeTo = Enum.ActuatorRelativeTo.World
-	velocity.VelocityConstraintMode = Enum.VelocityConstraintMode.Plane
-	velocity.PrimaryTangentAxis = Vector3.xAxis
-	velocity.SecondaryTangentAxis = Vector3.zAxis
-	velocity.PlaneVelocity = Vector2.new(direction.X, direction.Z) * speed
-	velocity.MaxForce = math.huge
-	velocity.Parent = root
-
-	dashing = true
-	task.delay(DODGE.Duration, function()
-		velocity:Destroy()
-		attachment:Destroy()
-		-- Frena el arrastre del dash para que no patine al terminar.
-		if root.Parent then
-			root.AssemblyLinearVelocity = Vector3.new(0, root.AssemblyLinearVelocity.Y, 0)
-		end
+	dashing = Dash.Start(root, direction, DODGE.Distance / DODGE.Duration, DODGE.Duration, function()
 		dashing = false
 	end)
 end

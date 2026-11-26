@@ -11,6 +11,8 @@ export type ClassDef = {
 	Resource: Resource,
 	Roles: { Role },
 	BasicAttack: string,
+	MaxResource: number,
+	Actives: { string }, -- activas de clase, en orden de tecla (1, 2, 3)
 }
 
 local Classes: { [string]: ClassDef } = {
@@ -20,6 +22,8 @@ local Classes: { [string]: ClassDef } = {
 		Resource = "Energy",
 		Roles = { "Tank", "Damage" },
 		BasicAttack = "WarriorCombo",
+		MaxResource = 100,
+		Actives = { "Cleave", "BattleShout", "Charge" },
 	},
 	Mage = {
 		Id = "Mage",
@@ -27,6 +31,8 @@ local Classes: { [string]: ClassDef } = {
 		Resource = "Mana",
 		Roles = { "Damage" },
 		BasicAttack = "MagicBolt",
+		MaxResource = 100,
+		Actives = {},
 	},
 }
 
