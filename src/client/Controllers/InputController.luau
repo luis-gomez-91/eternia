@@ -12,6 +12,10 @@ local AbilityData = require(ReplicatedStorage.Shared.Data.Abilities)
 local Classes = require(ReplicatedStorage.Shared.Data.Classes)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
 local FeedbackController = require(script.Parent.FeedbackController)
+local TargetController = require(script.Parent.TargetController)
+
+-- Con objetivo fijado a esta distancia extra del alcance, el personaje gira hacia él al golpear.
+local FACE_MARGIN = 3
 
 local player = Players.LocalPlayer
 
@@ -54,7 +58,8 @@ function InputController:Start()
 			end
 			comboIndex = comboIndex % #ability.Hits + 1
 			lastSwing = now
-			useAbility:FireServer("BasicAttack")
+			local target = TargetController.FaceIfWithin(ability.Range + FACE_MARGIN)
+			useAbility:FireServer("BasicAttack", target)
 			FeedbackController.PlayLocal(ability.Hits[comboIndex].Cue)
 		end
 		looping = false
