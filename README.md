@@ -15,3 +15,36 @@ rojo serve
 ```
 
 For more help, check out [the Rojo documentation](https://rojo.space/docs).
+## Herramientas
+
+Instalar las herramientas del proyecto (Rojo, Selene, StyLua, Wally):
+
+```bash
+rokit install
+```
+
+Antes de subir cambios:
+
+```bash
+stylua src        # formatear
+selene src        # revisar errores comunes
+```
+
+Paquetes de Wally (cuando se agreguen en `wally.toml`):
+
+```bash
+wally install
+```
+
+## Estructura
+
+| Carpeta | Va a | Contenido |
+|---|---|---|
+| `src/server/Services` | ServerScriptService | Servicios del servidor (combate, datos, loot...) |
+| `src/client/Controllers` | StarterPlayerScripts | Controladores del cliente (controles, cámara, UI...) |
+| `src/shared/Data` | ReplicatedStorage | Contenido del juego como tablas (clases, habilidades, mobs) |
+| `src/shared/Remotes.luau` | ReplicatedStorage | Definición única de todos los remotos |
+
+Cada módulo en `Services` o `Controllers` se carga solo y puede tener `Init()` (preparar) y `Start()` (arrancar).
+
+Estado del proyecto: [ESTADO.md](ESTADO.md) · Diseño: [PLAN.md](PLAN.md)

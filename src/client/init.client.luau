@@ -1,1 +1,7 @@
-print("Hello world, from client!")
+--!strict
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Shared = ReplicatedStorage:WaitForChild("Shared")
+local Loader = require(Shared.Loader)
+
+Loader.LoadFolder(script.Controllers)

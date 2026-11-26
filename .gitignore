@@ -21,3 +21,7 @@ profile.svg
 
 # Time trace
 trace.json
+
+# Wally packages
+/Packages
+/ServerPackages

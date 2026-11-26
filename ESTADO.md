@@ -23,8 +23,8 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 
 ### Preparación del proyecto
 - [x] Proyecto Rojo creado y subido a GitHub
-- [ ] Selene, StyLua y Wally agregados con Rokit
-- [ ] Estructura de carpetas: `Services/` (servidor), `Controllers/` (cliente), `Data/` y `Remotes` (compartido)
+- [x] Selene, StyLua y Wally agregados con Rokit
+- [x] Estructura de carpetas: `Services/` (servidor), `Controllers/` (cliente), `Data/` y `Remotes` (compartido)
 - [ ] Remotos con límite de llamadas por segundo por jugador
 
 ### Combate
@@ -70,3 +70,4 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 |---|---|
 | 25 nov 2026 | Plan por fases escrito |
 | 26 nov 2026 | Proyecto Rojo subido a GitHub; creado este archivo de estado |
+| 26 nov 2026 | Selene, StyLua y Wally instalados; estructura de Services, Controllers, Data y Remotes con cargador Init/Start |
