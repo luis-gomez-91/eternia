@@ -47,4 +47,4 @@ wally install
 
 Cada módulo en `Services` o `Controllers` se carga solo y puede tener `Init()` (preparar) y `Start()` (arrancar).
 
-Estado del proyecto: [ESTADO.md](ESTADO.md) · Diseño: [PLAN.md](PLAN.md)
+Estado del proyecto: [docs/ESTADO.md](docs/ESTADO.md) · Diseño: [docs/PLAN.md](docs/PLAN.md) · Fichas: [docs/fichas/](docs/fichas/)

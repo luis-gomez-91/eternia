@@ -842,7 +842,7 @@ Regla: una pieza no entra a construcción sin su ficha aprobada, y no entra a ar
 |NPC|Dónde está, qué hace (vende, da encargos, mejora, cuenta historia), diálogos y aspecto|
 |Mob|Aspecto, comportamiento, 1 o 2 ataques con su aviso, vida y daño por nivel, y qué suelta|
 
-Las fichas viven en una carpeta del doc o en Notion, y cada una enlaza a su concepto visual y a su versión en caja gris.
+Las fichas viven en [fichas/](fichas/), y cada una enlaza a su concepto visual y a su versión en caja gris.
 
 ### Fase 0 — Prototipo de combate (meses 0 a 1,5)
 

@@ -46,8 +46,8 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 
 ### Diseño (fuera del código)
 - [ ] Guía visual en borrador
-- [ ] Plantillas de fichas (zona, mazmorra, jefe, NPC, mob)
-- [ ] Fichas del jefe de prueba y los 3 mobs
+- [x] Plantillas de fichas (zona, mazmorra, jefe, NPC, mob) — ver [fichas/](fichas/)
+- [ ] Fichas del jefe de prueba y los 3 mobs (creadas en borrador, falta llenarlas)
 
 ### Prueba
 - [ ] Sesión con 10 testers de 20 minutos
@@ -71,3 +71,4 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 25 nov 2026 | Plan por fases escrito |
 | 26 nov 2026 | Proyecto Rojo subido a GitHub; creado este archivo de estado |
 | 26 nov 2026 | Selene, StyLua y Wally instalados; estructura de Services, Controllers, Data y Remotes con cargador Init/Start |
+| 26 nov 2026 | Documentos movidos a `docs/`; plantillas de fichas y borradores del jefe de prueba y 3 mobs |
