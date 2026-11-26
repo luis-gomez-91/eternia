@@ -10,6 +10,7 @@
 -- texto usado para generar cada uno en docs/AUDIO.md.
 
 local Abilities = require(script.Parent.Abilities)
+local MobData = require(script.Parent.Mobs)
 
 local Actives = Abilities.Actives
 local Basics = Abilities.Abilities
@@ -138,6 +139,10 @@ local ARCANE = Color3.fromRGB(175, 120, 255)
 local FIRE = Color3.fromRGB(255, 120, 35)
 local SHADOW = Color3.fromRGB(150, 55, 230)
 local FEL = Color3.fromRGB(120, 255, 110)
+local VENOM = Color3.fromRGB(150, 255, 90)
+local BRUTE = Color3.fromRGB(255, 130, 90)
+local ROCK = Color3.fromRGB(165, 140, 115)
+local MobAttacks = MobData.Attacks
 
 local Cues: { [string]: Cue } = {
 	-- Warrior: dos tajos cruzados y un golpe de arriba hacia abajo.
@@ -470,6 +475,87 @@ local Cues: { [string]: Cue } = {
 		Sound = sound("Dodge", 0.45, 0.05),
 	},
 
+	-- Mobs y jefes (provisorio: reusan sonidos de las clases con otro tono hasta
+	-- generar los suyos con ElevenLabs; ver docs/AUDIO.md). El aviso en el suelo
+	-- lo dibuja MobFeedbackController; esto es lo que se ve al soltar el ataque.
+	MobSwing = {
+		Effects = {
+			{ Kind = "Slash", Color = BRUTE, Size = 5, Span = 120, Roll = -10, Sweep = 1 },
+		},
+		Sound = sound("WarriorCombo2", 0.5, 0.06, { Pitch = 0.75 }),
+	},
+	MobBite = {
+		Effects = {
+			{ Kind = "Slash", Color = Color3.new(1, 1, 1), Size = 3, Span = 90, Roll = 90, Sweep = 1 },
+		},
+		Sound = sound("Impact", 0.45, 0.08, { Pitch = 1.35 }),
+	},
+	MobSpit = {
+		Projectile = {
+			Shape = "Orb",
+			Color = VENOM,
+			Size = 0.8,
+			Speed = MobAttacks.SpiderSpit.Speed :: number,
+			From = "Fangs",
+			Impact = { Effects = { { Kind = "Burst", Color = VENOM, Size = 3, Duration = 0.25 } } },
+		},
+		Sound = sound("Corruption", 0.45, 0.06, { Pitch = 1.5 }),
+	},
+	MobGrowl = {
+		Sound = sound("BattleShout", 0.4, 0.05, { Pitch = 1.6 }),
+	},
+	MobCharge = {
+		Effects = {
+			{ Kind = "Trail", Color = Color3.fromRGB(220, 220, 230), Duration = 0.6 },
+		},
+		Sound = sound("Charge", 0.55, 0.05, { Pitch = 0.85 }),
+	},
+	MobDeath = {
+		Effects = {
+			{
+				Kind = "Burst",
+				Color = Color3.fromRGB(200, 200, 200),
+				Size = 5,
+				Duration = 0.4,
+				Ground = true,
+				Height = 1,
+			},
+		},
+	},
+	BossWarn = {
+		Sound = sound("Smite", 0.6, 0, { Pitch = 0.5 }),
+	},
+	OgreSmash = {
+		Effects = {
+			{ Kind = "Slash", Color = BRUTE, Size = 11, Span = 80, Roll = 90, Sweep = 1, Height = 2 },
+			{ Kind = "Ring", Color = ROCK, Delay = 0.08, Duration = 0.4, Size = 14, Ground = true },
+		},
+		Sound = sound("PaladinSmash", 0.8, 0.04, { Pitch = 0.6 }),
+	},
+	OgreStomp = {
+		Effects = {
+			{ Kind = "Ring", Color = BRUTE, Duration = 0.5, Size = 28, Ground = true },
+			{ Kind = "Ring", Color = ROCK, Delay = 0.1, Duration = 0.5, Size = 18, Ground = true },
+			{ Kind = "Burst", Color = ROCK, Size = 9, Duration = 0.35, Ground = true, Height = 1 },
+		},
+		Sound = sound("FireballExplosion", 0.8, 0.04, { Pitch = 0.6 }),
+	},
+	OgreRock = {
+		Effects = {
+			{ Kind = "Column", Color = ROCK, Size = 18, Duration = 0.25, Ground = true },
+			{ Kind = "Burst", Color = ROCK, Delay = 0.1, Size = 12, Duration = 0.35, Ground = true, Height = 0.5 },
+		},
+		Sound = sound("FireballExplosion", 0.5, 0.1, { Pitch = 0.8 }),
+	},
+	OgreRoar = {
+		Effects = {
+			{ Kind = "Ring", Color = BRUTE, Duration = 0.6, Size = 34, Ground = true },
+			{ Kind = "Ring", Color = BRUTE, Delay = 0.25, Duration = 0.6, Size = 22, Ground = true },
+			{ Kind = "Aura", Color = Color3.fromRGB(255, 60, 40), Duration = 1.5 },
+		},
+		Sound = sound("BattleShout", 0.9, 0, { Pitch = 0.55 }),
+	},
+
 	-- Impactos sobre el objetivo (llegan con el daño del servidor). Ver Impacts.
 	Impact = {
 		Effects = { { Kind = "Spark", Color = Color3.new(1, 1, 1), Size = 1 } },
@@ -503,6 +589,15 @@ local Cues: { [string]: Cue } = {
 	ImpactFireCrit = { Effects = { { Kind = "Spark", Color = FIRE, Size = 1.9 } } },
 	ImpactShadow = { Effects = { { Kind = "Spark", Color = SHADOW, Size = 0.9 } } },
 	ImpactShadowCrit = { Effects = { { Kind = "Spark", Color = SHADOW, Size = 1.8 } } },
+	-- Golpes de mobs y jefes sobre los jugadores.
+	ImpactVenom = {
+		Effects = { { Kind = "Spark", Color = VENOM, Size = 1 } },
+		Sound = sound("Impact", 0.4, 0.08, { Pitch = 1.2 }),
+	},
+	ImpactHeavy = {
+		Effects = { { Kind = "Spark", Color = BRUTE, Size = 1.8 } },
+		Sound = sound("ImpactCrit", 0.6, 0.05, { Pitch = 0.7 }),
+	},
 	-- Pulsos de daño en el tiempo: chispa chica, sin sonido.
 	ImpactTick = { Effects = { { Kind = "Spark", Color = Color3.new(1, 1, 1), Size = 0.45 } } },
 }
@@ -517,14 +612,17 @@ local Impacts: { [string]: ImpactSet } = {
 	Arcane = { Hit = "ImpactArcane", Crit = "ImpactArcaneCrit" },
 	Fire = { Hit = "ImpactFire", Crit = "ImpactFireCrit" },
 	Shadow = { Hit = "ImpactShadow", Crit = "ImpactShadowCrit" },
+	Venom = { Hit = "ImpactVenom", Crit = "ImpactVenom" },
+	Heavy = { Hit = "ImpactHeavy", Crit = "ImpactHeavy" },
 }
 
--- Sacudida de cámara cuando un golpe propio acierta. Magnitude en grados.
+-- Sacudida de cámara cuando un golpe propio acierta o cuando te golpean. Magnitude en grados.
 export type ShakeDef = { Magnitude: number, Duration: number }
 
 local Shakes: { [string]: ShakeDef } = {
 	Hit = { Magnitude = 0.35, Duration = 0.12 },
 	Crit = { Magnitude = 0.9, Duration = 0.2 },
+	Hurt = { Magnitude = 0.7, Duration = 0.18 }, -- un mob golpea al propio personaje
 }
 
 -- Arma provisoria de cada clase, hecha con piezas pegadas a las manos.

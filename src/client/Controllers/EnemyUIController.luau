@@ -1,7 +1,7 @@
 --!strict
 -- Lo que se ve de los enemigos (tag "Enemy"): barra de vida con nombre,
--- números de daño flotantes y un destello al recibir un golpe. También los
--- números verdes de curación sobre los jugadores.
+-- números de daño flotantes y un destello al recibir un golpe. Sobre los
+-- jugadores: números verdes de curación, rojos de daño recibido y "Esquivado".
 -- Todo es visual; la vida real la decide el servidor en los atributos.
 
 local CollectionService = game:GetService("CollectionService")
@@ -16,8 +16,11 @@ local NUMBER_LIFETIME = 0.8
 
 local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
 
-local screenFolder = Instance.new("Folder")
+-- ScreenGui que no se borra al reaparecer: un Folder en PlayerGui se pierde
+-- cuando el personaje muere, y con él todas las barras.
+local screenFolder = Instance.new("ScreenGui")
 screenFolder.Name = "EnemyUI"
+screenFolder.ResetOnSpawn = false
 
 local EnemyUIController = {}
 
@@ -102,9 +105,13 @@ local function attachHealthBar(model: Model)
 end
 
 local HEAL_COLOR = Color3.fromRGB(110, 255, 130)
+local INCOMING_COLOR = Color3.fromRGB(255, 70, 60)
 
--- `kind`: "Hit" (golpe), "Tick" (daño en el tiempo, más chico) o "Heal" (verde, con +).
-local function showNumber(model: Model, amount: number, crit: boolean, kind: "Hit" | "Tick" | "Heal")
+type NumberKind = "Hit" | "Tick" | "Heal" | "Incoming" | "Dodged"
+
+-- `kind`: "Hit" (golpe), "Tick" (daño en el tiempo, más chico), "Heal" (verde, con +),
+-- "Incoming" (daño que recibe un jugador, rojo) o "Dodged" (texto "Esquivado").
+local function showNumber(model: Model, amount: number, crit: boolean, kind: NumberKind)
 	local primary = model.PrimaryPart
 	if not primary then
 		return
@@ -122,15 +129,19 @@ local function showNumber(model: Model, amount: number, crit: boolean, kind: "Hi
 	label.BackgroundTransparency = 1
 	label.Size = UDim2.fromScale(1, 1)
 	label.Font = Enum.Font.GothamBlack
-	label.TextSize = if crit then 30 elseif kind == "Tick" then 16 else 22
+	label.TextSize = if crit then 30 elseif kind == "Tick" or kind == "Dodged" then 16 else 22
 	label.TextColor3 = if kind == "Heal"
 		then HEAL_COLOR
+		elseif kind == "Incoming" then INCOMING_COLOR
+		elseif kind == "Dodged" then Color3.fromRGB(140, 210, 255)
 		elseif crit then Color3.fromRGB(255, 210, 60)
 		elseif kind == "Tick" then Color3.fromRGB(215, 190, 255)
 		else Color3.new(1, 1, 1)
 	label.TextStrokeTransparency = 0.3
 	label.Text = if kind == "Heal"
 		then `+{math.floor(amount)}`
+		elseif kind == "Incoming" then `-{math.floor(amount)}`
+		elseif kind == "Dodged" then "Esquivado"
 		elseif crit then `{math.floor(amount)}!`
 		else tostring(math.floor(amount))
 	label.Parent = gui
@@ -183,6 +194,10 @@ function EnemyUIController:Start()
 			if typeof(target) == "Instance" and target:IsA("Model") and typeof(entry.Amount) == "number" then
 				if entry.Heal then
 					showNumber(target, entry.Amount, false, "Heal")
+				elseif entry.Dodged then
+					showNumber(target, 0, false, "Dodged")
+				elseif entry.Incoming then
+					showNumber(target, entry.Amount, false, "Incoming")
 				else
 					showNumber(target, entry.Amount, entry.Crit == true, if entry.Tick then "Tick" else "Hit")
 					flash(target)

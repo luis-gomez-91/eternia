@@ -24,6 +24,7 @@ local EVENTS: { [string]: Limit | false } = {
 	SelectClass = { rate = 2, burst = 3 }, -- cliente -> servidor: cambia de clase (selector provisorio)
 	CombatFeedback = false, -- servidor -> clientes: daño aplicado, para números y efectos
 	CombatCue = false, -- servidor -> clientes: un jugador hizo un ataque (animación, efectos, sonido)
+	MobCue = false, -- servidor -> clientes: un mob detecta, avisa un ataque, lo suelta, cambia de fase o muere
 }
 
 local FUNCTIONS: { [string]: Limit | false } = {}

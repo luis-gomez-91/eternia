@@ -198,6 +198,27 @@ function FeedbackController.Play(character: Model, cueId: string, replicated: bo
 	playEffectsAndSound(cue, ctx, root)
 end
 
+-- Señal de un mob o jefe desde un punto y dirección que manda el servidor (el
+-- modelo puede no haber girado todavía en este cliente). `projectileDistance`
+-- acorta el proyectil hasta donde choca con el escenario.
+function FeedbackController.PlayFrom(caster: Model, cueId: string, origin: CFrame, projectileDistance: number?)
+	local cue = Feedback.Cues[cueId]
+	if not cue then
+		warn(`[Feedback] Señal desconocida: {cueId}`)
+		return
+	end
+	local root = caster:FindFirstChild("HumanoidRootPart")
+	if cue.Projectile and projectileDistance then
+		local projectile = table.clone(cue.Projectile)
+		projectile.Distance = projectileDistance
+		local copy = table.clone(cue)
+		copy.Projectile = projectile
+		cue = copy
+	end
+	local ctx: Effects.Context = { character = caster, caster = caster, origin = origin }
+	playEffectsAndSound(cue, ctx, if root then root else anchorAt(origin.Position))
+end
+
 -- Señal del propio personaje.
 function FeedbackController.PlayLocal(cueId: string?, target: Model?)
 	local character = player.Character
@@ -310,7 +331,7 @@ function FeedbackController:Start()
 		end
 		for _, entry in batch :: { any } do
 			local target = entry.Target
-			if typeof(target) ~= "Instance" or not target:IsA("Model") or entry.Heal then
+			if typeof(target) ~= "Instance" or not target:IsA("Model") or entry.Heal or entry.Dodged then
 				continue -- las curaciones ya se ven en la señal que las lanzó
 			end
 			local crit = entry.Crit == true
@@ -323,6 +344,8 @@ function FeedbackController:Start()
 			FeedbackController.PlayAt(impactPosition(target), if crit then set.Crit else set.Hit)
 			if entry.Source == player then
 				shake(if crit then Feedback.Shakes.Crit else Feedback.Shakes.Hit)
+			elseif entry.Incoming and target == player.Character then
+				shake(Feedback.Shakes.Hurt)
 			end
 		end
 	end)

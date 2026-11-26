@@ -163,6 +163,8 @@ El fondo continuo sale de Roblox; los detalles propios de cada zona se generan. 
 
 Cada mob y jefe tiene sus sonidos en la sección "Sonidos" de su ficha ([fichas/](fichas/)): detectar al jugador, atacar, recibir golpe y morir; los jefes además el aviso de cada ataque fuerte, el cambio de fase y el rugido.
 
+Fase 0 (provisorio): los 3 mobs y el jefe de prueba reusan sonidos de las clases con otro tono (`Data/Feedback`, señales `Mob*` y `Ogre*`). Falta generar los propios con ElevenLabs; lo que usa cada uno está en su ficha.
+
 ## Música
 
 | Pista | Dónde suena | Fuente | ID Roblox | Estado |
