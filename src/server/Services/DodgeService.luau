@@ -10,6 +10,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local AbilityData = require(ReplicatedStorage.Shared.Data.Abilities)
 local Charges = require(ReplicatedStorage.Shared.Charges)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
+local CueService = require(script.Parent.CueService)
 
 local DODGE = AbilityData.Dodge
 -- Margen de carga por latencia: el cliente puede ver la carga lista un poco antes.
@@ -46,6 +47,7 @@ local function onDodge(player: Player)
 		return
 	end
 	character:SetAttribute(INVULNERABLE_ATTRIBUTE, workspace:GetServerTimeNow() + DODGE.Invulnerable)
+	CueService.Broadcast(player, DODGE.Cue)
 end
 
 function DodgeService:Start()

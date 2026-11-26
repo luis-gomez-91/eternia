@@ -35,6 +35,12 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [ ] Mage: ataque básico, Orbe arcano, Parpadeo y Bola de fuego
 - [ ] Fijar objetivo automático y botón para cambiar
 
+### Feedback de combate (provisorio, se cambia por el arte final)
+- [x] Sistema por datos: cada ataque y habilidad indica su animación, efecto y sonido (`Data/Feedback`, `Data/Poses`)
+- [x] Warrior: animaciones del combo, Tajo, Grito, Embestida y esquivar (poses en código, sin assets)
+- [x] Warrior: efectos (arco del tajo, onda del grito, estelas, chispa de impacto) y sonidos
+- [ ] Mage: lo mismo al hacer sus habilidades
+
 ### Enemigos y zona
 - [ ] Subárea de prueba en caja gris
 - [ ] 3 tipos de mobs con IA simple (patrulla, persigue, ataca, vuelve)
@@ -59,7 +65,7 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [ ] ¿Nombres finales de zonas, mazmorras y jefes?
 - [ ] ¿Estilo visual: low-poly estilizado, o más detallado?
 - [ ] ¿Tamaño del equipo y quién hace código, arte 3D, animación y música?
-- [ ] ¿Presupuesto para herramientas de pago y para contratar en Talent Hub?
+- [ ] ¿Presupuesto para herramientas de pago (incluye ElevenLabs) y para contratar en Talent Hub?
 - [ ] ¿Precio del pase de temporada y de los Cristales?
 - [ ] ¿Beta temprana abierta a todos o solo por invitación de Discord?
 - [ ] ¿Idiomas al lanzamiento: solo español, o español e inglés?
@@ -76,3 +82,8 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Muñecos de práctica y combo básico del Warrior validado en servidor (alcance, cono frontal, ritmo); daño en lotes de 0,1 s; barras, números y destello en cliente |
 | 26 nov 2026 | Esquivar con Q: dash en cliente, cargas e invulnerabilidad validadas en servidor; indicador de cargas en pantalla |
 | 26 nov 2026 | Habilidades de clase del Warrior (Tajo, Grito de batalla, Embestida) con Energía, esperas y espera global de 0,5 s validadas en servidor; barra de habilidades en pantalla |
+| 26 nov 2026 | Plan: la Fase 0 suma feedback provisorio de combate (animaciones, efectos y sonidos simples por datos); habilidades de clase del Warrior en el plan |
+| 26 nov 2026 | Plan: animación, efectos y sonido en 3 niveles (provisorio, sistema en Fase 1, final por fases); nuevo riesgo de cuello de botella de animación |
+| 26 nov 2026 | Feedback provisorio del Warrior: señales por datos (pose o animación, efectos, sonido), poses R15 en código, arcos, ondas, estelas, aura y chispas; los demás jugadores lo ven por `CombatCue`; espada provisoria en la mano; el esquivar ya no hace caer al personaje al chocar |
+| 26 nov 2026 | Sacudida de cámara al acertar golpes propios (más fuerte en crítico); grupos de volumen SFX, Música, Ambiente y Voces |
+| 26 nov 2026 | Plan: fuentes de audio (ElevenLabs para sonidos propios, Creator Store solo con licencia, APM para música de prueba) y reglas de subida |

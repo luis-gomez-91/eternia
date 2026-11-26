@@ -6,6 +6,7 @@
 export type MeleeHit = {
 	Damage: number,
 	Recovery: number, -- segundos mínimos hasta el siguiente golpe del combo
+	Cue: string, -- animación, efectos y sonido (Data/Feedback)
 }
 
 export type MeleeBasicAttack = {
@@ -29,6 +30,7 @@ export type ActiveDef = {
 	Kind: ActiveKind,
 	Cost: number, -- recurso de la clase (Energía o Maná)
 	Cooldown: number,
+	Cue: string, -- animación, efectos y sonido (Data/Feedback)
 	Damage: number?,
 	Range: number?,
 	ArcDot: number?,
@@ -48,9 +50,9 @@ local Abilities = {
 		ComboReset = 1.2,
 		EnergyPerHit = 8,
 		Hits = {
-			{ Damage = 12, Recovery = 0.45 },
-			{ Damage = 12, Recovery = 0.45 },
-			{ Damage = 22, Recovery = 0.75 },
+			{ Damage = 12, Recovery = 0.45, Cue = "WarriorCombo1" },
+			{ Damage = 12, Recovery = 0.45, Cue = "WarriorCombo2" },
+			{ Damage = 22, Recovery = 0.75, Cue = "WarriorCombo3" },
 		},
 	} :: MeleeBasicAttack,
 }
@@ -59,6 +61,7 @@ local Actives: { [string]: ActiveDef } = {
 	-- Warrior, clase (nivel 1, 3 y 6)
 	Cleave = {
 		Id = "Cleave",
+		Cue = "Cleave",
 		Name = "Tajo",
 		Kind = "Cleave",
 		Cost = 20,
@@ -69,6 +72,7 @@ local Actives: { [string]: ActiveDef } = {
 	},
 	BattleShout = {
 		Id = "BattleShout",
+		Cue = "BattleShout",
 		Name = "Grito de batalla",
 		Kind = "SelfBuff",
 		Cost = 0,
@@ -79,6 +83,7 @@ local Actives: { [string]: ActiveDef } = {
 	},
 	Charge = {
 		Id = "Charge",
+		Cue = "Charge",
 		Name = "Embestida",
 		Kind = "Charge",
 		Cost = 15,
@@ -102,6 +107,7 @@ export type DodgeDef = {
 	Distance: number, -- studs recorridos
 	Duration: number, -- segundos que dura el dash
 	Invulnerable: number, -- segundos sin recibir daño desde que empieza
+	Cue: string, -- animación, efectos y sonido (Data/Feedback)
 }
 
 -- Esquivar: igual para todas las clases.
@@ -111,6 +117,7 @@ local DODGE: DodgeDef = {
 	Distance = 16,
 	Duration = 0.2,
 	Invulnerable = 0.3,
+	Cue = "Dodge",
 }
 
 return table.freeze({

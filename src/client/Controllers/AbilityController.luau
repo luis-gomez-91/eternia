@@ -14,6 +14,7 @@ local Classes = require(ReplicatedStorage.Shared.Data.Classes)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
 local Targeting = require(ReplicatedStorage.Shared.Targeting)
 local Dash = require(script.Parent.Parent.Util.Dash)
+local FeedbackController = require(script.Parent.FeedbackController)
 
 local KEYS = { Enum.KeyCode.One, Enum.KeyCode.Two, Enum.KeyCode.Three }
 local SLOT_SIZE = 56
@@ -91,6 +92,7 @@ local function tryUse(slot: number)
 	if def.Kind == "Charge" and target then
 		startCharge(root, def, target)
 	end
+	FeedbackController.PlayLocal(def.Cue)
 end
 
 type Slot = { frame: Frame, shade: Frame, timer: TextLabel }

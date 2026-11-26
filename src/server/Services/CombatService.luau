@@ -13,6 +13,7 @@ local AbilityData = require(ReplicatedStorage.Shared.Data.Abilities)
 local Classes = require(ReplicatedStorage.Shared.Data.Classes)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
 local Targeting = require(ReplicatedStorage.Shared.Targeting)
+local CueService = require(script.Parent.CueService)
 local DamageService = require(script.Parent.DamageService)
 
 -- Margen para el jitter de red en ritmos y tiempos de espera.
@@ -90,11 +91,11 @@ local function getAliveRoot(player: Player): BasePart?
 end
 
 -- Daño base con bonos activos y tirada de crítico.
-local function hit(state: PlayerState, target: Model, base: number): number
+local function hit(player: Player, state: PlayerState, target: Model, base: number): number
 	local multiplier = if os.clock() < state.buffUntil then 1 + state.buffBonus else 1
 	local crit = math.random() < AbilityData.BaseCritChance
 	local amount = base * multiplier * (if crit then 2 else 1)
-	return DamageService.Apply(target, math.floor(amount + 0.5), crit)
+	return DamageService.Apply(target, math.floor(amount + 0.5), crit, player)
 end
 
 local function basicAttack(player: Player)
@@ -116,10 +117,11 @@ local function basicAttack(player: Player)
 	end
 	state.comboIndex = state.comboIndex % #ability.Hits + 1
 	state.lastSwing = now
+	CueService.Broadcast(player, ability.Hits[state.comboIndex].Cue)
 
 	-- Un golpe al aire también avanza el combo.
 	local target = Targeting.InCone(root.CFrame, ability.Range, ability.ArcDot)[1]
-	if target and hit(state, target, ability.Hits[state.comboIndex].Damage) > 0 then
+	if target and hit(player, state, target, ability.Hits[state.comboIndex].Damage) > 0 then
 		addEnergy(player, ability.EnergyPerHit)
 	end
 end
@@ -135,9 +137,9 @@ local activeHandlers: {
 	) -> boolean,
 } =
 	{
-		Cleave = function(_player, state, root, def)
+		Cleave = function(player, state, root, def)
 			for _, enemy in Targeting.InCone(root.CFrame, def.Range :: number, def.ArcDot :: number) do
-				hit(state, enemy, def.Damage :: number)
+				hit(player, state, enemy, def.Damage :: number)
 			end
 			return true -- al aire también gasta: es un golpe que se ve
 		end,
@@ -149,7 +151,7 @@ local activeHandlers: {
 			return true
 		end,
 
-		Charge = function(_player, state, root, def, target)
+		Charge = function(player, state, root, def, target)
 			-- El cliente elige el objetivo y se mueve; el servidor revisa que fuera válido.
 			if typeof(target) ~= "Instance" or not Targeting.IsAlive(target) then
 				return false
@@ -168,7 +170,7 @@ local activeHandlers: {
 			local travel = math.max(0, dist - Targeting.Radius(enemy) - CHARGE_STOP_DISTANCE)
 			task.delay(travel / (def.Speed :: number), function()
 				if Targeting.IsAlive(enemy) then
-					hit(state, enemy, def.Damage :: number)
+					hit(player, state, enemy, def.Damage :: number)
 				end
 			end)
 			return true
@@ -204,6 +206,7 @@ local function useActive(player: Player, abilityId: string, target: unknown)
 	addEnergy(player, -def.Cost)
 	state.readyAt[abilityId] = now + def.Cooldown
 	state.globalReadyAt = now + AbilityData.GlobalCooldown
+	CueService.Broadcast(player, def.Cue)
 end
 
 function CombatService:Start()

@@ -11,6 +11,7 @@ local UserInputService = game:GetService("UserInputService")
 local AbilityData = require(ReplicatedStorage.Shared.Data.Abilities)
 local Classes = require(ReplicatedStorage.Shared.Data.Classes)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
+local FeedbackController = require(script.Parent.FeedbackController)
 
 local player = Players.LocalPlayer
 
@@ -54,6 +55,7 @@ function InputController:Start()
 			comboIndex = comboIndex % #ability.Hits + 1
 			lastSwing = now
 			useAbility:FireServer("BasicAttack")
+			FeedbackController.PlayLocal(ability.Hits[comboIndex].Cue)
 		end
 		looping = false
 	end

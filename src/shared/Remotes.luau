@@ -22,6 +22,7 @@ local EVENTS: { [string]: Limit | false } = {
 	UseAbility = { rate = 10, burst = 15 }, -- cliente -> servidor: quiere usar una habilidad
 	Dodge = { rate = 3, burst = 4 }, -- cliente -> servidor: quiere esquivar
 	CombatFeedback = false, -- servidor -> clientes: daño aplicado, para números y efectos
+	CombatCue = false, -- servidor -> clientes: un jugador hizo un ataque (animación, efectos, sonido)
 }
 
 local FUNCTIONS: { [string]: Limit | false } = {}

@@ -13,6 +13,7 @@ local AbilityData = require(ReplicatedStorage.Shared.Data.Abilities)
 local Charges = require(ReplicatedStorage.Shared.Charges)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
 local Dash = require(script.Parent.Parent.Util.Dash)
+local FeedbackController = require(script.Parent.FeedbackController)
 
 local DODGE = AbilityData.Dodge
 local KEY = Enum.KeyCode.Q
@@ -49,6 +50,7 @@ local function tryDodge()
 	end
 	Remotes.Event("Dodge"):FireServer()
 	dash(root, humanoid)
+	FeedbackController.PlayLocal(DODGE.Cue)
 end
 
 local function buildHud(): { Frame }
@@ -107,7 +109,22 @@ local function buildHud(): { Frame }
 	return fills
 end
 
+-- Un dash rápido contra algo (p. ej. la base de un muñeco) hace tropezar al
+-- Humanoid y lo deja tirado. En este juego nunca se cae por choques.
+local function preventTripping(character: Model)
+	local humanoid = character:WaitForChild("Humanoid", 10)
+	if humanoid and humanoid:IsA("Humanoid") then
+		humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+		humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+	end
+end
+
 function DodgeController:Start()
+	player.CharacterAdded:Connect(preventTripping)
+	if player.Character then
+		task.spawn(preventTripping, player.Character)
+	end
+
 	UserInputService.InputBegan:Connect(function(input, gameProcessed)
 		if not gameProcessed and input.KeyCode == KEY then
 			tryDodge()

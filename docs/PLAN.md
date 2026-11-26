@@ -297,6 +297,8 @@ El ataque básico no gasta recurso ni tiene espera: con Energía la genera y con
 - Fénix al rango 3: 2 puntos.
 - Total: 41. Parpadeo y Barrera quedan sin maximizar. Otro jugador podría subir la Barrera y dejar el Orbe más bajo para aguantar más.
 
+Las habilidades de clase del Warrior son Tajo (golpe amplio a todos los enemigos al frente), Grito de batalla (más daño por unos segundos y Energía al instante) y Embestida (carga hasta un enemigo y lo golpea).
+
 Las otras 2 ramas del Mage usan las mismas 3 habilidades de clase y cambian el resto. Escarcha usa Lanza de hielo, Nova helada y Ventisca, con pasivas que hacen más daño a enemigos ralentizados o congelados. Arcano usa Explosión arcana, Misiles arcanos y Poder arcano, con pasivas de cargas arcanas: cada Explosión suma una carga que sube el daño y el costo de maná, y los Misiles las gastan.
 
 ### Controles
@@ -615,8 +617,25 @@ El estilo es fantasía estilizada y low-poly, con colores saturados y siluetas c
 - Música propia por zona, mazmorra y jefe; capa de combate que entra al pelear.
 - Efectos de sonido de impacto claros por clase (metal, flechas, magia).
 - Aviso sonoro antes de cada ataque fuerte de jefe.
-- Volumen separado de música, efectos y voces en ajustes.
+- Volumen separado de música, efectos, ambiente y voces en ajustes (un SoundGroup por cada uno).
 - Solo audio con licencia comercial o hecho por el equipo.
+
+**De dónde sale cada sonido**
+
+|   |   |   |
+|---|---|---|
+|Tipo|Fuente|Por qué|
+|Sonidos propios: habilidades, golpes del combo, esquivar, mobs, jefes|ElevenLabs Sound Effects (plan de pago, que da licencia comercial)|Es lo que hace que el juego suene distinto; se describe en texto y salen varias versiones|
+|Voces de personajes|ElevenLabs, solo gritos, quejidos y esfuerzos sin palabras|Las frases habría que grabarlas por idioma; los sonidos sin palabras sirven en todos|
+|Ambiente, interfaz, pasos e impactos genéricos|Creator Store, solo de catálogos con licencia (ProSoundEffects, APM Music)|Gratis, ya aprobados y sin subir nada|
+|Música|APM Music del Creator Store para prototipo y beta; música propia o contratada para el lanzamiento|La música generada con IA se usa solo si la licencia del plan permite uso comercial|
+
+**Reglas**
+
+- Nunca audio subido por usuarios del Creator Store con origen desconocido: muchos son recortes de otros juegos o películas.
+- Antes de subir, cada sonido se recorta y se normaliza en Audacity para que todos suenen parecido de fuerte.
+- Se sube por tandas con Open Cloud, porque cada audio pasa por moderación y hay un límite de subidas al mes (más alto con la cuenta verificada).
+- Los IDs viven solo en los datos (`Data/Feedback`): cambiar un sonido no toca código.
 
 ### Flujo de arte
 
@@ -626,6 +645,16 @@ El estilo es fantasía estilizada y low-poly, con colores saturados y siluetas c
 4. Modelado en Blender (o base generada con Meshy o Tripo y limpiada en Blender).
 5. Texturas y materiales, importación a Studio y prueba en móvil.
 6. Iluminación, efectos, sonido y pulido.
+
+### Animación, efectos y sonido de combate
+
+Van juntos y en 3 niveles, para que cada prueba se entienda y el arte final no obligue a tocar código:
+
+1. **Provisorio:** cada habilidad, mob o jefe entra a la caja gris con animación, efecto y sonido simples, hechos por quien programa la mecánica.
+2. **Sistema (Fase 1):** todo se define por datos (IDs de animación, efecto y sonido por habilidad), con precarga, avisos de ataques enemigos y modo de gráficos bajos. Pasar al arte final es cambiar IDs.
+3. **Final:** primero Warrior y Mage como referencia de calidad y de tiempo por habilidad; después el resto según la tabla de fases.
+
+Volumen estimado: unas 250 animaciones (unas 110 de clases, 60 de mobs y 90 de jefes), además de sus efectos y sonidos.
 
 ## Idiomas y localización
 
@@ -673,7 +702,8 @@ El juego se construye en Roblox Studio, con el código en Git y el arte 3D en Bl
 |Concept art|Higgsfield o Midjourney|Moodboards, concept de zonas y jefes|De pago|
 |Marketing|Higgsfield, CapCut|Trailers y videos cortos|De pago con plan gratis|
 |UI|Figma|Diseñar pantallas e iconos antes de llevarlos a Studio|Gratis o de pago|
-|Audio|Audacity, biblioteca de audio de Roblox, música con licencia|Música y efectos|Gratis o de pago|
+|Audio|ElevenLabs Sound Effects|Sonidos propios de combate, mobs y jefes|De pago (el plan gratis no permite uso comercial)|
+|Audio|Audacity, biblioteca de audio de Roblox, música con licencia|Recortar y normalizar; ambiente, interfaz y música|Gratis o de pago|
 |Planificación|Notion, Trello o Linear|Tareas, documentos y tablero por fase|Gratis o de pago|
 |Comunidad|Discord y grupo de Roblox|Avisos, reportes de bugs y beta testers|Gratis|
 |Analítica|Analytics de Roblox Creator Hub|Retención, embudos, economía, ingresos|Gratis|
@@ -811,7 +841,7 @@ Cada pieza del juego (zona, mazmorra, jefe, NPC, mob) pasa por los mismos 5 paso
 
 1. **Ficha en papel:** qué es, qué hace y por qué es divertido, con la plantilla de su tipo.
 2. **Concepto visual:** 2 o 3 imágenes de referencia (Higgsfield o un artista) para fijar el aspecto.
-3. **Caja gris:** versión jugable hecha con bloques en Roblox Studio, sin arte.
+3. **Caja gris:** versión jugable hecha con bloques en Roblox Studio, sin arte final. El combate sí lleva feedback provisorio (animaciones, efectos y sonidos simples) para que se entienda al jugarlo.
 4. **Prueba:** se juega con testers. Si no es divertido, se vuelve al paso 1 o 3. Nada pasa al arte final sin aprobar aquí.
 5. **Arte final:** modelos (Blender), texturas, efectos, sonido y música.
 
@@ -820,14 +850,14 @@ Cada pieza del juego (zona, mazmorra, jefe, NPC, mob) pasa por los mismos 5 paso
 |   |   |   |   |
 |---|---|---|---|
 |Fase|Ficha y concepto|Caja gris jugable|Arte final|
-|0 — Prototipo|Guía visual en borrador; plantillas de fichas; jefe de prueba y 3 mobs|Subárea de prueba y jefe de prueba|Nada|
-|1 — Núcleo técnico|Guía visual final; Ciudadela y sus NPCs; Bosque Sombrío completo y su mazmorra con 3 jefes|Ciudadela|Personaje base y armaduras iniciales; kit de piezas del Bosque|
-|2 — Clases|Aspecto de las 6 clases y efectos de sus habilidades; Arenas Rojas y su mazmorra con 3 jefes|Bosque Sombrío y mazmorra 1; zona de práctica|Ciudadela y Bosque Sombrío; efectos de habilidades|
-|3 — Mundo y mazmorras|Picos Helados, Pantano Maldito y Volcán Infernal con sus mazmorras y 9 jefes; NPCs de cada zona|Arenas Rojas y zonas 3 a 5 con sus mazmorras|Arenas Rojas y mazmorra 2 (para la beta del mes 7); música de zonas 1 y 2|
-|4 — Progresión|Aspecto del equipo por rareza, legendarios, monturas, mascotas e iconos|—|Picos Helados y Pantano Maldito con sus mazmorras; objetos y monturas|
-|5 — Endgame y PvP|Efectos visuales de los afijos de Sellos; mapas de Estandarte y Arena|Mapas de PvP|Volcán Infernal y mazmorra 5; mapas de PvP|
-|6 — Social y tienda|Cosméticos de la tienda y del pase de Temporada 1; primer evento|Evento 1|Cosméticos, tienda e interfaz final|
-|7 — Pulido y lanzamiento|Temporada 2 y siguiente evento|Evento 2|Pulido general, trailer, thumbnails e icono|
+|0 — Prototipo|Guía visual en borrador; plantillas de fichas; jefe de prueba y 3 mobs|Subárea de prueba y jefe de prueba|Nada (solo feedback provisorio de combate)|
+|1 — Núcleo técnico|Guía visual final; Ciudadela y sus NPCs; Bosque Sombrío completo y su mazmorra con 3 jefes|Ciudadela|Personaje base y armaduras iniciales; kit de piezas del Bosque; Warrior y Mage con animaciones, efectos y sonidos finales como referencia de calidad|
+|2 — Clases|Aspecto de las 6 clases y efectos de sus habilidades; Arenas Rojas y su mazmorra con 3 jefes|Bosque Sombrío y mazmorra 1; zona de práctica|Ciudadela y Bosque Sombrío; animaciones, efectos y sonidos de las 6 clases y 18 especializaciones|
+|3 — Mundo y mazmorras|Picos Helados, Pantano Maldito y Volcán Infernal con sus mazmorras y 9 jefes; NPCs de cada zona|Arenas Rojas y zonas 3 a 5 con sus mazmorras|Arenas Rojas y mazmorra 2 (para la beta del mes 7); música de zonas 1 y 2; animaciones, avisos y sonidos de los mobs y jefes de las zonas 1 y 2|
+|4 — Progresión|Aspecto del equipo por rareza, legendarios, monturas, mascotas e iconos|—|Picos Helados y Pantano Maldito con sus mazmorras, mobs y jefes animados; objetos; monturas y mascotas animadas|
+|5 — Endgame y PvP|Efectos visuales de los afijos de Sellos; mapas de Estandarte y Arena|Mapas de PvP|Volcán Infernal y mazmorra 5 con sus mobs y jefes animados; mapas de PvP; efectos de afijos y del PvP|
+|6 — Social y tienda|Cosméticos de la tienda y del pase de Temporada 1; primer evento|Evento 1|Cosméticos, tienda e interfaz final; emotes y efectos cosméticos|
+|7 — Pulido y lanzamiento|Temporada 2 y siguiente evento|Evento 2|Pulido general (incluye timing de animaciones y efectos, y versión de gráficos bajos), trailer, thumbnails e icono|
 
 Regla: una pieza no entra a construcción sin su ficha aprobada, y no entra a arte final sin pasar la prueba en caja gris.
 
@@ -847,6 +877,7 @@ Las fichas viven en [fichas/](fichas/), y cada una enlaza a su concepto visual y
 ### Fase 0 — Prototipo de combate (meses 0 a 1,5)
 
 - Warrior y Mage con 3 habilidades cada uno, ataque básico y esquivar.
+- Feedback provisorio de combate: animación, efecto y sonido simples para cada ataque y habilidad, definidos por datos para cambiarlos por el arte final sin tocar código.
 - Una subárea gris con 3 tipos de mobs y un jefe con 2 fases.
 - Controles de PC y móvil.
 - **Terminado cuando:** 10 testers juegan 20 minutos, entienden el combate sin explicación y quieren seguir.
@@ -858,6 +889,7 @@ Las fichas viven en [fichas/](fichas/), y cada una enlaza a su concepto visual y
 - Combate validado en servidor, amenaza, IA de mobs y sistema de jefes por datos.
 - UI base: vida, recurso, barra de habilidades, inventario.
 - Sistema de localización listo: todo el texto en tablas, en español e inglés, y glosario de nombres iniciado.
+- Sistema de feedback de combate por datos: animaciones, efectos y sonidos con precarga, avisos de ataques enemigos (zona roja en el suelo y sonido) y modo de gráficos bajos.
 - Guía visual aprobada.
 - **Terminado cuando:** 30 jugadores juegan 1 hora sin errores de datos ni lag notable.
 
@@ -956,6 +988,7 @@ El mayor riesgo es que el combate no se sienta bien en móvil; por eso la Fase 0
 |Contenido se acaba rápido|Media|Alto|Sellos, PvP, colecciones y temporadas cada 8 semanas|
 |Retraso del calendario|Alta|Medio|Beta temprana en el mes 7 y fases con criterio claro para recortar a tiempo|
 |Arte inconsistente por usar IA|Media|Medio|Guía visual aprobada antes de producir y retoque manual|
+|Cuello de botella de animación (unas 250 animaciones)|Alta|Alto|Animador contratado en Talent Hub antes de terminar la Fase 1; Warrior y Mage como referencia para medir el tiempo real; provisorias mientras tanto|
 |Trampas que rompen la economía|Media|Alto|Servidor autoritativo, alertas por ganancias anormales y baneos|
 |El juego no se descubre en Roblox|Media|Muy alto|Thumbnails y videos cuidados, comunidad desde la beta, eventos con fecha|
 
@@ -968,7 +1001,7 @@ Marca cada una cuando la decidas; lo que está en el doc es la recomendación.
 - ¿Nombres finales de zonas, mazmorras y jefes?
 - ¿Estilo visual: low-poly estilizado, o más detallado?
 - ¿Tamaño del equipo y quién hace código, arte 3D, animación y música?
-- ¿Presupuesto para herramientas de pago y para contratar en Talent Hub?
+- ¿Presupuesto para herramientas de pago (incluye ElevenLabs) y para contratar en Talent Hub?
 - ¿Precio del pase de temporada y de los Cristales?
 - ¿Beta temprana abierta a todos o solo por invitación de Discord?
 - ¿Idiomas al lanzamiento: solo español, o español e inglés?

@@ -12,6 +12,7 @@ export type Feedback = {
 	Target: Model,
 	Amount: number,
 	Crit: boolean,
+	Source: Player?, -- quién pegó (para la sacudida de cámara de su cliente)
 }
 
 local DamageService = {}
@@ -19,14 +20,14 @@ local DamageService = {}
 local pending: { Feedback } = {}
 
 -- Devuelve el daño que realmente se aplicó (0 si el objetivo ya no tenía vida).
-function DamageService.Apply(target: Model, amount: number, crit: boolean): number
+function DamageService.Apply(target: Model, amount: number, crit: boolean, source: Player?): number
 	local health = target:GetAttribute("Health")
 	if typeof(health) ~= "number" or health <= 0 or amount <= 0 then
 		return 0
 	end
 	local dealt = math.min(health, amount)
 	target:SetAttribute("Health", health - dealt)
-	table.insert(pending, { Target = target, Amount = amount, Crit = crit })
+	table.insert(pending, { Target = target, Amount = amount, Crit = crit, Source = source })
 	return dealt
 end
 
