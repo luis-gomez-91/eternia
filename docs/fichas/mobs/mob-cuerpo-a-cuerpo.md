@@ -28,5 +28,14 @@ Propuesta: Se acerca y golpea. Enseña a esquivar y a pegar entre sus ataques.
 ## Qué suelta
 -
 
+## Sonidos
+Ver [AUDIO.md](../../AUDIO.md). Fuente: ElevenLabs.
+| Sonido | Cuándo | Estado |
+|---|---|---|
+| Detectar | Ve al jugador | Por generar |
+| Ataque | Cada ataque de arriba | Por generar |
+| Recibe golpe | | Por generar |
+| Muere | | Por generar |
+
 ## Notas de prueba
 -

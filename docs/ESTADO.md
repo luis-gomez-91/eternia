@@ -66,6 +66,7 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [ ] ¿Estilo visual: low-poly estilizado, o más detallado?
 - [ ] ¿Tamaño del equipo y quién hace código, arte 3D, animación y música?
 - [ ] ¿Presupuesto para herramientas de pago (incluye ElevenLabs) y para contratar en Talent Hub?
+- [ ] ¿Música final: generada con ElevenLabs Music o hecha por un compositor?
 - [ ] ¿Precio del pase de temporada y de los Cristales?
 - [ ] ¿Beta temprana abierta a todos o solo por invitación de Discord?
 - [ ] ¿Idiomas al lanzamiento: solo español, o español e inglés?
@@ -87,3 +88,4 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Feedback provisorio del Warrior: señales por datos (pose o animación, efectos, sonido), poses R15 en código, arcos, ondas, estelas, aura y chispas; los demás jugadores lo ven por `CombatCue`; espada provisoria en la mano; el esquivar ya no hace caer al personaje al chocar |
 | 26 nov 2026 | Sacudida de cámara al acertar golpes propios (más fuerte en crítico); grupos de volumen SFX, Música, Ambiente y Voces |
 | 26 nov 2026 | Plan: fuentes de audio (ElevenLabs para sonidos propios, Creator Store solo con licencia, APM para música de prueba) y reglas de subida |
+| 26 nov 2026 | Plan: todos los sonidos del juego por categoría con su fuente y su fase; catálogo nuevo [AUDIO.md](AUDIO.md) con guía de estilo; sección "Sonidos" en las fichas |

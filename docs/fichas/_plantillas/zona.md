@@ -54,7 +54,10 @@ Las 3 subáreas y el camino hasta la mazmorra (imagen o boceto).
 | | | | |
 
 ## Música y sonido
--
+Ver [AUDIO.md](../../AUDIO.md).
+- Fondo continuo (Roblox):
+- Detalles propios de la zona (ElevenLabs):
+- Música:
 
 ## Notas de prueba
 -

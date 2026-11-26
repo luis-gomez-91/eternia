@@ -28,5 +28,14 @@ Propuesta: Avisa y embiste en línea recta. Enseña a leer avisos y a esquivar a
 ## Qué suelta
 -
 
+## Sonidos
+Ver [AUDIO.md](../../AUDIO.md). Fuente: ElevenLabs.
+| Sonido | Cuándo | Estado |
+|---|---|---|
+| Detectar | Ve al jugador | Por generar |
+| Ataque | Cada ataque de arriba | Por generar |
+| Recibe golpe | | Por generar |
+| Muere | | Por generar |
+
 ## Notas de prueba
 -

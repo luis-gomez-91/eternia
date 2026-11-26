@@ -28,5 +28,14 @@ Qué papel cumple en el combate y por qué es divertido pelear con él (1 o 2 l�
 ## Qué suelta
 -
 
+## Sonidos
+Ver [AUDIO.md](../../AUDIO.md). Fuente: ElevenLabs.
+| Sonido | Cuándo | Estado |
+|---|---|---|
+| Detectar | Ve al jugador | Por generar |
+| Ataque | Cada ataque de arriba | Por generar |
+| Recibe golpe | | Por generar |
+| Muere | | Por generar |
+
 ## Notas de prueba
 -

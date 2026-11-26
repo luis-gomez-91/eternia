@@ -622,17 +622,42 @@ El estilo es fantasía estilizada y low-poly, con colores saturados y siluetas c
 
 **De dónde sale cada sonido**
 
+Regla: lo que identifica a Eternia y el jugador recuerda se genera con **ElevenLabs**; lo que solo tiene que estar ahí y nadie nota sale de **Roblox genérico** (Creator Store, solo catálogos con licencia como ProSoundEffects y APM Music).
+
 |   |   |   |
 |---|---|---|
-|Tipo|Fuente|Por qué|
-|Sonidos propios: habilidades, golpes del combo, esquivar, mobs, jefes|ElevenLabs Sound Effects (plan de pago, que da licencia comercial)|Es lo que hace que el juego suene distinto; se describe en texto y salen varias versiones|
-|Voces de personajes|ElevenLabs, solo gritos, quejidos y esfuerzos sin palabras|Las frases habría que grabarlas por idioma; los sonidos sin palabras sirven en todos|
-|Ambiente, interfaz, pasos e impactos genéricos|Creator Store, solo de catálogos con licencia (ProSoundEffects, APM Music)|Gratis, ya aprobados y sin subir nada|
-|Música|APM Music del Creator Store para prototipo y beta; música propia o contratada para el lanzamiento|La música generada con IA se usa solo si la licencia del plan permite uso comercial|
+|Categoría|Ejemplos|Fuente|
+|Clases|Ataques básicos, habilidades, definitivas, esquivar, recibir golpe, morir|ElevenLabs|
+|Voces|Gritos, esfuerzos y quejidos sin palabras (sirven en todos los idiomas)|ElevenLabs|
+|Impactos|Por material (metal, carne, madera, piedra, magia) y crítico|ElevenLabs|
+|Mobs|Detectar al jugador, atacar, recibir golpe, morir|ElevenLabs|
+|Jefes|Aviso de ataque fuerte, ataques, cambio de fase, rugido, muerte|ElevenLabs|
+|Ambiente|Fondo continuo de cada zona y de la Ciudadela|Roblox genérico; detalles propios de cada zona (criaturas, lava, viento helado) con ElevenLabs|
+|Interfaz|Clics, abrir y cerrar paneles, error|Roblox genérico|
+|Momentos clave|Subir de nivel, loot por rareza, mejora en el herrero, desbloquear portal, logros|ElevenLabs|
+|Movimiento|Pasos por superficie, saltar, caer|Roblox genérico|
+|Monturas, mascotas, eventos y PvP|Sonidos de cada montura y mascota, estandarte capturado, cuenta atrás, victoria|ElevenLabs|
+|Música|Zonas, mazmorras, jefes, capa de combate|APM Music para prototipo y beta; la final es decisión pendiente (ElevenLabs Music o compositor)|
+
+El fondo continuo de las zonas queda en Roblox genérico porque un ambiente largo que se repite sin cortes sale mejor de una librería profesional que generado.
+
+**Catálogo:** cada sonido del juego tiene una fila en [AUDIO.md](AUDIO.md) con dónde suena, su fuente, el texto usado en ElevenLabs y su ID en Roblox. Así se puede regenerar o hacer variantes con el mismo estilo. Las fichas de zona, mob y jefe tienen una sección "Sonidos" que enlaza a su parte del catálogo.
+
+**Cuándo se hace cada cosa**
+
+|   |   |
+|---|---|
+|Fase|Sonidos finales|
+|1 — Núcleo técnico|Warrior y Mage completos, impactos, interfaz y momentos clave|
+|2 — Clases|Las 6 clases y 18 especializaciones|
+|3 en adelante|Mobs, jefes y ambiente de cada zona junto con su arte final; monturas, mascotas, eventos y PvP en su fase|
+
+**Costo:** se mide con el primer sonido generado y se anota aquí el estimado de créditos del catálogo completo.
 
 **Reglas**
 
 - Nunca audio subido por usuarios del Creator Store con origen desconocido: muchos son recortes de otros juegos o películas.
+- Todo texto de ElevenLabs sigue la guía de estilo de [AUDIO.md](AUDIO.md) para que el juego suene coherente.
 - Antes de subir, cada sonido se recorta y se normaliza en Audacity para que todos suenen parecido de fuerte.
 - Se sube por tandas con Open Cloud, porque cada audio pasa por moderación y hay un límite de subidas al mes (más alto con la cuenta verificada).
 - Los IDs viven solo en los datos (`Data/Feedback`): cambiar un sonido no toca código.
@@ -702,7 +727,7 @@ El juego se construye en Roblox Studio, con el código en Git y el arte 3D en Bl
 |Concept art|Higgsfield o Midjourney|Moodboards, concept de zonas y jefes|De pago|
 |Marketing|Higgsfield, CapCut|Trailers y videos cortos|De pago con plan gratis|
 |UI|Figma|Diseñar pantallas e iconos antes de llevarlos a Studio|Gratis o de pago|
-|Audio|ElevenLabs Sound Effects|Sonidos propios de combate, mobs y jefes|De pago (el plan gratis no permite uso comercial)|
+|Audio|ElevenLabs Sound Effects|Sonidos propios: clases, voces, impactos, mobs, jefes, momentos clave, monturas y eventos|De pago (el plan gratis no permite uso comercial)|
 |Audio|Audacity, biblioteca de audio de Roblox, música con licencia|Recortar y normalizar; ambiente, interfaz y música|Gratis o de pago|
 |Planificación|Notion, Trello o Linear|Tareas, documentos y tablero por fase|Gratis o de pago|
 |Comunidad|Discord y grupo de Roblox|Avisos, reportes de bugs y beta testers|Gratis|
@@ -890,6 +915,7 @@ Las fichas viven en [fichas/](fichas/), y cada una enlaza a su concepto visual y
 - UI base: vida, recurso, barra de habilidades, inventario.
 - Sistema de localización listo: todo el texto en tablas, en español e inglés, y glosario de nombres iniciado.
 - Sistema de feedback de combate por datos: animaciones, efectos y sonidos con precarga, avisos de ataques enemigos (zona roja en el suelo y sonido) y modo de gráficos bajos.
+- Sonidos finales de Warrior y Mage, impactos, interfaz y momentos clave (ver [AUDIO.md](AUDIO.md)).
 - Guía visual aprobada.
 - **Terminado cuando:** 30 jugadores juegan 1 hora sin errores de datos ni lag notable.
 
@@ -1002,6 +1028,7 @@ Marca cada una cuando la decidas; lo que está en el doc es la recomendación.
 - ¿Estilo visual: low-poly estilizado, o más detallado?
 - ¿Tamaño del equipo y quién hace código, arte 3D, animación y música?
 - ¿Presupuesto para herramientas de pago (incluye ElevenLabs) y para contratar en Talent Hub?
+- ¿Música final: generada con ElevenLabs Music o hecha por un compositor?
 - ¿Precio del pase de temporada y de los Cristales?
 - ¿Beta temprana abierta a todos o solo por invitación de Discord?
 - ¿Idiomas al lanzamiento: solo español, o español e inglés?

@@ -31,5 +31,16 @@ Rol principal: Tank / Sanador / Daño. Por qué:
 ## Recompensas
 -
 
+## Sonidos
+Ver [AUDIO.md](../../AUDIO.md). Fuente: ElevenLabs.
+| Sonido | Cuándo | Estado |
+|---|---|---|
+| Rugido | Al empezar la pelea | Por generar |
+| Aviso | Antes de cada ataque fuerte (uno por ataque) | Por generar |
+| Ataques | Cada ataque de arriba | Por generar |
+| Cambio de fase | | Por generar |
+| Recibe golpe | | Por generar |
+| Muere | | Por generar |
+
 ## Notas de prueba
 -
