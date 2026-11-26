@@ -30,7 +30,7 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 ### Combate
 - [x] Ataque básico del Warrior validado en servidor (distancia, cooldown, daño) — combo de 3 golpes 12/12/22
 - [x] Muñeco de práctica con barra de vida, números de daño y reacción al golpe
-- [ ] Esquivar: dash con 2 cargas que se recuperan en 4 s
+- [x] Esquivar: dash con 2 cargas que se recuperan en 4 s (Q; 16 studs, 0,3 s de invulnerabilidad)
 - [ ] Warrior: 3 habilidades
 - [ ] Mage: ataque básico, Orbe arcano, Parpadeo y Bola de fuego
 - [ ] Fijar objetivo automático y botón para cambiar
@@ -74,3 +74,4 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Documentos movidos a `docs/`; plantillas de fichas y borradores del jefe de prueba y 3 mobs |
 | 26 nov 2026 | Límite por jugador en remotos (cubeta de fichas): UseAbility 10/s, Dodge 3/s; probado en Studio |
 | 26 nov 2026 | Muñecos de práctica y combo básico del Warrior validado en servidor (alcance, cono frontal, ritmo); daño en lotes de 0,1 s; barras, números y destello en cliente |
+| 26 nov 2026 | Esquivar con Q: dash en cliente, cargas e invulnerabilidad validadas en servidor; indicador de cargas en pantalla |

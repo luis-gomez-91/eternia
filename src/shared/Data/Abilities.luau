@@ -37,7 +37,25 @@ local Abilities = {
 -- Probabilidad base de crítico (doble de daño) hasta que lleguen los stats de equipo.
 local BASE_CRIT_CHANCE = 0.05
 
+export type DodgeDef = {
+	Charges: number, -- cargas máximas
+	Recharge: number, -- segundos para recuperar una carga
+	Distance: number, -- studs recorridos
+	Duration: number, -- segundos que dura el dash
+	Invulnerable: number, -- segundos sin recibir daño desde que empieza
+}
+
+-- Esquivar: igual para todas las clases.
+local DODGE: DodgeDef = {
+	Charges = 2,
+	Recharge = 4,
+	Distance = 16,
+	Duration = 0.2,
+	Invulnerable = 0.3,
+}
+
 return table.freeze({
 	Abilities = table.freeze(Abilities),
 	BaseCritChance = BASE_CRIT_CHANCE,
+	Dodge = table.freeze(DODGE),
 })
