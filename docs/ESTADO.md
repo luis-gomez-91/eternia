@@ -28,8 +28,8 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [x] Remotos con límite de llamadas por segundo por jugador (`RateLimiter` + `Remotes.OnServerEvent`)
 
 ### Combate
-- [ ] Ataque básico del Warrior validado en servidor (distancia, cooldown, daño)
-- [ ] Muñeco de práctica con barra de vida, números de daño y reacción al golpe
+- [x] Ataque básico del Warrior validado en servidor (distancia, cooldown, daño) — combo de 3 golpes 12/12/22
+- [x] Muñeco de práctica con barra de vida, números de daño y reacción al golpe
 - [ ] Esquivar: dash con 2 cargas que se recuperan en 4 s
 - [ ] Warrior: 3 habilidades
 - [ ] Mage: ataque básico, Orbe arcano, Parpadeo y Bola de fuego
@@ -73,3 +73,4 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Selene, StyLua y Wally instalados; estructura de Services, Controllers, Data y Remotes con cargador Init/Start |
 | 26 nov 2026 | Documentos movidos a `docs/`; plantillas de fichas y borradores del jefe de prueba y 3 mobs |
 | 26 nov 2026 | Límite por jugador en remotos (cubeta de fichas): UseAbility 10/s, Dodge 3/s; probado en Studio |
+| 26 nov 2026 | Muñecos de práctica y combo básico del Warrior validado en servidor (alcance, cono frontal, ritmo); daño en lotes de 0,1 s; barras, números y destello en cliente |
