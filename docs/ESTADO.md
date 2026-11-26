@@ -1,6 +1,6 @@
 # Eternia — Estado del proyecto
 
-Resumen de lo hecho y lo pendiente. El diseño completo está en [PLAN.md](PLAN.md).
+Resumen de lo hecho y lo pendiente. El diseño completo está en [PLAN.md](PLAN.md); el catálogo de sonidos, en [AUDIO.md](AUDIO.md).
 
 **Fase actual:** 0 — Prototipo de combate · **Última actualización:** 26 nov 2026
 
@@ -26,6 +26,8 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [x] Selene, StyLua y Wally agregados con Rokit
 - [x] Estructura de carpetas: `Services/` (servidor), `Controllers/` (cliente), `Data/` y `Remotes` (compartido)
 - [x] Remotos con límite de llamadas por segundo por jugador (`RateLimiter` + `Remotes.OnServerEvent`)
+- [x] Place guardado en Roblox (privado), con permisos de MCP para subir assets desde `assets/audio`
+- [x] Clave de ElevenLabs en `.env` (ignorado por Git)
 
 ### Combate
 - [x] Ataque básico del Warrior validado en servidor (distancia, cooldown, daño) — combo de 3 golpes 12/12/22
@@ -39,7 +41,8 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [x] Sistema por datos: cada ataque y habilidad indica su animación, efecto y sonido (`Data/Feedback`, `Data/Poses`)
 - [x] Warrior: animaciones del combo, Tajo, Grito, Embestida y esquivar (poses en código, sin assets)
 - [x] Warrior: efectos (arco del tajo, onda del grito, estelas, chispa de impacto) y sonidos
-- [ ] Mage: lo mismo al hacer sus habilidades
+- [x] Sonidos propios del Warrior, esquivar e impactos generados con ElevenLabs y subidos a Roblox
+- [ ] Mage: animaciones, efectos y sonidos (ElevenLabs) al hacer sus habilidades
 
 ### Enemigos y zona
 - [ ] Subárea de prueba en caja gris
