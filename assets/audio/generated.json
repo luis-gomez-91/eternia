@@ -1,0 +1,65 @@
+{
+  "WarriorCombo1": {
+    "variant": "warrior/WarriorCombo1_b",
+    "folder": "warrior",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A quick one-handed sword slash cutting through the air, sharp light metallic whoosh.",
+    "duration": 0.6,
+    "assetId": "111424923198216"
+  },
+  "WarriorCombo2": {
+    "variant": "warrior/WarriorCombo2_b",
+    "folder": "warrior",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A fast backhand sword swing, airy whoosh with a slightly lower tone and a faint blade ring.",
+    "duration": 0.6,
+    "assetId": "124397046727052"
+  },
+  "WarriorCombo3": {
+    "variant": "warrior/WarriorCombo3_b",
+    "folder": "warrior",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A heavy two-handed overhead sword swing, deep powerful whoosh ending in a strong ground-slam thud.",
+    "duration": 1.0,
+    "assetId": "103438577618554"
+  },
+  "Cleave": {
+    "variant": "warrior/Cleave_b",
+    "folder": "warrior",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A wide sweeping 180-degree heavy sword cleave, deep forceful whoosh with a fiery crackling edge.",
+    "duration": 0.9,
+    "assetId": "105049720867727"
+  },
+  "BattleShout": {
+    "variant": "warrior/BattleShout_b",
+    "folder": "warrior",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music. A fierce male warrior battle cry, short wordless roar, no words, with a deep resonant war horn swell underneath.",
+    "duration": 1.6,
+    "assetId": "104391889530290"
+  },
+  "Charge": {
+    "variant": "warrior/Charge_a",
+    "folder": "warrior",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A warrior charging forward at high speed, heavy armored rush with a strong building wind whoosh.",
+    "duration": 0.8,
+    "assetId": "77904768404795"
+  },
+  "Dodge": {
+    "variant": "common/Dodge_b",
+    "folder": "common",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A very quick light dash, short cloth swish and air whoosh.",
+    "duration": 0.5,
+    "assetId": "83476574026443"
+  },
+  "Impact": {
+    "variant": "impacts/Impact_a",
+    "folder": "impacts",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A sword blade hitting a target, solid crisp thwack with a short bright metal ring.",
+    "duration": 0.5,
+    "assetId": "88644710053967"
+  },
+  "ImpactCrit": {
+    "variant": "impacts/ImpactCrit_b",
+    "folder": "impacts",
+    "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A heavy critical sword hit, crunchy powerful impact with a bright metallic ring and a short sparkling shimmer.",
+    "duration": 0.8,
+    "assetId": "125109039614338"
+  }
+}

@@ -184,19 +184,25 @@ local function createSoundGroups()
 	end
 end
 
+-- Roblox libera un audio cuando se destruye la última instancia que lo usa, y
+-- volver a cargarlo tarda unos 300 ms. Por eso queda una instancia de cada
+-- sonido viva (sin sonar) toda la sesión: así cada golpe suena al siguiente frame.
 local function preload()
+	local folder = Instance.new("Folder")
+	folder.Name = "PreloadedCombatSounds"
+	folder.Parent = SoundService
 	local sounds: { Instance } = {}
+	local seen: { [string]: boolean } = {}
 	for _, cue in Feedback.Cues do
-		if cue.Sound then
+		if cue.Sound and not seen[cue.Sound.Id] then
+			seen[cue.Sound.Id] = true
 			local sound = Instance.new("Sound")
 			sound.SoundId = cue.Sound.Id
+			sound.Parent = folder
 			table.insert(sounds, sound)
 		end
 	end
 	ContentProvider:PreloadAsync(sounds)
-	for _, sound in sounds do
-		sound:Destroy()
-	end
 end
 
 function FeedbackController:Init()

@@ -6,8 +6,8 @@
 -- y los efectos son piezas simples. Para pasar al arte final basta poner
 -- `Animation = "rbxassetid://..."` (reemplaza a la pose) y cambiar los IDs de sonido.
 --
--- Sonidos: solo con licencia clara (ver PLAN.md, "Audio"). Los marcados
--- "origen no verificado" se cambian antes de publicar.
+-- Sonidos: solo con licencia clara (ver PLAN.md, "Audio"). Catálogo con el
+-- texto usado para generar cada uno en docs/AUDIO.md.
 
 local Abilities = require(script.Parent.Abilities)
 
@@ -59,14 +59,14 @@ local Cues: { [string]: Cue } = {
 		Effects = {
 			{ Kind = "Slash", Color = STEEL, Delay = 0.1, Size = 6, Span = 140, Roll = -15, Sweep = 1 },
 		},
-		Sound = { Id = "rbxassetid://9120704978", Volume = 0.6, Pitch = 1.05, PitchJitter = 0.05 },
+		Sound = { Id = "rbxassetid://111424923198216", Volume = 0.5, PitchJitter = 0.05 },
 	},
 	WarriorCombo2 = {
 		Pose = "WarriorSlashLeft",
 		Effects = {
 			{ Kind = "Slash", Color = STEEL, Delay = 0.1, Size = 6, Span = 140, Roll = 15, Sweep = -1 },
 		},
-		Sound = { Id = "rbxassetid://9120704978", Volume = 0.6, Pitch = 0.95, PitchJitter = 0.05 },
+		Sound = { Id = "rbxassetid://124397046727052", Volume = 0.5, PitchJitter = 0.05 },
 	},
 	WarriorCombo3 = {
 		Pose = "WarriorOverhead",
@@ -74,7 +74,7 @@ local Cues: { [string]: Cue } = {
 			{ Kind = "Slash", Color = GOLD, Delay = 0.22, Size = 5, Span = 110, Roll = 90, Sweep = 1, Height = 1.2 },
 			{ Kind = "Ring", Color = GOLD, Delay = 0.3, Duration = 0.35, Size = 9, Height = -2.8 },
 		},
-		Sound = { Id = "rbxassetid://9126229255", Volume = 0.7, Pitch = 0.9, PitchJitter = 0.04 },
+		Sound = { Id = "rbxassetid://103438577618554", Volume = 0.65, PitchJitter = 0.04 },
 	},
 
 	-- Activas del Warrior
@@ -83,7 +83,7 @@ local Cues: { [string]: Cue } = {
 		Effects = {
 			{ Kind = "Slash", Color = EMBER, Delay = 0.14, Size = 8.5, Span = 200, Roll = 0, Sweep = 1 },
 		},
-		Sound = { Id = "rbxassetid://9120709477", Volume = 0.8, Pitch = 0.85, PitchJitter = 0.04 },
+		Sound = { Id = "rbxassetid://105049720867727", Volume = 0.7, PitchJitter = 0.04 },
 	},
 	BattleShout = {
 		Pose = "WarriorShout",
@@ -92,14 +92,14 @@ local Cues: { [string]: Cue } = {
 			{ Kind = "Ring", Color = GOLD, Delay = 0.3, Duration = 0.5, Size = 14, Height = -2.8 },
 			{ Kind = "Aura", Color = GOLD, Delay = 0.15, Duration = Abilities.Actives.BattleShout.Duration },
 		},
-		Sound = { Id = "rbxassetid://9120415730", Volume = 0.9, Pitch = 0.9 },
+		Sound = { Id = "rbxassetid://104391889530290", Volume = 0.7 },
 	},
 	Charge = {
 		Pose = "WarriorCharge",
 		Effects = {
 			{ Kind = "Trail", Color = EMBER, Duration = 0.4 },
 		},
-		Sound = { Id = "rbxassetid://9125648149", Volume = 0.7, Pitch = 0.9 },
+		Sound = { Id = "rbxassetid://77904768404795", Volume = 0.6 },
 	},
 
 	-- Esquivar (todas las clases)
@@ -108,19 +108,17 @@ local Cues: { [string]: Cue } = {
 		Effects = {
 			{ Kind = "Trail", Color = Color3.fromRGB(140, 210, 255), Duration = 0.25 },
 		},
-		Sound = { Id = "rbxassetid://9126283272", Volume = 0.5, Pitch = 1.1, PitchJitter = 0.05 },
+		Sound = { Id = "rbxassetid://83476574026443", Volume = 0.45, PitchJitter = 0.05 },
 	},
 
 	-- Impactos sobre el objetivo (llegan con el daño del servidor)
 	Impact = {
 		Effects = { { Kind = "Spark", Color = Color3.new(1, 1, 1), Size = 1 } },
-		-- Origen no verificado (subida de un usuario): cambiar antes de publicar.
-		Sound = { Id = "rbxassetid://101309544882556", Volume = 0.5, PitchJitter = 0.08 },
+		Sound = { Id = "rbxassetid://88644710053967", Volume = 0.5, PitchJitter = 0.08 },
 	},
 	ImpactCrit = {
 		Effects = { { Kind = "Spark", Color = Color3.fromRGB(255, 200, 60), Size = 1.7 } },
-		-- Origen no verificado (subida de un usuario): cambiar antes de publicar.
-		Sound = { Id = "rbxassetid://7171761940", Volume = 0.7, PitchJitter = 0.05 },
+		Sound = { Id = "rbxassetid://125109039614338", Volume = 0.7, PitchJitter = 0.05 },
 	},
 }
 

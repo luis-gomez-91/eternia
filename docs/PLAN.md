@@ -652,7 +652,7 @@ El fondo continuo de las zonas queda en Roblox genérico porque un ambiente larg
 |2 — Clases|Las 6 clases y 18 especializaciones|
 |3 en adelante|Mobs, jefes y ambiente de cada zona junto con su arte final; monturas, mascotas, eventos y PvP en su fase|
 
-**Costo:** se mide con el primer sonido generado y se anota aquí el estimado de créditos del catálogo completo.
+**Costo:** medido en la primera tanda (27 variantes, 22 s de audio, 117 créditos): unos **5 créditos por segundo generado**. Con 3 variantes por sonido, un sonido de combate de 1 s cuesta unos 15 créditos. Estimado del catálogo completo (unos 400 sonidos más los detalles de ambiente): entre 6.000 y 10.000 créditos, repartidos por fases.
 
 **Reglas**
 

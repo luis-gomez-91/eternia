@@ -89,3 +89,4 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Sacudida de cámara al acertar golpes propios (más fuerte en crítico); grupos de volumen SFX, Música, Ambiente y Voces |
 | 26 nov 2026 | Plan: fuentes de audio (ElevenLabs para sonidos propios, Creator Store solo con licencia, APM para música de prueba) y reglas de subida |
 | 26 nov 2026 | Plan: todos los sonidos del juego por categoría con su fuente y su fase; catálogo nuevo [AUDIO.md](AUDIO.md) con guía de estilo; sección "Sonidos" en las fichas |
+| 26 nov 2026 | Primeros sonidos propios con ElevenLabs (combo, Tajo, Grito, Embestida, esquivar, impacto y crítico) subidos a Roblox; place guardado en Roblox para poder subir assets; la precarga deja los sonidos vivos para que suenen sin retraso (de ~330 ms a 1 frame) |

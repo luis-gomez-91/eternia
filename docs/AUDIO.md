@@ -14,7 +14,8 @@ Todo texto parte de esta base para que el juego suene coherente:
 - **Estilo:** fantasía estilizada de acción, como un juego de rol para jóvenes: claro y con fuerza, nunca gore ni realista crudo.
 - **Mezcla:** seco y cercano, sin reverberación larga, sin música de fondo, sin voces salvo que se pidan.
 - **Duración:** la justa. Golpes y habilidades de 0,3 a 1,5 s; momentos clave hasta 3 s; detalles de ambiente hasta 8 s.
-- **Variantes:** se generan 3 o 4 por sonido y se elige la mejor; los golpes repetidos (combo, impactos) se quedan con 2 o 3 para alternar.
+- **Variantes:** se generan 3 por sonido y se elige la mejor midiendo inicio, subida, duración útil y si se concentra en un solo golpe. Se descarta antes cualquier variante con pico bajo −6 dB (a veces sale casi en silencio).
+- **Mínimo de ElevenLabs:** 0,5 s por sonido.
 - **Voces:** solo gritos, esfuerzos y quejidos sin palabras.
 
 Texto base que se antepone: `Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice.`
@@ -23,7 +24,7 @@ Texto base que se antepone: `Stylized fantasy action game sound effect, punchy a
 
 1. Agregar la fila en la sección que corresponde, con estado `Por generar`.
 2. Generar con el texto base más la descripción; guardar el texto final en la fila.
-3. Recortar y normalizar en Audacity; subir por tanda con Open Cloud.
+3. Recortar el silencio y normalizar a −1 dB de pico; guardar en `assets/audio/<grupo>/<Sonido>.mp3` (la variante y el texto quedan en `assets/audio/generated.json`). Subir por tanda con Open Cloud.
 4. Poner el ID en la fila y en los datos del juego (`Data/Feedback` para combate).
 
 ## Clases
@@ -32,12 +33,12 @@ Texto base que se antepone: `Stylized fantasy action game sound effect, punchy a
 
 | Sonido | Dónde suena | Fuente | Texto ElevenLabs | ID Roblox | Estado |
 |---|---|---|---|---|---|
-| WarriorCombo1 | Golpe 1 del combo (tajo) | Roblox (ProSoundEffects) | — | 9120704978 | Provisorio |
-| WarriorCombo2 | Golpe 2 del combo (revés) | Roblox (ProSoundEffects) | — | 9120704978 | Provisorio |
-| WarriorCombo3 | Golpe 3 del combo (de arriba abajo) | Roblox (ProSoundEffects) | — | 9126229255 | Provisorio |
-| Cleave | Tajo (giro amplio) | Roblox (ProSoundEffects) | — | 9120709477 | Provisorio |
-| BattleShout | Grito de batalla | Roblox (ProSoundEffects) | — | 9120415730 | Provisorio |
-| Charge | Embestida | Roblox (ProSoundEffects) | — | 9125648149 | Provisorio |
+| WarriorCombo1 | Golpe 1 del combo (tajo) | ElevenLabs | A quick one-handed sword slash cutting through the air, sharp light metallic whoosh. | 111424923198216 | En juego |
+| WarriorCombo2 | Golpe 2 del combo (revés) | ElevenLabs | A fast backhand sword swing, airy whoosh with a slightly lower tone and a faint blade ring. | 124397046727052 | En juego |
+| WarriorCombo3 | Golpe 3 del combo (de arriba abajo) | ElevenLabs | A heavy two-handed overhead sword swing, deep powerful whoosh ending in a strong ground-slam thud. | 103438577618554 | En juego |
+| Cleave | Tajo (giro amplio) | ElevenLabs | A wide sweeping 180-degree heavy sword cleave, deep forceful whoosh with a fiery crackling edge. | 105049720867727 | En juego |
+| BattleShout | Grito de batalla | ElevenLabs | A fierce male warrior battle cry, short wordless roar, no words, with a deep resonant war horn swell underneath. | 104391889530290 | En juego |
+| Charge | Embestida | ElevenLabs | A warrior charging forward at high speed, heavy armored rush with a strong building wind whoosh. | 77904768404795 | En juego |
 | WarriorHurt | Recibe un golpe (quejido) | ElevenLabs | | | Por generar |
 | WarriorDeath | Muere | ElevenLabs | | | Por generar |
 
@@ -56,14 +57,14 @@ Texto base que se antepone: `Stylized fantasy action game sound effect, punchy a
 
 | Sonido | Dónde suena | Fuente | Texto ElevenLabs | ID Roblox | Estado |
 |---|---|---|---|---|---|
-| Dodge | Esquivar | Roblox (ProSoundEffects) | — | 9126283272 | Provisorio |
+| Dodge | Esquivar | ElevenLabs | A very quick light dash, short cloth swish and air whoosh. | 83476574026443 | En juego |
 
 ## Impactos
 
 | Sonido | Dónde suena | Fuente | Texto ElevenLabs | ID Roblox | Estado |
 |---|---|---|---|---|---|
-| Impact | Golpe que acierta | Provisorio (origen no verificado) | — | 101309544882556 | Provisorio |
-| ImpactCrit | Golpe crítico | Provisorio (origen no verificado) | — | 7171761940 | Provisorio |
+| Impact | Golpe que acierta | ElevenLabs | A sword blade hitting a target, solid crisp thwack with a short bright metal ring. | 88644710053967 | En juego |
+| ImpactCrit | Golpe crítico | ElevenLabs | A heavy critical sword hit, crunchy powerful impact with a bright metallic ring and a short sparkling shimmer. | 125109039614338 | En juego |
 | ImpactMetal | Golpe a armadura o metal | ElevenLabs | | | Por generar |
 | ImpactFlesh | Golpe a criatura | ElevenLabs | | | Por generar |
 | ImpactWood | Golpe a madera (muñecos, escudos) | ElevenLabs | | | Por generar |
