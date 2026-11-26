@@ -2,6 +2,8 @@
 
 25 nov 2026 · @Luis
 
+> Avance y tareas: ver [ESTADO.md](ESTADO.md).
+
 ## Resumen
 
 Eternia es un RPG de acción en Roblox para jugadores de 10 a 25 años: una ciudad central con portales a 5 zonas, una mazmorra por zona y nivel máximo 50. Es "Dungeon Quest con clases, especializaciones, roles de tank y sanador, y PvP", no un WoW en Roblox.
