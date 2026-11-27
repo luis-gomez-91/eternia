@@ -677,7 +677,7 @@ Regla: lo que identifica a Eternia y el jugador recuerda se genera con **ElevenL
 |Momentos clave|Subir de nivel, loot por rareza, mejora en el herrero, desbloquear portal, logros|ElevenLabs|
 |Movimiento|Pasos por superficie, saltar, caer|Roblox genérico|
 |Monturas, mascotas, eventos y PvP|Sonidos de cada montura y mascota, estandarte capturado, cuenta atrás, victoria|ElevenLabs|
-|Música|Zonas, mazmorras, jefes, capa de combate|APM Music para prototipo y beta; la final es decisión pendiente (ElevenLabs Music o compositor)|
+|Música|Zonas, mazmorras, jefes, capa de combate|APM Music para prototipo y beta; la final, con ElevenLabs Music (un compositor solo si la primera pista no llega al nivel)|
 
 El fondo continuo de las zonas queda en Roblox genérico porque un ambiente largo que se repite sin cortes sale mejor de una librería profesional que generado.
 
@@ -767,6 +767,17 @@ Eternia sale con 2 idiomas traducidos a mano y suma más con el tiempo. Todo el 
 
 **Métricas:** porcentaje de jugadores y retención por idioma. Si un idioma con traducción automática supera el 10% de los jugadores, pasa a tener traducción revisada por una persona.
 
+## Equipo
+
+Eternia lo hace un equipo chico que encarga afuera lo que no se puede generar ni programar:
+
+|Área|Quién|
+|---|---|
+|Diseño y código|El dueño del proyecto, con Claude Code|
+|Concept art, íconos, sonidos y música|Generados con IA (Gemini y ElevenLabs) y aprobados por el dueño|
+|Modelado 3D y animación|Artistas contratados por encargo en Talent Hub, con las fichas, los conceptos aprobados y el anexo técnico como encargo|
+|Traducción al inglés|A mano por el equipo; portugués, con un freelancer (ver [Idiomas](#idiomas-y-localización))|
+
 ## Herramientas por área
 
 El juego se construye en Roblox Studio, con el código en Git y el arte 3D en Blender. La IA de imágenes sirve para concept art y marketing, no para los modelos finales.
@@ -786,10 +797,11 @@ El juego se construye en Roblox Studio, con el código en Git y el arte 3D en Bl
 |Modelos 3D|Meshy o Tripo|Generar bases 3D con IA que se limpian en Blender|De pago con plan gratis|
 |Texturas|Blender, Substance Painter o Krita|Pintar texturas|Gratis o de pago|
 |Animación|Animation Editor de Roblox o Moon Animator|Ataques, habilidades, emotes|Gratis o de pago|
-|Concept art|Higgsfield o Midjourney|Moodboards, concept de zonas y jefes|De pago|
+|Concept art|Gemini por API (script de `assets/concepts/`)|Moodboards, concept de zonas, jefes y personajes|De pago por uso|
 |Marketing|Higgsfield, CapCut|Trailers y videos cortos|De pago con plan gratis|
 |UI|Figma|Diseñar pantallas e iconos antes de llevarlos a Studio|Gratis o de pago|
 |Audio|ElevenLabs Sound Effects|Sonidos propios: clases, voces, impactos, mobs, jefes, momentos clave, monturas y eventos|De pago (el plan gratis no permite uso comercial)|
+|Música|ElevenLabs Music|Música final de zonas, mazmorras y jefes|De pago, en el mismo plan|
 |Audio|Audacity, biblioteca de audio de Roblox, música con licencia|Recortar y normalizar; ambiente, interfaz y música|Gratis o de pago|
 |Planificación|Notion, Trello o Linear|Tareas, documentos y tablero por fase|Gratis o de pago|
 |Comunidad|Discord y grupo de Roblox|Avisos, reportes de bugs y beta testers|Gratis|
@@ -928,7 +940,7 @@ El diseño no se hace todo al principio. Va siempre una fase por delante de la c
 Cada pieza del juego (zona, mazmorra, jefe, NPC, mob) pasa por los mismos 5 pasos:
 
 1. **Ficha en papel:** qué es, qué hace y por qué es divertido, con la plantilla de su tipo.
-2. **Concepto visual:** 2 o 3 imágenes de referencia (Higgsfield o un artista) para fijar el aspecto.
+2. **Concepto visual:** 2 o 3 imágenes de referencia (Gemini con el script del proyecto, o un artista) para fijar el aspecto.
 3. **Caja gris:** versión jugable hecha con bloques en Roblox Studio, sin arte final. El combate sí lleva feedback provisorio (animaciones, efectos y sonidos simples) para que se entienda al jugarlo.
 4. **Prueba:** se prueba jugando. Si no es divertido, se vuelve al paso 1 o 3. Nada pasa al arte final sin aprobar aquí.
 5. **Arte final:** modelos (Blender), texturas, efectos, sonido y música.
@@ -996,7 +1008,7 @@ Las fichas viven en [fichas/](fichas/), y cada una enlaza a su concepto visual y
 - Ciudadela, tutorial, 5 zonas con encargos, historia, élites, eventos y cofres.
 - 5 mazmorras con 15 jefes, modo normal y difícil.
 - Buscador de grupo.
-- **Hito: beta temprana** con la ciudad y las 2 primeras zonas (niveles 1 a 20) abierta a la comunidad de Discord.
+- **Hito: beta temprana** con la ciudad y las 2 primeras zonas (niveles 1 a 20), solo por invitación desde el Discord.
 - **Terminado cuando:** se puede llegar del nivel 1 al 50 y matar a los 15 jefes.
 
 ### Fase 4 — Progresión y economía (mes 7 a 8)
@@ -1078,7 +1090,7 @@ El mayor riesgo es que el combate no se sienta bien en móvil; por eso la Fase 0
 |Lag con 30 jugadores y muchos efectos|Media|Alto|Presupuestos de rendimiento, pruebas en móvil de gama media desde la Fase 1|
 |Pérdida o duplicación de datos|Baja|Muy alto|ProfileStore con bloqueo de sesión, registro de inventario y restauración|
 |Contenido se acaba rápido|Media|Alto|Sellos, PvP, colecciones y temporadas cada 8 semanas|
-|Retraso del calendario|Alta|Medio|Beta temprana en el mes 7 y fases con criterio claro para recortar a tiempo|
+|Retraso del calendario|Alta|Medio|Beta temprana en el mes 7 y fases con criterio claro para recortar a tiempo. Recorte de reserva: si la Fase 3 se atrasa más de un mes, se lanza con nivel máximo 40 y el Volcán Infernal llega con la Temporada 1|
 |Arte inconsistente por usar IA|Media|Medio|Guía visual aprobada antes de producir y retoque manual|
 |Cuello de botella de animación (unas 250 animaciones)|Alta|Alto|Animador contratado en Talent Hub antes de terminar la Fase 1; Warrior y Mage como referencia para medir el tiempo real; provisorias mientras tanto|
 |Trampas que rompen la economía|Media|Alto|Servidor autoritativo, alertas por ganancias anormales y baneos|
@@ -1086,15 +1098,5 @@ El mayor riesgo es que el combate no se sienta bien en móvil; por eso la Fase 0
 
 ## Decisiones pendientes
 
-Marca cada una cuando la decidas; lo que está en el doc es la recomendación.
+El estado de cada decisión está en [ESTADO.md](ESTADO.md#decisiones-pendientes). Las tomadas ya están escritas en este plan.
 
-- ¿Normal de mazmorra jugable solo, o siempre en grupo?
-- ¿Nivel máximo 50 al lanzamiento, o 40 con la quinta zona en la primera temporada?
-- ¿Nombres finales de zonas, mazmorras y jefes?
-- ¿Estilo visual: low-poly estilizado, o más detallado?
-- ¿Tamaño del equipo y quién hace código, arte 3D, animación y música?
-- ¿Presupuesto para herramientas de pago (incluye ElevenLabs) y para contratar en Talent Hub?
-- ¿Música final: generada con ElevenLabs Music o hecha por un compositor?
-- ¿Precio del pase de temporada y de los Cristales?
-- ¿Beta temprana abierta a todos o solo por invitación de Discord?
-- ¿Idiomas al lanzamiento: solo español, o español e inglés?

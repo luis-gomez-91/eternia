@@ -172,4 +172,4 @@ Fase 0: los 3 mobs y el jefe de prueba tienen sus propios sonidos de ElevenLabs,
 | Ciudadela | Ciudad central | APM Music (prototipo) | | Por elegir |
 | Combate | Capa que entra al pelear | APM Music (prototipo) | | Por elegir |
 
-La música final de cada zona, mazmorra y jefe está pendiente de decidir (ElevenLabs Music o compositor).
+La música final de cada zona, mazmorra y jefe se genera con ElevenLabs Music. Si la primera pista no llega al nivel, se encarga a un compositor.
