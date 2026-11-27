@@ -148,12 +148,22 @@ local function tryUse(slot: number | "Ultimate")
 		return
 	end
 
-	-- Con objetivo fijado a su alcance, el personaje gira hacia él antes de usarla;
-	-- si no hay, el primero al frente (la misma regla que usa el servidor).
+	-- Con objetivo fijado, la habilidad va siempre a él: el personaje gira hacia
+	-- él, y si está fuera de alcance no se usa (no salta a otro enemigo más cerca).
+	-- Sin objetivo fijado, el primero al frente (la misma regla que el servidor).
+	-- Las de área frente a uno (cono) no necesitan objetivo: solo giran si está cerca.
 	local target: Model? = nil
-	if def.Range then
+	if def.Range and not AbilityData.NeedsTarget(def) then
 		target = TargetController.FaceIfWithin(def.Range)
-			or Targeting.InCone(root.CFrame, def.Range, def.ArcDot or 0.5)[1]
+	elseif def.Range then
+		if TargetController.Get() then
+			target = TargetController.FaceIfWithin(def.Range)
+			if not target then
+				return -- el objetivo fijado está lejos: no se gasta
+			end
+		else
+			target = Targeting.InCone(root.CFrame, def.Range, def.ArcDot or 0.5)[1]
+		end
 	end
 	if AbilityData.NeedsTarget(def) and not target then
 		return -- nadie al alcance: no se gasta

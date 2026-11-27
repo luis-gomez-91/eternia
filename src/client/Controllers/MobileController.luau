@@ -118,11 +118,13 @@ local function onHold(button: TextButton, callback: (pressed: boolean) -> ())
 	end)
 end
 
+-- Salta cambiando el estado del Humanoid: `humanoid.Jump = true` no sirve
+-- porque el ControlModule de Roblox reescribe Jump en cada fotograma.
 local function jump()
 	local character = player.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-	if humanoid then
-		humanoid.Jump = true
+	if humanoid and humanoid.Health > 0 and humanoid.FloorMaterial ~= Enum.Material.Air then
+		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 	end
 end
 
@@ -159,7 +161,12 @@ local function build()
 
 	local jumpButton = makeButton(holder, "Jump", arc(0, INNER_RADIUS), INNER_SIZE, COLORS.Utility)
 	jumpButton.label.Text = "Saltar"
-	jumpButton.button.Activated:Connect(jump)
+	-- Al tocar, no al soltar: el salto tiene que sentirse inmediato.
+	onHold(jumpButton.button, function(pressed)
+		if pressed then
+			jump()
+		end
+	end)
 
 	-- Habilidades 1 a 3 en el primer arco. Las de especialización (4 a 6)
 	-- se suman aquí cuando existan.
