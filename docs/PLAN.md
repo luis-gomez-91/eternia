@@ -597,11 +597,7 @@ El estilo es fantasía estilizada y low-poly, con colores saturados y siluetas c
 
 ### Guía visual
 
-- **Personajes:** avatares R15 de Roblox con armaduras como accesorios; cada clase se reconoce por su silueta (escudo grande, capa, sombrero de mago, capucha).
-- **Proporciones:** ligeramente exageradas (armas y hombreras grandes).
-- **Legibilidad del combate:** zonas de peligro enemigas en rojo, curación en verde menta, defensa en azul y críticos en dorado; veneno y magia vil en verde ácido para no confundirse con la curación. Ningún efecto tapa las marcas del suelo.
-- **Rarezas:** gris, azul, morado y naranja en bordes, haces de luz del loot y textos.
-- **UI:** marcos de piedra y metal simples, iconos con contorno grueso, textos grandes legibles en móvil (mínimo 14 px).
+Las reglas de estilo (geometría, materiales, luz, colores reservados de combate, siluetas de clase, niveles de enemigos, animación, efectos e interfaz) están en [GUIA-VISUAL.md](GUIA-VISUAL.md). Las medidas para Roblox, los presupuestos orientativos, las fichas de los 3 conceptos de prueba y la checklist de aprobación están en [GUIA-VISUAL-TECNICA.md](GUIA-VISUAL-TECNICA.md).
 
 ### Ambiente por zona
 
@@ -618,9 +614,7 @@ El estilo es fantasía estilizada y low-poly, con colores saturados y siluetas c
 ### Presupuestos de rendimiento
 
 - Meta: 60 FPS en PC y 30 FPS estables en un teléfono de gama media.
-- Mobs: menos de 3.000 triángulos; jefes: menos de 15.000.
-- Texturas de 512 px en general y 1024 px solo para jefes.
-- Partículas: máximo 200 activas por efecto, con versión reducida en gráficos bajos.
+- Presupuestos por asset y por escena (triángulos, texturas, partículas, luces, draw calls): orientativos y pendientes de medir en un teléfono real, en [GUIA-VISUAL-TECNICA.md](GUIA-VISUAL-TECNICA.md#presupuestos-orientativos). Referencias iniciales: mobs con menos de 3.000 triángulos y jefes con menos de 15.000.
 - Zonas: StreamingEnabled y LOD para que solo cargue lo cercano.
 
 ### Audio
@@ -676,10 +670,10 @@ El fondo continuo de las zonas queda en Roblox genérico porque un ambiente larg
 ### Flujo de arte
 
 1. Concept art y moodboard por zona y jefe (IA de imágenes como Higgsfield o Midjourney, retocado por un artista).
-2. Guía visual aprobada.
+2. Guía visual aprobada: los 3 conceptos de prueba pasan juntos la checklist de [GUIA-VISUAL-TECNICA.md](GUIA-VISUAL-TECNICA.md#checklist-de-aprobación).
 3. Bloqueo de la zona en Roblox Studio con piezas grises.
 4. Modelado en Blender (o base generada con Meshy o Tripo y limpiada en Blender).
-5. Texturas y materiales, importación a Studio y prueba en móvil.
+5. Texturas y materiales con paletas compartidas, importación a Studio y prueba en móvil dentro de los presupuestos del anexo técnico.
 6. Iluminación, efectos, sonido y pulido.
 
 ### Animación, efectos y sonido de combate

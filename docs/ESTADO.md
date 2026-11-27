@@ -1,6 +1,6 @@
 # Eternia — Estado del proyecto
 
-Resumen de lo hecho y lo pendiente. El diseño completo está en [PLAN.md](PLAN.md); el catálogo de sonidos, en [AUDIO.md](AUDIO.md); las reglas de arte, en [GUIA-VISUAL.md](GUIA-VISUAL.md).
+Resumen de lo hecho y lo pendiente. El diseño completo está en [PLAN.md](PLAN.md); el catálogo de sonidos, en [AUDIO.md](AUDIO.md); las reglas de arte, en [GUIA-VISUAL.md](GUIA-VISUAL.md) y su [anexo técnico](GUIA-VISUAL-TECNICA.md).
 
 **Fase actual:** 0 — Prototipo de combate · **Última actualización:** 26 nov 2026
 
@@ -67,7 +67,9 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [ ] Teclas reasignables (en el menú de opciones, más adelante)
 
 ### Diseño (fuera del código)
-- [x] Guía visual en borrador: [GUIA-VISUAL.md](GUIA-VISUAL.md). Falta aprobarla con 3 conceptos de prueba
+- [x] Guía visual en borrador: [GUIA-VISUAL.md](GUIA-VISUAL.md), con anexo técnico [GUIA-VISUAL-TECNICA.md](GUIA-VISUAL-TECNICA.md) (presupuestos orientativos, fichas y checklist)
+- [ ] 3 conceptos de prueba (Warrior con armadura, Goblin Saqueador, rincón del Claro del Molino) aprobados juntos con la checklist del anexo
+- [ ] Medir en un teléfono real: distancia de cámara, luz (Voxel o ShadowMap) y presupuestos por escena
 - [x] Plantillas de fichas (zona, mazmorra, jefe, NPC, mob) — ver [fichas/](fichas/)
 - [x] Fichas del jefe de prueba y los 3 mobs llenas (estado: En caja gris)
 
@@ -76,7 +78,7 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [ ] ¿Normal de mazmorra jugable solo, o siempre en grupo?
 - [ ] ¿Nivel máximo 50 al lanzamiento, o 40 con la quinta zona en la primera temporada?
 - [ ] ¿Nombres finales de zonas, mazmorras y jefes?
-- [ ] ¿Estilo visual: low-poly estilizado, o más detallado?
+- [ ] ¿Estilo visual: low-poly estilizado, o más detallado? Propuesta en borrador: low-poly estilizado ([GUIA-VISUAL.md](GUIA-VISUAL.md)); se cierra cuando se aprueben los 3 conceptos
 - [ ] ¿Tamaño del equipo y quién hace código, arte 3D, animación y música?
 - [ ] ¿Presupuesto para herramientas de pago (incluye ElevenLabs) y para contratar en Talent Hub?
 - [ ] ¿Música final: generada con ElevenLabs Music o hecha por un compositor?
@@ -106,5 +108,6 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Subárea de prueba en caja gris con 3 mobs (Goblin Saqueador, Araña Escupidora, Lobo Gris) y jefe de prueba de 2 fases (Ogro del Claro). IA en servidor: patrulla, detecta, persigue, avisa con zona roja en el suelo, ataca y vuelve inmune a su sitio. Daño a jugadores con invulnerabilidad del esquivar. Fichas llenas. Arreglado: las barras de vida desaparecían al morir el jugador |
 | 26 nov 2026 | Controles: teclas 1 a 6 y R; barra de definitiva y una definitiva provisoria por clase; botones táctiles en arco para móvil. 16 sonidos de mobs y jefe generados con ElevenLabs, sin subir todavía (la red de la oficina bloquea Roblox) |
 | 26 nov 2026 | Guía visual en borrador: estilo low-poly estilizado, colores reservados de combate, siluetas por clase y reglas de enemigos, efectos e interfaz. La curación pasa a verde menta y el veneno y la magia vil a verde ácido, para no confundirlos |
+| 26 nov 2026 | Guía visual completada sin cambiar el estilo ni los colores: geometría, materiales (Metal en armas y armaduras), luz, cámara, R15, niveles de enemigos y tiempos de animación. Nuevo anexo técnico con presupuestos orientativos, fichas de los 3 conceptos y checklist. Sigue en borrador |
 | 26 nov 2026 | Se quita la sesión con 10 testers: cada cambio se prueba en casa en PC y móvil |
 | 26 nov 2026 | Primeros sonidos propios con ElevenLabs (combo, Tajo, Grito, Embestida, esquivar, impacto y crítico) subidos a Roblox; place guardado en Roblox para poder subir assets; la precarga deja los sonidos vivos para que suenen sin retraso (de ~330 ms a 1 frame) |
