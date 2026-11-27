@@ -93,11 +93,13 @@ local function makeButton(parent: Instance, name: string, center: Vector2, size:
 	icon.BackgroundTransparency = 1
 	icon.AnchorPoint = Vector2.new(0.5, 0.5)
 	icon.Position = UDim2.fromScale(0.5, 0.5)
-	icon.Size = UDim2.fromScale(0.8, 0.8)
-	icon.ScaleType = Enum.ScaleType.Fit
+	-- Ilustración opaca que llena el botón, recortada en círculo.
+	icon.Size = UDim2.fromScale(1, 1)
+	icon.ScaleType = Enum.ScaleType.Crop
 	icon.Visible = false
 	icon.ZIndex = 0 -- debajo del % de la definitiva y del tiempo de espera
 	icon.Parent = button
+	Instance.new("UICorner", icon).CornerRadius = UDim.new(0.5, 0)
 
 	-- Segundos de espera, encima de todo.
 	local timer = Instance.new("TextLabel")
@@ -325,9 +327,10 @@ local function build()
 			button.button.Visible = info ~= nil
 			if info then
 				setIcon(button, info.icon, info.name)
-				button.icon.ImageTransparency = if info.remaining >= 1 then 0.6 else 0
 				button.timer.Text = if info.remaining >= 1 then tostring(math.ceil(info.remaining)) else ""
 				local ready = info.remaining <= 0 and info.usable
+				-- Apagado en espera o sin recurso, igual que la barra de PC.
+				button.icon.ImageTransparency = if ready then 0 else 0.55
 				button.button.BackgroundTransparency = if ready then 0.15 else 0.6
 				button.label.TextTransparency = if info.remaining >= 1 then 0.6 else 0
 			end

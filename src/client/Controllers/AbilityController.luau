@@ -474,10 +474,12 @@ local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, F
 		icon.BackgroundTransparency = 1
 		icon.AnchorPoint = Vector2.new(0.5, 0.5)
 		icon.Position = UDim2.fromScale(0.5, 0.5)
-		icon.Size = UDim2.fromScale(0.86, 0.86)
-		icon.ScaleType = Enum.ScaleType.Fit
+		-- Los íconos son ilustraciones opacas que llenan el espacio entero.
+		icon.Size = UDim2.fromScale(1, 1)
+		icon.ScaleType = Enum.ScaleType.Crop
 		icon.Visible = false
 		icon.Parent = frame
+		Instance.new("UICorner", icon).CornerRadius = UDim.new(0, 8)
 
 		frame.MouseEnter:Connect(function()
 			hovered = i
@@ -496,6 +498,7 @@ local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, F
 		key.TextSize = 13
 		key.TextColor3 = Color3.fromRGB(240, 190, 50)
 		key.TextXAlignment = Enum.TextXAlignment.Left
+		key.TextStrokeTransparency = 0.2 -- se lee sobre la ilustración del ícono
 		key.Text = if isUltimate then "R" else tostring(i)
 		key.ZIndex = 3
 		key.Parent = frame

@@ -50,7 +50,16 @@ Estos colores ya están en el juego (`Data/Feedback`, `EnemyUIController`, `MobF
 | Definitiva | Naranja `#FF7828` | Botón y barra de la R |
 | Veneno y magia vil | Verde ácido `#AFFF32` a `#C8F028` | Araña, Brujo. Amarillento a propósito, para no confundirse con la curación |
 
-**Colores de las clases** (efectos, arma provisoria, acento de su UI): Warrior acero y brasa, Paladín dorado sagrado, Ranger verde naturaleza, Mage morado arcano y fuego, Sacerdote luz blanca cálida, Brujo morado sombra con verde vil.
+**Colores de las clases** (efectos, arma provisoria, acento de su UI y fondo o brillo de sus íconos). Cada clase tiene un color principal para que se reconozca de un vistazo, elegido para no confundirse con los colores reservados. En los íconos es una guía, no una regla: manda el color del elemento (el fuego es naranja aunque sea del Mage, la curación es verde menta).
+
+| Clase | Color | Cuidado con |
+|---|---|---|
+| Warrior | Rojo carmesí oscuro `#A0202E`, con acero | Oscuro y apagado, para no parecer el rojo de peligro `#FF2D23` |
+| Paladín | Dorado bronce `#E0A030`, con blanco | Más cálido que el dorado de los críticos `#FFD23C` |
+| Ranger | Amarillo mostaza `#D8C83A`, con madera | Más verdoso que el amarillo de la barra de Energía |
+| Mage | Azul cobalto `#2F6BFF`, con fuego naranja | Más oscuro y saturado que el azul cielo de defensa `#8CD2FF` |
+| Sacerdote | Blanco cálido `#FFF4D6`, con dorado | Las curaciones siguen en verde menta |
+| Brujo | Morado `#8A3FD0`, con verde ácido vil | El verde vil sigue siendo amarillento, nunca menta |
 
 **Rarezas:** Común gris `#B4B4B4`, Raro azul `#3C8CFF`, Épico morado `#A04BFF`, Legendario naranja `#FF8C1E`. Se ven en bordes, haces de luz del loot y textos.
 
@@ -86,7 +95,8 @@ Las animaciones comunican el combate, no solo decoran. Cada ataque tiene **antic
 
 ## Interfaz
 
-- Marcos simples de piedra y metal, esquinas redondeadas, iconos con contorno grueso y **sin texto dibujado dentro** (para traducir).
+- Marcos simples de piedra y metal, esquinas redondeadas.
+- **Íconos de habilidades:** ilustración pintada que llena todo el cuadrado (opaca, sin transparencia ni marco), con luz dramática: un foco brillante y bordes que caen a oscuro. Un solo motivo grande que se reconozca a 44 px. **Sin texto dibujado dentro** (para traducir). El marco, el redondeo en móvil y el apagado los pone la interfaz. Inspirados en el estilo de los RPG clásicos, nunca copiando íconos de otro juego.
 - Fuente Gotham (Bold y Black). **Mínimo 14 px** de texto en móvil.
 - PC y móvil hoy (consola, más adelante). En móvil, botones de 44 px o más en arco alrededor del pulgar derecho; el lado izquierdo queda libre para el joystick. Detalle por plataforma en el [anexo](GUIA-VISUAL-TECNICA.md#interfaz-por-plataforma).
 

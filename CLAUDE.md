@@ -28,5 +28,5 @@ Al terminar un cambio:
 ## Assets
 
 - Sonidos: generados con ElevenLabs (clave en `.env`), guardados en `assets/audio/<grupo>/` y registrados en `assets/audio/generated.json` con su `assetId`. Se suben con Open Cloud (MCP de Roblox Studio, `/assets/v1/assets`, creador = usuario dueño del place) y el ID va a `SOUND_IDS` en `src/shared/Data/Feedback.luau`.
-- Íconos de habilidades: PNG de 256 px en `assets/icons/<clase>/`, registrados en `assets/icons/uploaded.json`. Se suben como `Image` (no `Decal`, cuyo ID no sirve en scripts) y el ID va al campo `Icon` de `src/shared/Data/Abilities.luau`. Los provisorios los dibuja `assets/icons/draw_icons.py`.
+- Íconos de habilidades: PNG de 256 px en `assets/icons/<clase>/`, registrados en `assets/icons/uploaded.json`. Se suben como `Image` (no `Decal`, cuyo ID no sirve en scripts) y el ID va al campo `Icon` de `src/shared/Data/Abilities.luau`. Se generan con Gemini (`assets/icons/generate_icons.py`, clave `GEMINI_API_KEY` en `.env`, instrucciones en `prompts.json`), se elige un candidato en `finalize_icons.py` y se muestran al usuario antes de subirlos.
 - Pruebas en PC y en móvil (simulador de Studio y celular real) antes de dar algo por terminado.

@@ -1,98 +1,122 @@
 {
   "Cleave": {
     "file": "warrior/Cleave.png",
-    "assetId": "102258518348847"
+    "assetId": "83120447753827",
+    "source": "candidates/Cleave/gemini-3.1-flash-image_3.jpg"
   },
   "BattleShout": {
     "file": "warrior/BattleShout.png",
-    "assetId": "90321338396394"
+    "assetId": "92721561938638",
+    "source": "candidates/BattleShout/gemini-3.1-flash-image_3.jpg"
   },
   "Charge": {
     "file": "warrior/Charge.png",
-    "assetId": "113502248977170"
+    "assetId": "127130803326420",
+    "source": "candidates/Charge/gemini-3.1-flash-image_2.jpg"
   },
   "Whirlwind": {
     "file": "warrior/Whirlwind.png",
-    "assetId": "106885372945371"
+    "assetId": "70485699850451",
+    "source": "candidates/Whirlwind/gemini-3.1-flash-image_1.jpg"
   },
   "HolyStrike": {
     "file": "paladin/HolyStrike.png",
-    "assetId": "85159086930305"
+    "assetId": "72535989943506",
+    "source": "candidates/HolyStrike/gemini-3.1-flash-image_3.jpg"
   },
   "Consecration": {
     "file": "paladin/Consecration.png",
-    "assetId": "138119949939336"
+    "assetId": "111956222476091",
+    "source": "candidates/Consecration/gemini-3.1-flash-image_2.jpg"
   },
   "HealingLight": {
     "file": "paladin/HealingLight.png",
-    "assetId": "137661013544453"
+    "assetId": "82274935017050",
+    "source": "candidates/HealingLight/gemini-3.1-flash-image_2.jpg"
   },
   "DawnHammer": {
     "file": "paladin/DawnHammer.png",
-    "assetId": "102832106982855"
+    "assetId": "77447008813583",
+    "source": "candidates/DawnHammer/gemini-3.1-flash-image_1.jpg"
   },
   "PowerShot": {
     "file": "ranger/PowerShot.png",
-    "assetId": "86630840999189"
+    "assetId": "79066903599955",
+    "source": "candidates/PowerShot/gemini-3.1-flash-image_1.jpg"
   },
   "ArrowRain": {
     "file": "ranger/ArrowRain.png",
-    "assetId": "131037842182703"
+    "assetId": "119338109628759",
+    "source": "candidates/ArrowRain/gemini-3.1-flash-image_1.jpg"
   },
   "Disengage": {
     "file": "ranger/Disengage.png",
-    "assetId": "97313154568043"
+    "assetId": "84586715026915",
+    "source": "candidates/Disengage/gemini-3.1-flash-image_1.jpg"
   },
   "Volley": {
     "file": "ranger/Volley.png",
-    "assetId": "119922445718736"
+    "assetId": "83590150421872",
+    "source": "candidates/Volley/gemini-3.1-flash-image_1.jpg"
   },
   "ArcaneOrb": {
     "file": "mage/ArcaneOrb.png",
-    "assetId": "129435169481355"
+    "assetId": "100348224842789",
+    "source": "candidates/ArcaneOrb/gemini-3.1-flash-image_1.jpg"
   },
   "Blink": {
     "file": "mage/Blink.png",
-    "assetId": "110685310401359"
+    "assetId": "117971607227249",
+    "source": "candidates/Blink/gemini-3.1-flash-image_1.jpg"
   },
   "Fireball": {
     "file": "mage/Fireball.png",
-    "assetId": "140583281100370"
+    "assetId": "115453557511246",
+    "source": "candidates/Fireball/gemini-3.1-flash-image_1.jpg"
   },
   "MeteorShower": {
     "file": "mage/MeteorShower.png",
-    "assetId": "113511834224457"
+    "assetId": "126009370361460",
+    "source": "candidates/MeteorShower/gemini-3.1-flash-image_1.jpg"
   },
   "Smite": {
     "file": "priest/Smite.png",
-    "assetId": "122105416474092"
+    "assetId": "111874713537447",
+    "source": "candidates/Smite/gemini-3.1-flash-image_1.jpg"
   },
   "Heal": {
     "file": "priest/Heal.png",
-    "assetId": "74288907185323"
+    "assetId": "108733629382809",
+    "source": "candidates/Heal/gemini-3.1-flash-image_1.jpg"
   },
   "HolyNova": {
     "file": "priest/HolyNova.png",
-    "assetId": "77637409589940"
+    "assetId": "84710246428537",
+    "source": "candidates/HolyNova/gemini-3.1-flash-image_1.jpg"
   },
   "DivineHymn": {
     "file": "priest/DivineHymn.png",
-    "assetId": "101463983183502"
+    "assetId": "131337215788772",
+    "source": "candidates/DivineHymn/gemini-3.1-flash-image_1.jpg"
   },
   "Corruption": {
     "file": "warlock/Corruption.png",
-    "assetId": "125290655755208"
+    "assetId": "94299462145310",
+    "source": "candidates/Corruption/gemini-3.1-flash-image_1.jpg"
   },
   "DrainLife": {
     "file": "warlock/DrainLife.png",
-    "assetId": "79203382793777"
+    "assetId": "104984132615928",
+    "source": "candidates/DrainLife/gemini-3.1-flash-image_1.jpg"
   },
   "ShadowBlast": {
     "file": "warlock/ShadowBlast.png",
-    "assetId": "121404023717192"
+    "assetId": "96003169501636",
+    "source": "candidates/ShadowBlast/gemini-3.1-flash-image_1.jpg"
   },
   "ShadowPact": {
     "file": "warlock/ShadowPact.png",
-    "assetId": "136079240478939"
+    "assetId": "118667443740862",
+    "source": "candidates/ShadowPact/gemini-3.1-flash-image_1.jpg"
   }
 }

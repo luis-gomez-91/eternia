@@ -28,3 +28,6 @@ trace.json
 
 # Claves locales (ElevenLabs, etc.): nunca a Git
 .env
+assets/icons/candidates/
+.DS_Store
+__pycache__/
