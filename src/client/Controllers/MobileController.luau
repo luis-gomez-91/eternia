@@ -24,6 +24,8 @@ local INNER_RADIUS = 112
 local OUTER_RADIUS = 176
 -- Centro del botón de ataque, medido desde la esquina inferior derecha.
 local CENTER = Vector2.new(-100, -100)
+-- Tamaño de un botón mientras se mantiene apretado.
+local PRESSED_SCALE = 0.9
 
 local COLORS = {
 	Attack = Color3.fromRGB(190, 60, 50),
@@ -97,13 +99,17 @@ local function makeButton(parent: Instance, name: string, center: Vector2, size:
 	return { button = button, label = label, timer = timer, stroke = stroke }
 end
 
--- Botón que se mantiene apretado (ataque): avisa al apretar y al soltar.
+-- Botón que se mantiene apretado (ataque, saltar): avisa al apretar y al
+-- soltar, y se achica mientras está apretado para que se note que tomó el toque.
 local function onHold(button: TextButton, callback: (pressed: boolean) -> ())
 	local touching = 0
+	local scale = Instance.new("UIScale")
+	scale.Parent = button
 	button.InputBegan:Connect(function(input)
 		local kind = input.UserInputType
 		if kind == Enum.UserInputType.Touch or kind == Enum.UserInputType.MouseButton1 then
 			touching += 1
+			scale.Scale = PRESSED_SCALE
 			callback(true)
 		end
 	end)
@@ -112,20 +118,43 @@ local function onHold(button: TextButton, callback: (pressed: boolean) -> ())
 		if kind == Enum.UserInputType.Touch or kind == Enum.UserInputType.MouseButton1 then
 			touching = math.max(0, touching - 1)
 			if touching == 0 then
+				scale.Scale = 1
 				callback(false)
 			end
 		end
 	end)
 end
 
--- Salta cambiando el estado del Humanoid: `humanoid.Jump = true` no sirve
--- porque el ControlModule de Roblox reescribe Jump en cada fotograma.
-local function jump()
+-- Salto: al tocar, si está en el suelo, salta en el acto cambiando el estado
+-- del Humanoid. Además, mientras el botón siga apretado, Humanoid.Jump queda en
+-- true justo después de que el ControlModule de Roblox lo escriba (prioridad
+-- Input) en cada fotograma; puesto una sola vez, el ControlModule lo borra.
+-- Igual que el botón de Roblox: mantenerlo apretado sigue saltando.
+local JUMP_STEP = "EterniaTouchJump"
+local jumpHeld = false
+
+local function getHumanoid(): Humanoid?
 	local character = player.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-	if humanoid and humanoid.Health > 0 and humanoid.FloorMaterial ~= Enum.Material.Air then
+	return if humanoid and humanoid.Health > 0 then humanoid else nil
+end
+
+local function setJumpHeld(pressed: boolean)
+	jumpHeld = pressed
+	if not pressed then
+		RunService:UnbindFromRenderStep(JUMP_STEP)
+		return
+	end
+	local humanoid = getHumanoid()
+	if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air then
 		humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 	end
+	RunService:BindToRenderStep(JUMP_STEP, Enum.RenderPriority.Input.Value + 1, function()
+		local current = getHumanoid()
+		if jumpHeld and current then
+			current.Jump = true
+		end
+	end)
 end
 
 -- Oculta el botón de salto de Roblox: el nuestro está en el arco.
@@ -162,11 +191,7 @@ local function build()
 	local jumpButton = makeButton(holder, "Jump", arc(0, INNER_RADIUS), INNER_SIZE, COLORS.Utility)
 	jumpButton.label.Text = "Saltar"
 	-- Al tocar, no al soltar: el salto tiene que sentirse inmediato.
-	onHold(jumpButton.button, function(pressed)
-		if pressed then
-			jump()
-		end
-	end)
+	onHold(jumpButton.button, setJumpHeld)
 
 	-- Habilidades 1 a 3 en el primer arco. Las de especialización (4 a 6)
 	-- se suman aquí cuando existan.

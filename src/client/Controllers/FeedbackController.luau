@@ -180,6 +180,9 @@ function FeedbackController.Play(character: Model, cueId: string, replicated: bo
 		warn(`[Feedback] Señal desconocida: {cueId}`)
 		return
 	end
+	if cue.ClearAura then
+		Effects.ClearAura(character)
+	end
 	local root = character:FindFirstChild("HumanoidRootPart")
 	if not root or not root:IsA("BasePart") then
 		return

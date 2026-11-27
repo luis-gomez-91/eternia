@@ -7,6 +7,10 @@
 -- para no mandar pedidos que se van a rechazar; el servidor sigue decidiendo.
 -- Los movimientos (Embestida, Parpadeo, Retirada) se hacen aquí para que
 -- respondan al instante, igual que esquivar.
+--
+-- Hechizos con carga (CastTime): al apretar empieza la carga (barra en pantalla,
+-- brillo y velocidad reducida) y el hechizo sale solo al terminar. Esquivar,
+-- perder el objetivo o salirse de alcance la cancelan sin gastar nada.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -49,6 +53,13 @@ local LEAP_UP_SPEED = 28
 local SLOT_SIZE = 56
 -- Igual que en el servidor: la Embestida se detiene a esta distancia del borde.
 local CHARGE_STOP_DISTANCE = 2.5
+-- Durante la carga, el objetivo puede alejarse esto más allá del alcance antes de
+-- cancelar (un poco menos que el margen del servidor, para que no la rechace).
+local CAST_RANGE_TOLERANCE = 2
+-- Cualquier dirección: el objetivo no tiene que estar al frente mientras se carga.
+local ANY_DIRECTION = -1
+local CAST_BAR_SIZE = Vector2.new(220, 20)
+local CAST_COLOR = Color3.fromRGB(255, 150, 50)
 
 local player = Players.LocalPlayer
 
@@ -56,6 +67,16 @@ local AbilityController = {}
 
 local readyAt: { [string]: number } = {}
 local globalReadyAt = 0
+
+type Cast = {
+	abilityId: string,
+	def: AbilityData.ActiveDef,
+	target: Model?,
+	startedAt: number,
+	humanoid: Humanoid,
+	baseSpeed: number, -- velocidad antes de la carga, para devolverla
+}
+local cast: Cast? = nil
 
 local function getClass(): Classes.ClassDef?
 	local classId = player:GetAttribute("Class")
@@ -129,7 +150,107 @@ local function abilityAt(slot: number | "Ultimate"): (string?, AbilityData.Activ
 	return abilityId, abilityId and AbilityData.Actives[abilityId]
 end
 
+-- Lanza la activa: avisa al servidor, empieza la espera y hace el movimiento
+-- y la señal en el acto.
+local function release(root: BasePart, abilityId: string, def: AbilityData.ActiveDef, target: Model?)
+	local now = os.clock()
+	Remotes.Event("UseAbility"):FireServer(abilityId, target)
+	readyAt[abilityId] = now + def.Cooldown
+	globalReadyAt = now + AbilityData.GlobalCooldown
+
+	if def.Kind == "Charge" and target then
+		startCharge(root, def, target)
+	elseif def.Kind == "Blink" then
+		blink(root, def.Distance :: number)
+	elseif def.Kind == "Leap" then
+		leap(root, def)
+	end
+	FeedbackController.PlayLocal(def.Cue, target)
+end
+
+-- Termina la carga y devuelve la velocidad normal.
+local function endCast(): Cast?
+	local current = cast
+	if not current then
+		return nil
+	end
+	cast = nil
+	if current.humanoid.Parent then
+		current.humanoid.WalkSpeed = current.baseSpeed
+	end
+	return current
+end
+
+-- Cancela la carga en curso (esquivar, objetivo perdido): no gasta nada.
+local function cancelCast()
+	if endCast() then
+		Remotes.Event("CancelCast"):FireServer()
+		FeedbackController.PlayLocal("CastCancel")
+	end
+end
+
+local function startCast(abilityId: string, def: AbilityData.ActiveDef, target: Model?)
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if not humanoid then
+		return
+	end
+	Remotes.Event("StartCast"):FireServer(abilityId, target)
+	cast = {
+		abilityId = abilityId,
+		def = def,
+		target = target,
+		startedAt = os.clock(),
+		humanoid = humanoid,
+		baseSpeed = humanoid.WalkSpeed,
+	}
+	humanoid.WalkSpeed *= def.CastMove or AbilityData.CastMove
+	FeedbackController.PlayLocal(def.CastCue, target)
+end
+
+-- Cada fotograma: cancela si se perdió el objetivo (o se movió y la habilidad
+-- no lo permite) y lanza el hechizo al completar la carga.
+local function updateCast()
+	local current = cast
+	if not current then
+		return
+	end
+	local root = getAliveRoot()
+	if not root or current.humanoid.Health <= 0 then
+		cancelCast()
+		return
+	end
+	local def = current.def
+	local target = current.target
+	if target then
+		local range = (def.Range or 0) + CAST_RANGE_TOLERANCE
+		if not Targeting.IsAlive(target) or not Targeting.Distance(target, root.CFrame, range, ANY_DIRECTION) then
+			cancelCast()
+			return
+		end
+	end
+	if def.CastMoveCancels and current.humanoid.MoveDirection.Magnitude > 0.1 then
+		cancelCast()
+		return
+	end
+	if os.clock() - current.startedAt < (def.CastTime :: number) then
+		return
+	end
+	endCast()
+	if target then
+		local position = target:GetPivot().Position
+		local flat = Vector3.new(position.X, root.Position.Y, position.Z)
+		if (flat - root.Position).Magnitude > 0.1 then
+			root.CFrame = CFrame.lookAt(root.Position, flat)
+		end
+	end
+	release(root, current.abilityId, def, target)
+end
+
 local function tryUse(slot: number | "Ultimate")
+	if cast then
+		return -- una carga a la vez; esquivar la cancela
+	end
 	local abilityId, def = abilityAt(slot)
 	local root = getAliveRoot()
 	if not abilityId or not def or not root then
@@ -169,22 +290,64 @@ local function tryUse(slot: number | "Ultimate")
 		return -- nadie al alcance: no se gasta
 	end
 
-	Remotes.Event("UseAbility"):FireServer(abilityId, target)
-	readyAt[abilityId] = now + def.Cooldown
-	globalReadyAt = now + AbilityData.GlobalCooldown
-
-	if def.Kind == "Charge" and target then
-		startCharge(root, def, target)
-	elseif def.Kind == "Blink" then
-		blink(root, def.Distance :: number)
-	elseif def.Kind == "Leap" then
-		leap(root, def)
+	if def.CastTime then
+		startCast(abilityId, def, target)
+	else
+		release(root, abilityId, def, target)
 	end
-	FeedbackController.PlayLocal(def.Cue, target)
 end
 
 -- Usar un espacio (1 a 6) o la definitiva desde otro control (botones táctiles).
 AbilityController.Use = tryUse
+
+-- Para esquivar y el ataque básico: cancelar la carga y saber si hay una en curso.
+AbilityController.CancelCast = cancelCast
+
+function AbilityController.IsCasting(): boolean
+	return cast ~= nil
+end
+
+-- Barra de carga al centro, debajo del personaje.
+local function buildCastBar(): (Frame, Frame, TextLabel)
+	local gui = Instance.new("ScreenGui")
+	gui.Name = "CastBar"
+	gui.ResetOnSpawn = false
+
+	local back = Instance.new("Frame")
+	back.AnchorPoint = Vector2.new(0.5, 0.5)
+	back.Position = UDim2.fromScale(0.5, 0.66)
+	back.Size = UDim2.fromOffset(CAST_BAR_SIZE.X, CAST_BAR_SIZE.Y)
+	back.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+	back.BackgroundTransparency = 0.2
+	back.BorderSizePixel = 0
+	back.Visible = false
+	back.Parent = gui
+	Instance.new("UICorner", back).CornerRadius = UDim.new(0, 6)
+	local stroke = Instance.new("UIStroke")
+	stroke.Color = CAST_COLOR
+	stroke.Thickness = 1.5
+	stroke.Parent = back
+
+	local fill = Instance.new("Frame")
+	fill.BackgroundColor3 = CAST_COLOR
+	fill.BorderSizePixel = 0
+	fill.Size = UDim2.fromScale(0, 1)
+	fill.Parent = back
+	Instance.new("UICorner", fill).CornerRadius = UDim.new(0, 6)
+
+	local label = Instance.new("TextLabel")
+	label.BackgroundTransparency = 1
+	label.Size = UDim2.fromScale(1, 1)
+	label.Font = Enum.Font.GothamBold
+	label.TextSize = 13
+	label.TextColor3 = Color3.new(1, 1, 1)
+	label.TextStrokeTransparency = 0.4
+	label.ZIndex = 2
+	label.Parent = back
+
+	gui.Parent = player:WaitForChild("PlayerGui")
+	return back, fill, label
+end
 
 export type SlotInfo = {
 	name: string,
@@ -371,11 +534,25 @@ function AbilityController:Start()
 		end
 	end)
 
+	local castBack, castFill, castLabel = buildCastBar()
+	RunService.Heartbeat:Connect(updateCast)
+	player.CharacterAdded:Connect(function()
+		endCast()
+	end)
+
 	local energyFill, energyText, slots, row = buildHud()
 	local hud = row.Parent :: Frame
 	local hudSize = hud.Size
 	local hudPosition = hud.Position
 	RunService.RenderStepped:Connect(function()
+		local current = cast
+		castBack.Visible = current ~= nil
+		if current then
+			local progress = (os.clock() - current.startedAt) / (current.def.CastTime :: number)
+			castFill.Size = UDim2.fromScale(math.clamp(progress, 0, 1), 1)
+			castLabel.Text = current.def.Name
+		end
+
 		local energy, maxEnergy = getResource()
 		energyFill.Size = UDim2.fromScale(if maxEnergy > 0 then energy / maxEnergy else 0, 1)
 

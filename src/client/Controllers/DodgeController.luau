@@ -1,5 +1,6 @@
 --!strict
 -- Esquivar con Q: dash corto hacia donde te mueves (o hacia adelante si estás quieto).
+-- Cancela la carga de un hechizo.
 -- El movimiento se hace aquí para que responda al instante; el servidor lleva
 -- las cargas con las mismas reglas (Shared/Charges) y da la invulnerabilidad.
 -- También dibuja las cargas abajo al centro.
@@ -13,6 +14,7 @@ local AbilityData = require(ReplicatedStorage.Shared.Data.Abilities)
 local Charges = require(ReplicatedStorage.Shared.Charges)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
 local Dash = require(script.Parent.Parent.Util.Dash)
+local AbilityController = require(script.Parent.AbilityController)
 local FeedbackController = require(script.Parent.FeedbackController)
 
 local DODGE = AbilityData.Dodge
@@ -48,6 +50,8 @@ local function tryDodge()
 	if not meter:TryConsume(os.clock()) then
 		return
 	end
+	-- Esquivar cancela la carga de un hechizo (antes del dash, que devuelve la velocidad).
+	AbilityController.CancelCast()
 	Remotes.Event("Dodge"):FireServer()
 	dash(root, humanoid)
 	FeedbackController.PlayLocal(DODGE.Cue)

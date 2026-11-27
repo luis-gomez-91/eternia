@@ -73,6 +73,7 @@ export type Cue = {
 	Effects: { EffectDef }?,
 	Sound: SoundDef?,
 	Projectile: ProjectileDef?,
+	ClearAura: boolean?, -- apaga el brillo del personaje (carga cancelada)
 }
 
 -- IDs de los sonidos subidos (docs/AUDIO.md).
@@ -176,6 +177,9 @@ local DEATH_PUFF: EffectDef =
 	{ Kind = "Burst", Color = Color3.fromRGB(200, 200, 200), Size = 5, Duration = 0.4, Ground = true, Height = 1 }
 
 local Cues: { [string]: Cue } = {
+	-- Carga cancelada (esquivar, objetivo perdido): apaga el brillo de la carga.
+	CastCancel = { ClearAura = true },
+
 	-- Warrior: dos tajos cruzados y un golpe de arriba hacia abajo.
 	WarriorCombo1 = {
 		Pose = "WarriorSlashRight",
@@ -379,6 +383,13 @@ local Cues: { [string]: Cue } = {
 			},
 		},
 		Sound = sound("FireballCast", 0.55, 0.04),
+	},
+
+	-- Carga de la Bola de fuego: brillo de fuego que dura toda la carga.
+	FireballCharge = {
+		Effects = {
+			{ Kind = "Aura", Color = FIRE, Duration = (Actives.Fireball.CastTime :: number) + 0.2 },
+		},
 	},
 
 	-- Sacerdote: luz blanca y curación verde.

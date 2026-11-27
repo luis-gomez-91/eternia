@@ -181,6 +181,15 @@ local function aura(def: Feedback.EffectDef, ctx: Context)
 	end)
 end
 
+-- Apaga el brillo del personaje antes de tiempo (carga cancelada).
+function Effects.ClearAura(character: Model)
+	local highlight = auras[character]
+	if highlight then
+		auras[character] = nil
+		highlight:Destroy()
+	end
+end
+
 -- Chispa de impacto: destello y esquirlas que salen en todas direcciones.
 local function spark(def: Feedback.EffectDef, ctx: Context)
 	local scale = def.Size or 1

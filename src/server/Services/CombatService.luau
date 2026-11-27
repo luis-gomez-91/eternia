@@ -10,6 +10,11 @@
 -- clase, ver Data/Classes). La Energía la genera el ataque básico; el Maná se
 -- recupera solo y un poco con el ataque básico. Las activas lo gastan.
 --
+-- Hechizos con carga (CastTime): el cliente avisa al empezar (StartCast) y
+-- manda UseAbility al terminar. El servidor revisa que la carga haya durado lo
+-- que dice la habilidad y que no haya esquivado en medio; si no, la ignora.
+-- Cancelar no cobra nada ni empieza la espera.
+--
 -- Clase: atributo Class. Mientras no exista la selección de personaje, el
 -- jugador la cambia con el selector provisorio (remoto SelectClass).
 
@@ -39,6 +44,16 @@ local CHARGE_STOP_DISTANCE = 2.5
 local DEFAULT_CLASS = "Warrior"
 -- Cada cuánto se recupera el Maná.
 local REGEN_INTERVAL = 0.5
+-- Margen de latencia para el tiempo de carga de un hechizo.
+local CAST_TOLERANCE = 0.15
+-- Atributo del personaje que pone DodgeService: fin de la invulnerabilidad del esquive.
+local INVULNERABLE_ATTRIBUTE = "InvulnerableUntil"
+
+type Cast = {
+	abilityId: string,
+	startedAt: number, -- os.clock() del servidor
+	serverStart: number, -- workspace:GetServerTimeNow(), para compararlo con el esquive
+}
 
 type PlayerState = {
 	comboIndex: number,
@@ -47,6 +62,7 @@ type PlayerState = {
 	globalReadyAt: number,
 	buffUntil: number,
 	buffBonus: number,
+	cast: Cast?, -- hechizo que está cargando
 }
 
 local CombatService = {}
@@ -342,36 +358,93 @@ local activeHandlers: { [AbilityData.ActiveKind]: Handler } = {
 	end,
 }
 
-local function useActive(player: Player, abilityId: string, target: unknown)
+-- Revisa que el jugador pueda usar la activa ahora: es de su clase (o su
+-- definitiva), está vivo, terminó las esperas y tiene recurso o barra llena.
+local function checkReady(player: Player, abilityId: string): (ActiveDef?, PlayerState?, BasePart?, boolean)
 	local class = getClass(player)
 	local def = AbilityData.Actives[abilityId]
 	if not class or not def then
-		return
+		return nil, nil, nil, false
 	end
 	-- La definitiva se paga con la barra llena en vez de recurso.
 	local isUltimate = abilityId == class.Ultimate
 	if not isUltimate and not table.find(class.Actives, abilityId) then
-		return
+		return nil, nil, nil, false
 	end
 	local root = getAliveRoot(player)
 	if not root then
-		return
+		return nil, nil, nil, false
 	end
 
 	local state = getState(player)
 	local now = os.clock()
 	if now < state.globalReadyAt - TIMING_TOLERANCE then
-		return
+		return nil, nil, nil, false
 	end
 	if now < (state.readyAt[abilityId] or 0) - TIMING_TOLERANCE then
-		return
+		return nil, nil, nil, false
 	end
 	if isUltimate then
 		if not UltimateService.IsFull(player) then
-			return
+			return nil, nil, nil, false
 		end
 	elseif getResource(player) < def.Cost then
+		return nil, nil, nil, false
+	end
+	return def, state, root, isUltimate
+end
+
+-- true si el jugador esquivó después de `since` (hora del servidor).
+local function dodgedSince(player: Player, since: number): boolean
+	local character = player.Character
+	local untilTime = character and character:GetAttribute(INVULNERABLE_ATTRIBUTE)
+	return typeof(untilTime) == "number" and untilTime - AbilityData.Dodge.Invulnerable > since
+end
+
+local function startCast(player: Player, abilityId: string, target: unknown)
+	local def, state, root = checkReady(player, abilityId)
+	if not def or not state or not root or not def.CastTime then
 		return
+	end
+	local enemy: Model? = nil
+	if AbilityData.NeedsTarget(def) then
+		enemy = resolveTarget(root, def.Range :: number, def.ArcDot or 0.5, target)
+		if not enemy then
+			return
+		end
+	end
+	state.cast = { abilityId = abilityId, startedAt = os.clock(), serverStart = workspace:GetServerTimeNow() }
+	if def.CastCue then
+		CueService.Broadcast(player, def.CastCue, enemy)
+	end
+end
+
+local function cancelCast(player: Player)
+	local state = states[player]
+	if state and state.cast then
+		state.cast = nil
+		CueService.Broadcast(player, "CastCancel")
+	end
+end
+
+local function useActive(player: Player, abilityId: string, target: unknown)
+	local def, state, root, isUltimate = checkReady(player, abilityId)
+	if not def or not state or not root then
+		return
+	end
+	if def.CastTime then
+		-- Solo vale si cargó todo el tiempo, sin esquivar, este mismo hechizo.
+		local cast = state.cast
+		state.cast = nil
+		if not cast or cast.abilityId ~= abilityId then
+			return
+		end
+		if os.clock() - cast.startedAt < def.CastTime - CAST_TOLERANCE then
+			return
+		end
+		if dodgedSince(player, cast.serverStart) then
+			return
+		end
 	end
 
 	local used, cueTarget = activeHandlers[def.Kind](player, state, root, def, target)
@@ -383,6 +456,7 @@ local function useActive(player: Player, abilityId: string, target: unknown)
 	else
 		addResource(player, -def.Cost)
 	end
+	local now = os.clock()
 	state.readyAt[abilityId] = now + def.Cooldown
 	state.globalReadyAt = now + AbilityData.GlobalCooldown
 	CueService.Broadcast(player, def.Cue, cueTarget)
@@ -422,6 +496,14 @@ function CombatService:Start()
 			useActive(player, abilityId, target)
 		end
 	end)
+
+	Remotes.OnServerEvent("StartCast", function(player: Player, abilityId: unknown, target: unknown)
+		if typeof(abilityId) == "string" then
+			startCast(player, abilityId, target)
+		end
+	end)
+
+	Remotes.OnServerEvent("CancelCast", cancelCast)
 
 	Remotes.OnServerEvent("SelectClass", function(player: Player, classId: unknown)
 		if typeof(classId) == "string" and Classes[classId] and player:GetAttribute("Class") ~= classId then

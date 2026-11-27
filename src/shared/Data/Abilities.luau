@@ -72,6 +72,11 @@ export type ActiveDef = {
 	Drain: number?, -- Strike: fracción del daño que cura al que la lanza
 	Heal: number?, -- Heal/Area: fracción de la vida máxima que cura
 	Distance: number?, -- Blink/Leap: studs que recorre
+	-- Hechizos con carga (PLAN.md, "Hechizos con carga"): sale al terminar la carga.
+	CastTime: number?, -- segundos de carga; sin valor, instantánea
+	CastCue: string?, -- señal mientras carga (brillo que ven todos)
+	CastMove: number?, -- velocidad al cargar, fracción de la normal (CAST_MOVE por defecto)
+	CastMoveCancels: boolean?, -- moverse cancela la carga (prueba al estilo WoW)
 }
 
 local Abilities: { [string]: BasicAttack } = {
@@ -305,13 +310,18 @@ local Actives: { [string]: ActiveDef } = {
 		Impact = "Fire",
 		Cost = 20,
 		Cooldown = 3,
-		Damage = 35,
+		-- Con carga pega más que una instantánea del mismo costo (antes 35 y 15).
+		Damage = 55,
 		Range = 40,
 		ArcDot = 0.8,
 		Speed = 75,
-		Delay = 0.35,
+		Delay = 0.1,
 		Radius = 6,
-		SplashDamage = 15,
+		SplashDamage = 20,
+		CastTime = 1,
+		CastCue = "FireballCharge",
+		-- Para probar la regla de WoW: CastMove = 1 y CastMoveCancels = true.
+		CastMove = 0.5,
 		Dot = { Damage = 4, Ticks = 4, Interval = 1 },
 	},
 
@@ -509,6 +519,9 @@ local NEEDS_TARGET: { [ActiveKind]: boolean } = {
 -- Espera mínima entre dos activas cualesquiera.
 local GLOBAL_COOLDOWN = 0.5
 
+-- Velocidad al cargar un hechizo si la habilidad no dice otra (fracción de la normal).
+local CAST_MOVE = 0.5
+
 -- Probabilidad base de crítico (doble de daño) hasta que lleguen los stats de equipo.
 local BASE_CRIT_CHANCE = 0.05
 
@@ -555,6 +568,7 @@ return table.freeze({
 	Actives = table.freeze(Actives),
 	NeedsTarget = needsTarget,
 	GlobalCooldown = GLOBAL_COOLDOWN,
+	CastMove = CAST_MOVE,
 	UltimateFill = ULTIMATE_FILL,
 	UltimateTakenWeight = ULTIMATE_TAKEN_WEIGHT,
 	BaseCritChance = BASE_CRIT_CHANCE,

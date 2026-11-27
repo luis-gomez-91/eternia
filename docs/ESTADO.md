@@ -66,6 +66,7 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [x] Móvil: botones en arco alrededor del pulgar derecho (ataque, saltar, 1 a 3, esquivar con cargas, definitiva con % y cambiar objetivo); reemplaza el botón de salto de Roblox. Probado en el simulador de iPhone 17 Pro y en un celular real
 - [x] Las habilidades con objetivo respetan el foco: van al enemigo fijado o no se usan si está lejos
 - [ ] Teclas reasignables (en el menú de opciones, más adelante)
+- [x] Prueba de hechizo con carga: Bola de fuego del Mage con 1 s, movimiento al 50% y esquivar que cancela sin gastar; probada en PC y móvil (reglas en [PLAN.md](PLAN.md#hechizos-con-carga))
 
 ### Publicación de prueba
 - [x] Juego publicado en privado como "Eternia — Desarrollo", con descripción y género
@@ -122,3 +123,5 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Guía visual completada sin cambiar el estilo ni los colores: geometría, materiales (Metal en armas y armaduras), luz, cámara, R15, niveles de enemigos y tiempos de animación. Nuevo anexo técnico con presupuestos orientativos, fichas de los 3 conceptos y checklist. Sigue en borrador |
 | 26 nov 2026 | Se quita la sesión con 10 testers: cada cambio se prueba en casa en PC y móvil |
 | 26 nov 2026 | Primeros sonidos propios con ElevenLabs (combo, Tajo, Grito, Embestida, esquivar, impacto y crítico) subidos a Roblox; place guardado en Roblox para poder subir assets; la precarga deja los sonidos vivos para que suenen sin retraso (de ~330 ms a 1 frame) |
+| 26 nov 2026 | Plan: hechizos con carga solo en algunos hechizos grandes de especialización (cargas de 0,5 a 1,5 s y canalizados), moviéndose al 50% y con esquivar que cancela; el resto sigue instantáneo. Lista por especialización en el plan |
+| 26 nov 2026 | Bola de fuego del Mage con carga de 1 s: barra de carga, brillo visible para todos, movimiento al 50%; esquivar, perder el objetivo o salirse de alcance cancela sin gastar. El servidor valida el tiempo de carga y el esquive. Daño 55 y salpicadura 20 (antes 35 y 15). Funciona en PC y móvil |

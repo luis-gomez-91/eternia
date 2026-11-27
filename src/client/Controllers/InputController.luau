@@ -12,6 +12,7 @@ local AbilityData = require(ReplicatedStorage.Shared.Data.Abilities)
 local Classes = require(ReplicatedStorage.Shared.Data.Classes)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
 local Targeting = require(ReplicatedStorage.Shared.Targeting)
+local AbilityController = require(script.Parent.AbilityController)
 local FeedbackController = require(script.Parent.FeedbackController)
 local TargetController = require(script.Parent.TargetController)
 
@@ -46,6 +47,13 @@ function InputController:Start()
 	local comboIndex = 0
 	local lastSwing = -math.huge
 
+	-- El combo es de la clase: al cambiarla empieza de nuevo. Si no, un índice
+	-- del Warrior (golpe 2 o 3) no existe en un ataque de un solo disparo.
+	player:GetAttributeChangedSignal("Class"):Connect(function()
+		comboIndex = 0
+		lastSwing = -math.huge
+	end)
+
 	-- Golpea mientras el botón siga apretado, esperando lo que pide cada golpe.
 	local function attackLoop()
 		if looping then
@@ -57,9 +65,14 @@ function InputController:Start()
 			if not ability then
 				break
 			end
+			if AbilityController.IsCasting() then
+				task.wait() -- no se ataca mientras se carga un hechizo
+				continue
+			end
 			local now = os.clock()
 			local elapsed = now - lastSwing
-			local wait = if comboIndex > 0 then ability.Hits[comboIndex].Recovery - elapsed else 0
+			local previous = ability.Hits[comboIndex]
+			local wait = if previous then previous.Recovery - elapsed else 0
 			if wait > 0 then
 				task.wait(wait)
 				continue

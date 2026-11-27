@@ -263,6 +263,41 @@ Hay 3 tipos de habilidad, además del ataque básico:
 
 El ataque básico no gasta recurso ni tiene espera: con Energía la genera y con Maná recupera un poco. Las 3 habilidades de clase son las mismas para las 3 especializaciones; lo que cambia de una rama a otra son las otras 3 activas, las 4 pasivas y la definitiva.
 
+#### Hechizos con carga
+
+Casi todo es instantáneo, porque el combate pide moverse y esquivar las zonas rojas, y en móvil quedarse quieto se siente lento. Algunos hechizos grandes llevan una carga corta para darles peso y un riesgo a cambio de más daño o curación.
+
+- **Carga:** de 0,5 a 1,5 s. El hechizo sale solo al terminar, hacia el objetivo fijado.
+- **Canalizado:** el efecto ocurre mientras dura (de 1,5 a 3 s). Se puede cortar antes y se pierde lo que faltaba.
+- **Moverse:** mientras se carga o se canaliza, el personaje se mueve al 50% de su velocidad.
+- **Esquivar cancela.** Una carga cancelada no gasta recurso ni empieza la espera. Un canalizado se cobra al empezar, así que cortarlo pierde lo que faltaba.
+- **El objetivo cuenta:** si el objetivo fijado muere o se sale de alcance durante la carga, se cancela sin gastar nada.
+- **Recibir daño no interrumpe.** Interrumpir queda solo para mecánicas especiales de jefes, que avisan antes.
+- **Pagan el riesgo:** pegan o curan bastante más que una instantánea del mismo costo. El número exacto se ajusta en la Fase 2 con el muñeco.
+- **Se ve:** barra de carga sobre el personaje y sobre el botón, y un brillo que los demás también ven (en PvP se puede anticipar).
+- **Nunca llevan carga:** el ataque básico, las 3 habilidades de clase (así los niveles 1 a 9 son simples), los desplazamientos, las defensivas, las de tank y las definitivas.
+
+|   |   |   |
+|---|---|---|
+|Clase|Especialización|Hechizos con carga|
+|Warrior|Todas|Ninguno|
+|Paladín|Sagrado|Luz sagrada (carga 1 s): la curación grande a un aliado|
+|Paladín|Protección y Castigo|Ninguno|
+|Ranger|Tirador|Disparo apuntado (carga 1 s)|
+|Ranger|Bestias|Llamar bestia (carga 1,5 s)|
+|Ranger|Trampero|Ninguno|
+|Mage|Fuego|Bola de fuego (carga 1 s)|
+|Mage|Escarcha|Ventisca (canalizado 3 s)|
+|Mage|Arcano|Explosión arcana (carga 0,75 s) y Misiles arcanos (canalizado 1,5 s)|
+|Sacerdote|Luz|Círculo de sanación (carga 1 s)|
+|Sacerdote|Disciplina|Ninguno: es el sanador que cura mientras se mueve|
+|Sacerdote|Sombra|Tortura mental (canalizado 2 s)|
+|Brujo|Maldiciones|Ninguno: aplica daño en el tiempo y sigue moviéndose|
+|Brujo|Invocación|Invocar diablillo e Invocar guardián (carga 1,5 s)|
+|Brujo|Caos|Descarga del caos (carga 1 s)|
+
+Así cada clase de tela tiene ramas con carga y ramas más móviles, y quien prefiera no cargar tiene una opción en el Sacerdote (Disciplina) y en el Brujo (Maldiciones).
+
 #### Ejemplo: Mage de Fuego en nivel 50
 
 |   |   |   |   |   |   |
@@ -271,7 +306,7 @@ El ataque básico no gasta recurso ni tiene espera: con Energía la genera y con
 |1|Orbe arcano|Activa de clase|Lanza un orbe que atraviesa a todos los enemigos en línea.|15|6 s|
 |3|Parpadeo|Activa de clase|Teletransporte de 10 m hacia adelante.|10|12 s|
 |6|Barrera de maná|Activa de clase|Escudo que absorbe daño igual al 20% de tu vida durante 6 s.|20|25 s|
-|10|Bola de fuego|Activa de Fuego|Bola que explota al impactar y deja al enemigo ardiendo 4 s.|20|3 s|
+|10|Bola de fuego|Activa de Fuego|Carga 1 s y lanza una bola que explota al impactar y deja al enemigo ardiendo 4 s.|20|3 s|
 |15|Ignición|Pasiva|Los críticos dejan al enemigo ardiendo 4 s más.|—|—|
 |20|Muro de llamas|Activa de Fuego|Muro de 8 m que quema a quien lo cruce durante 6 s.|30|15 s|
 |25|Calor creciente|Pasiva|Cada Bola de fuego que acierta da +5% de crítico, hasta 5 veces. Se reinicia al hacer un crítico.|—|—|
@@ -283,7 +318,7 @@ El ataque básico no gasta recurso ni tiene espera: con Energía la genera y con
 **Cómo se juega en una pelea:**
 
 1. Pones el Muro de llamas entre tú y el grupo de enemigos.
-2. Lanzas Bola de fuego una y otra vez. Cada acierto sube Calor creciente hasta que sale un crítico, y ese crítico, gracias a Ignición, deja al enemigo ardiendo más tiempo.
+2. Lanzas Bola de fuego una y otra vez, moviéndote despacio mientras carga y esquivando si viene un golpe (esquivar cancela la carga sin gastar maná). Cada acierto sube Calor creciente hasta que sale un crítico, y ese crítico, gracias a Ignición, deja al enemigo ardiendo más tiempo.
 3. Con los enemigos juntos y ardiendo (Pirómano les suma 10% de daño), tiras la Lluvia de meteoros.
 4. Mientras esperas los cooldowns, usas el ataque básico para recuperar maná.
 5. Si algo se te acerca, Parpadeo para alejarte o Barrera de maná si no alcanzas a escapar.
@@ -911,6 +946,7 @@ Las fichas viven en [fichas/](fichas/), y cada una enlaza a su concepto visual y
 - Feedback provisorio de combate: animación, efecto y sonido simples para cada ataque y habilidad, definidos por datos para cambiarlos por el arte final sin tocar código.
 - Una subárea gris con 3 tipos de mobs y un jefe con 2 fases.
 - Controles de PC y móvil.
+- Prueba de hechizo con carga: Bola de fuego del Mage con 1 s, movimiento al 50% y cancelación al esquivar, para confirmar en PC y móvil las reglas de [Hechizos con carga](#hechizos-con-carga).
 - **Terminado cuando:** al probarlo en PC y en móvil, el combate se entiende sin explicación y dan ganas de seguir jugando.
 
 ### Fase 1 — Núcleo técnico (mes 1,5 a 3)
