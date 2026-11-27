@@ -704,10 +704,10 @@ El fondo continuo de las zonas queda en Roblox genérico porque un ambiente larg
 
 ### Flujo de arte
 
-1. Concept art y moodboard por zona y jefe (IA de imágenes como Higgsfield o Midjourney, retocado por un artista).
+1. Concept art y moodboard por zona y jefe, generado con IA de imágenes por API (Gemini, con el script y las instrucciones de [assets/concepts/](../assets/concepts/prompts.json)) y aprobado antes de modelar; un artista lo retoca si hace falta.
 2. Guía visual aprobada: los 3 conceptos de prueba pasan juntos la checklist de [GUIA-VISUAL-TECNICA.md](GUIA-VISUAL-TECNICA.md#checklist-de-aprobación).
 3. Bloqueo de la zona en Roblox Studio con piezas grises.
-4. Modelado en Blender (o base generada con Meshy o Tripo y limpiada en Blender).
+4. Modelado en Blender por un artista (o base generada con Meshy o Tripo y limpiada en Blender), con el concepto aprobado como referencia. Las IA de mallas y de modelos de Roblox Studio sirven para pruebas, no para piezas que fijan el estilo: no respetan las fichas.
 5. Texturas y materiales con paletas compartidas, importación a Studio y prueba en móvil dentro de los presupuestos del anexo técnico.
 6. Iluminación, efectos, sonido y pulido.
 

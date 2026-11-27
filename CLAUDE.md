@@ -12,7 +12,7 @@ Cada documento tiene un solo papel, para que no se contradigan:
 - `GUIA-VISUAL.md` y `GUIA-VISUAL-TECNICA.md`: reglas de arte y medidas para Roblox.
 - `fichas/`: una ficha por zona, mazmorra, jefe, NPC o mob, con su sección de sonidos.
 
-Al terminar un cambio:
+Al terminar un cambio (la skill `cerrar-cambio` lleva la revisión completa, documento por documento):
 
 1. Marcar la tarea en `ESTADO.md` (o agregarla si es nueva) y sumar una fila al registro con la fecha.
 2. Si cambia el diseño, actualizar `PLAN.md` y, si suma trabajo, la tarea en `ESTADO.md`.
