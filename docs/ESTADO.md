@@ -86,6 +86,8 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [ ] Medir en los dispositivos de prueba (tablet Redmi para rendimiento; Poco X8 Pro e iPhone para lectura): distancia de cámara, luz (Voxel o ShadowMap) y presupuestos por escena — **postergado**: por ahora solo Studio y simulador
 - [x] Plantillas de fichas (zona, mazmorra, jefe, NPC, mob) — ver [fichas/](fichas/)
 - [x] Fichas del jefe de prueba y los 3 mobs llenas (estado: En caja gris)
+- [x] Ojos ámbar del Goblin provisorio (`#E67814`), sin el rojo de peligro
+- [x] Ojos ámbar también en la Araña y el Ogro provisorios: ningún enemigo tiene ojos rojos
 
 ## Decisiones pendientes
 
@@ -141,3 +143,4 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 27 nov 2026 | Goblin en 3D con las herramientas de IA de Roblox usando el concepto aprobado como referencia: 3 intentos más, ninguno cumple la ficha (modelo por piezas: redondo y de juguete; mallas: orejas cortas, verde lima y garrote chico). Los modelos 3D de los conceptos necesitan otro camino (artista o Blender, importados con Open Cloud) |
 | 27 nov 2026 | Flujo de arte del plan actualizado: el concept art sale de Gemini con el script del proyecto y se aprueba antes de modelar; el modelado lo hace un artista o pasa por Blender, porque las IA de Roblox no respetan las fichas. Nueva skill `cerrar-cambio` (`.claude/skills/`) para revisar los documentos al terminar cada cambio |
 | 27 nov 2026 | Color de cada clase en los datos (`Color` en `Data/Classes`) y aplicado: efectos de sus habilidades (Warrior carmesí, Paladín bronce, Ranger mostaza, Mage cobalto, Sacerdote blanco cálido, Brujo morado), arma provisoria (guarda carmesí, empuñadura mostaza, maza y escudo bronce y acero, orbe cobalto), borde de los espacios de habilidad en PC y móvil y franja en el selector de clase. Los anillos de suelo del Warrior pasan a acero porque el carmesí se confundía con las zonas rojas de peligro. Probado en Studio y en el simulador de iPhone 17 Pro |
+| 27 nov 2026 | Ojos del Goblin provisorio cambiados de rojo a ámbar en Neon. El `#FFB428` de la guía técnica se veía amarillo con Neon, igual que el del lobo; se comparó lado a lado en Studio y se aprobó `#E67814`. Guía técnica y ficha del mob actualizadas. Después, Araña y Ogro también pasan a ámbar: el verde ácido del veneno se veía amarillo con Neon en la Araña y el amarillo se deja para el lobo. Fichas de los tres actualizadas |
