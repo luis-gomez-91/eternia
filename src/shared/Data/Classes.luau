@@ -18,6 +18,9 @@ export type ClassDef = {
 	ResourceRegen: number,
 	Actives: { string }, -- activas de clase, en orden de tecla (1, 2, 3)
 	Ultimate: string, -- definitiva (tecla R); provisoria hasta las especializaciones
+	-- Color de la clase (GUIA-VISUAL.md, "Colores de las clases"): sus efectos,
+	-- el acento del arma provisoria y el borde de sus botones.
+	Color: Color3,
 }
 
 local Classes: { [string]: ClassDef } = {
@@ -32,6 +35,7 @@ local Classes: { [string]: ClassDef } = {
 		ResourceRegen = 0,
 		Actives = { "Cleave", "BattleShout", "Charge" },
 		Ultimate = "Whirlwind",
+		Color = Color3.fromRGB(160, 32, 46),
 	},
 	Paladin = {
 		Id = "Paladin",
@@ -44,6 +48,7 @@ local Classes: { [string]: ClassDef } = {
 		ResourceRegen = 0,
 		Actives = { "HolyStrike", "Consecration", "HealingLight" },
 		Ultimate = "DawnHammer",
+		Color = Color3.fromRGB(224, 160, 48),
 	},
 	Ranger = {
 		Id = "Ranger",
@@ -56,6 +61,7 @@ local Classes: { [string]: ClassDef } = {
 		ResourceRegen = 0,
 		Actives = { "PowerShot", "ArrowRain", "Disengage" },
 		Ultimate = "Volley",
+		Color = Color3.fromRGB(216, 200, 58),
 	},
 	Mage = {
 		Id = "Mage",
@@ -68,6 +74,7 @@ local Classes: { [string]: ClassDef } = {
 		ResourceRegen = 0.02,
 		Actives = { "ArcaneOrb", "Blink", "Fireball" },
 		Ultimate = "MeteorShower",
+		Color = Color3.fromRGB(47, 107, 255),
 	},
 	Priest = {
 		Id = "Priest",
@@ -80,6 +87,7 @@ local Classes: { [string]: ClassDef } = {
 		ResourceRegen = 0.02,
 		Actives = { "Smite", "Heal", "HolyNova" },
 		Ultimate = "DivineHymn",
+		Color = Color3.fromRGB(255, 244, 214),
 	},
 	Warlock = {
 		Id = "Warlock",
@@ -92,6 +100,7 @@ local Classes: { [string]: ClassDef } = {
 		ResourceRegen = 0.02,
 		Actives = { "Corruption", "DrainLife", "ShadowBlast" },
 		Ultimate = "ShadowPact",
+		Color = Color3.fromRGB(138, 63, 208),
 	},
 }
 

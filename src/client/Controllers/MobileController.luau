@@ -7,8 +7,11 @@
 -- Roblox, que quedaba debajo del arco.
 
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
+
+local Classes = require(ReplicatedStorage.Shared.Data.Classes)
 
 local AbilityController = require(script.Parent.AbilityController)
 local DodgeController = require(script.Parent.DodgeController)
@@ -327,11 +330,16 @@ local function build()
 			button.button.Visible = info ~= nil
 			if info then
 				setIcon(button, info.icon, info.name)
+				-- Borde con el color de la clase (GUIA-VISUAL.md).
+				local classId = player:GetAttribute("Class")
+				local class = if typeof(classId) == "string" then Classes[classId] else nil
+				button.stroke.Color = if class then class.Color else Color3.new(1, 1, 1)
 				button.timer.Text = if info.remaining >= 1 then tostring(math.ceil(info.remaining)) else ""
 				local ready = info.remaining <= 0 and info.usable
 				-- Apagado en espera o sin recurso, igual que la barra de PC.
 				button.icon.ImageTransparency = if ready then 0 else 0.55
 				button.button.BackgroundTransparency = if ready then 0.15 else 0.6
+				button.stroke.Transparency = if ready then 0.1 else 0.6
 				button.label.TextTransparency = if info.remaining >= 1 then 0.6 else 0
 			end
 		end

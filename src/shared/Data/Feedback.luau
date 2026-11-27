@@ -10,6 +10,7 @@
 -- texto usado para generar cada uno en docs/AUDIO.md.
 
 local Abilities = require(script.Parent.Abilities)
+local Classes = require(script.Parent.Classes)
 local MobData = require(script.Parent.Mobs)
 
 local Actives = Abilities.Actives
@@ -156,16 +157,20 @@ local function sound(
 	}
 end
 
-local GOLD = Color3.fromRGB(255, 205, 90)
+-- Color de cada clase (Data/Classes, GUIA-VISUAL.md): manda en sus efectos.
+local CRIMSON = Classes.Warrior.Color
+local BRONZE = Classes.Paladin.Color
+local MUSTARD = Classes.Ranger.Color
+local COBALT = Classes.Mage.Color
+local LIGHT = Classes.Priest.Color
+local SHADOW = Classes.Warlock.Color
+-- Acompañantes: acero, brasa, dorado de la luz, madera y fuego.
 local STEEL = Color3.fromRGB(225, 235, 255)
 local EMBER = Color3.fromRGB(255, 140, 60)
 local HOLY = Color3.fromRGB(255, 225, 130)
-local LIGHT = Color3.fromRGB(255, 248, 215)
+local WOOD_LIGHT = Color3.fromRGB(200, 160, 100)
 local HEAL = Color3.fromRGB(120, 255, 170) -- verde menta: solo curación (docs/GUIA-VISUAL.md)
-local NATURE = Color3.fromRGB(170, 230, 120)
-local ARCANE = Color3.fromRGB(175, 120, 255)
 local FIRE = Color3.fromRGB(255, 120, 35)
-local SHADOW = Color3.fromRGB(150, 55, 230)
 local FEL = Color3.fromRGB(175, 255, 50) -- verde ácido, distinto de la curación
 local VENOM = Color3.fromRGB(200, 240, 40)
 local BRUTE = Color3.fromRGB(255, 130, 90)
@@ -180,6 +185,8 @@ local Cues: { [string]: Cue } = {
 	CastCancel = { ClearAura = true },
 
 	-- Warrior: dos tajos cruzados y un golpe de arriba hacia abajo.
+	-- Su carmesí va en tajos, estelas y brillos; en el suelo usa acero para
+	-- no confundirse con las zonas rojas de peligro de los enemigos.
 	WarriorCombo1 = {
 		Pose = "WarriorSlashRight",
 		Effects = {
@@ -197,40 +204,40 @@ local Cues: { [string]: Cue } = {
 	WarriorCombo3 = {
 		Pose = "WarriorOverhead",
 		Effects = {
-			{ Kind = "Slash", Color = GOLD, Delay = 0.22, Size = 5, Span = 110, Roll = 90, Sweep = 1, Height = 1.2 },
-			{ Kind = "Ring", Color = GOLD, Delay = 0.3, Duration = 0.35, Size = 9, Height = -2.8 },
+			{ Kind = "Slash", Color = CRIMSON, Delay = 0.22, Size = 5, Span = 110, Roll = 90, Sweep = 1, Height = 1.2 },
+			{ Kind = "Ring", Color = STEEL, Delay = 0.3, Duration = 0.35, Size = 9, Height = -2.8 },
 		},
 		Sound = sound("WarriorCombo3", 0.65, 0.04),
 	},
 	Cleave = {
 		Pose = "WarriorCleave",
 		Effects = {
-			{ Kind = "Slash", Color = EMBER, Delay = 0.14, Size = 8.5, Span = 200, Roll = 0, Sweep = 1 },
+			{ Kind = "Slash", Color = CRIMSON, Delay = 0.14, Size = 8.5, Span = 200, Roll = 0, Sweep = 1 },
 		},
 		Sound = sound("Cleave", 0.7, 0.04),
 	},
 	BattleShout = {
 		Pose = "WarriorShout",
 		Effects = {
-			{ Kind = "Ring", Color = GOLD, Delay = 0.15, Duration = 0.5, Size = 22, Height = -2.8 },
-			{ Kind = "Ring", Color = GOLD, Delay = 0.3, Duration = 0.5, Size = 14, Height = -2.8 },
-			{ Kind = "Aura", Color = GOLD, Delay = 0.15, Duration = Actives.BattleShout.Duration },
+			{ Kind = "Ring", Color = STEEL, Delay = 0.15, Duration = 0.5, Size = 22, Height = -2.8 },
+			{ Kind = "Ring", Color = STEEL, Delay = 0.3, Duration = 0.5, Size = 14, Height = -2.8 },
+			{ Kind = "Aura", Color = CRIMSON, Delay = 0.15, Duration = Actives.BattleShout.Duration },
 		},
 		Sound = sound("BattleShout", 0.7),
 	},
 	Charge = {
 		Pose = "WarriorCharge",
 		Effects = {
-			{ Kind = "Trail", Color = EMBER, Duration = 0.4 },
+			{ Kind = "Trail", Color = CRIMSON, Duration = 0.4 },
 		},
 		Sound = sound("Charge", 0.6),
 	},
 
-	-- Paladín: maza pesada y luz dorada.
+	-- Paladín: maza pesada y luz bronce.
 	PaladinCombo1 = {
 		Pose = "PaladinSwing",
 		Effects = {
-			{ Kind = "Slash", Color = HOLY, Delay = 0.13, Size = 5.5, Span = 130, Roll = -25, Sweep = 1 },
+			{ Kind = "Slash", Color = BRONZE, Delay = 0.13, Size = 5.5, Span = 130, Roll = -25, Sweep = 1 },
 		},
 		Sound = sound("PaladinSwing", 0.55, 0.05),
 	},
@@ -238,8 +245,8 @@ local Cues: { [string]: Cue } = {
 		Pose = "WarriorOverhead",
 		Speed = 0.95,
 		Effects = {
-			{ Kind = "Slash", Color = HOLY, Delay = 0.23, Size = 5, Span = 100, Roll = 90, Sweep = 1, Height = 1.2 },
-			{ Kind = "Ring", Color = HOLY, Delay = 0.32, Duration = 0.4, Size = 10, Height = -2.8 },
+			{ Kind = "Slash", Color = BRONZE, Delay = 0.23, Size = 5, Span = 100, Roll = 90, Sweep = 1, Height = 1.2 },
+			{ Kind = "Ring", Color = BRONZE, Delay = 0.32, Duration = 0.4, Size = 10, Height = -2.8 },
 		},
 		Sound = sound("PaladinSmash", 0.65, 0.04),
 	},
@@ -247,19 +254,27 @@ local Cues: { [string]: Cue } = {
 		Pose = "WarriorOverhead",
 		Speed = 0.9,
 		Effects = {
-			{ Kind = "Aura", Color = HOLY, Duration = 0.5 },
-			{ Kind = "Column", Color = HOLY, Delay = 0.28, Duration = 0.45, Size = 14, AtTarget = true, Ground = true },
-			{ Kind = "Ring", Color = HOLY, Delay = 0.32, Duration = 0.4, Size = 10, AtTarget = true, Ground = true },
+			{ Kind = "Aura", Color = BRONZE, Duration = 0.5 },
+			{
+				Kind = "Column",
+				Color = BRONZE,
+				Delay = 0.28,
+				Duration = 0.45,
+				Size = 14,
+				AtTarget = true,
+				Ground = true,
+			},
+			{ Kind = "Ring", Color = BRONZE, Delay = 0.32, Duration = 0.4, Size = 10, AtTarget = true, Ground = true },
 		},
 		Sound = sound("HolyStrike", 0.7, 0.03),
 	},
 	Consecration = {
 		Pose = "PaladinSlam",
 		Effects = {
-			{ Kind = "Ring", Color = HOLY, Delay = 0.3, Duration = 0.45, Size = 22, Height = -2.8 },
+			{ Kind = "Ring", Color = BRONZE, Delay = 0.3, Duration = 0.45, Size = 22, Height = -2.8 },
 			{
 				Kind = "Field",
-				Color = HOLY,
+				Color = BRONZE,
 				Delay = 0.3,
 				Duration = (Actives.Consecration.Ticks :: number) * (Actives.Consecration.Interval :: number),
 				Size = (Actives.Consecration.Radius :: number) * 2,
@@ -278,7 +293,7 @@ local Cues: { [string]: Cue } = {
 		Sound = sound("HealingLight", 0.6),
 	},
 
-	-- Ranger: arco, flechas verdes.
+	-- Ranger: arco, flechas mostaza.
 	RangerShot = {
 		Pose = "BowShot",
 		Projectile = {
@@ -293,11 +308,11 @@ local Cues: { [string]: Cue } = {
 	PowerShot = {
 		Pose = "BowPower",
 		Effects = {
-			{ Kind = "Aura", Color = NATURE, Duration = 0.6 },
+			{ Kind = "Aura", Color = MUSTARD, Duration = 0.6 },
 		},
 		Projectile = {
 			Shape = "Arrow",
-			Color = NATURE,
+			Color = MUSTARD,
 			Size = 1.8,
 			Speed = Actives.PowerShot.Speed :: number,
 			Delay = Actives.PowerShot.Delay,
@@ -310,7 +325,7 @@ local Cues: { [string]: Cue } = {
 		Effects = {
 			{
 				Kind = "Ring",
-				Color = NATURE,
+				Color = MUSTARD,
 				Duration = 0.8,
 				Size = (Actives.ArrowRain.Radius :: number) * 2,
 				AtTarget = true,
@@ -318,7 +333,7 @@ local Cues: { [string]: Cue } = {
 			},
 			{
 				Kind = "Rain",
-				Color = NATURE,
+				Color = MUSTARD,
 				Delay = (Actives.ArrowRain.Delay :: number) - 0.25,
 				Duration = (Actives.ArrowRain.Ticks :: number) * (Actives.ArrowRain.Interval :: number) + 0.2,
 				Size = (Actives.ArrowRain.Radius :: number) * 2,
@@ -331,23 +346,23 @@ local Cues: { [string]: Cue } = {
 	Disengage = {
 		Pose = "LeapBack",
 		Effects = {
-			{ Kind = "Trail", Color = NATURE, Duration = Actives.Disengage.Duration },
-			{ Kind = "Ring", Color = NATURE, Duration = 0.35, Size = 8, Height = -2.8 },
+			{ Kind = "Trail", Color = MUSTARD, Duration = Actives.Disengage.Duration },
+			{ Kind = "Ring", Color = MUSTARD, Duration = 0.35, Size = 8, Height = -2.8 },
 		},
 		Sound = sound("Disengage", 0.5, 0.05),
 	},
 
-	-- Mage: arcano violeta y fuego.
+	-- Mage: arcano cobalto y fuego.
 	MagicBolt = {
 		Pose = "CastRight",
-		Projectile = { Shape = "Orb", Color = ARCANE, Size = 0.7, Speed = Basics.MagicBolt.Speed :: number },
+		Projectile = { Shape = "Orb", Color = COBALT, Size = 0.7, Speed = Basics.MagicBolt.Speed :: number },
 		Sound = sound("MagicBolt", 0.45, 0.06),
 	},
 	ArcaneOrb = {
 		Pose = "CastPush",
 		Projectile = {
 			Shape = "Orb",
-			Color = ARCANE,
+			Color = COBALT,
 			Size = 2.6,
 			Speed = Actives.ArcaneOrb.Speed :: number,
 			Delay = Actives.ArcaneOrb.Delay,
@@ -356,12 +371,12 @@ local Cues: { [string]: Cue } = {
 		Sound = sound("ArcaneOrb", 0.6),
 	},
 	BlinkOut = {
-		Effects = { { Kind = "Burst", Color = ARCANE, Duration = 0.3, Size = 6 } },
+		Effects = { { Kind = "Burst", Color = COBALT, Duration = 0.3, Size = 6 } },
 	},
 	Blink = {
 		Effects = {
-			{ Kind = "Burst", Color = ARCANE, Duration = 0.35, Size = 7 },
-			{ Kind = "Aura", Color = ARCANE, Duration = 0.4 },
+			{ Kind = "Burst", Color = COBALT, Duration = 0.35, Size = 7 },
+			{ Kind = "Aura", Color = COBALT, Duration = 0.4 },
 		},
 		Sound = sound("Blink", 0.55, 0.04),
 	},
@@ -516,17 +531,17 @@ local Cues: { [string]: Cue } = {
 			local def = Actives.Whirlwind
 			for i = 0, (def.Ticks :: number) - 1 do
 				local delay = (def.Delay :: number) + i * (def.Interval :: number)
-				table.insert(list, { Kind = "Slash", Color = EMBER, Delay = delay, Size = 9, Span = 360, Sweep = 1 })
+				table.insert(list, { Kind = "Slash", Color = CRIMSON, Delay = delay, Size = 9, Span = 360, Sweep = 1 })
 				table.insert(list, {
 					Kind = "Ring",
-					Color = GOLD,
+					Color = STEEL,
 					Delay = delay,
 					Duration = 0.35,
 					Size = (def.Radius :: number) * 2,
 					Height = -2.8,
 				})
 			end
-			table.insert(list, { Kind = "Trail", Color = EMBER, Duration = 1.4 })
+			table.insert(list, { Kind = "Trail", Color = CRIMSON, Duration = 1.4 })
 			return list
 		end)(),
 		Sound = sound("Cleave", 0.8, 0, { Pitch = 0.85 }),
@@ -534,11 +549,11 @@ local Cues: { [string]: Cue } = {
 	DawnHammer = {
 		Pose = "PaladinSlam",
 		Effects = {
-			{ Kind = "Column", Color = HOLY, Delay = 0.25, Duration = 0.5, Size = 24 },
+			{ Kind = "Column", Color = BRONZE, Delay = 0.25, Duration = 0.5, Size = 24 },
 			{ Kind = "Burst", Color = LIGHT, Delay = 0.45, Duration = 0.5, Size = 20 },
 			{
 				Kind = "Ring",
-				Color = HOLY,
+				Color = BRONZE,
 				Delay = 0.45,
 				Duration = 0.6,
 				Size = (Actives.DawnHammer.Radius :: number) * 2,
@@ -552,7 +567,7 @@ local Cues: { [string]: Cue } = {
 		Effects = {
 			{
 				Kind = "Ring",
-				Color = NATURE,
+				Color = MUSTARD,
 				Duration = 0.8,
 				Size = (Actives.Volley.Radius :: number) * 2,
 				AtTarget = true,
@@ -560,7 +575,7 @@ local Cues: { [string]: Cue } = {
 			},
 			{
 				Kind = "Rain",
-				Color = GOLD,
+				Color = WOOD_LIGHT,
 				Delay = (Actives.Volley.Delay :: number) - 0.25,
 				Duration = (Actives.Volley.Ticks :: number) * (Actives.Volley.Interval :: number) + 0.2,
 				Size = (Actives.Volley.Radius :: number) * 2,
@@ -774,8 +789,8 @@ local Cues: { [string]: Cue } = {
 		Sound = sound("ImpactCrit", 0.5, 0.05, { Pitch = 1.15 }),
 	},
 	-- Los hechizos ya suenan al lanzarse: su impacto es solo visual.
-	ImpactArcane = { Effects = { { Kind = "Spark", Color = ARCANE, Size = 0.9 } } },
-	ImpactArcaneCrit = { Effects = { { Kind = "Spark", Color = ARCANE, Size = 1.8 } } },
+	ImpactArcane = { Effects = { { Kind = "Spark", Color = COBALT, Size = 0.9 } } },
+	ImpactArcaneCrit = { Effects = { { Kind = "Spark", Color = COBALT, Size = 1.8 } } },
 	ImpactFire = { Effects = { { Kind = "Spark", Color = FIRE, Size = 1 } } },
 	ImpactFireCrit = { Effects = { { Kind = "Spark", Color = FIRE, Size = 1.9 } } },
 	ImpactShadow = { Effects = { { Kind = "Spark", Color = SHADOW, Size = 0.9 } } },
@@ -846,6 +861,14 @@ local Weapons: { [string]: { WeaponPart } } = {
 			Color = IRON,
 			Material = Enum.Material.Metal,
 		},
+		-- Guarda con el color de la clase.
+		{
+			Hand = "RightHand",
+			Size = Vector3.new(0.3, 1.1, 0.22),
+			Offset = CFrame.new(0, 0, -0.2),
+			Color = CRIMSON,
+			Material = Enum.Material.Metal,
+		},
 	},
 	-- Maza y escudo.
 	Paladin = {
@@ -867,27 +890,27 @@ local Weapons: { [string]: { WeaponPart } } = {
 			Hand = "RightHand",
 			Size = Vector3.new(0.9, 0.9, 0.2),
 			Offset = CFrame.new(0, 0, -2.4),
-			Color = HOLY,
+			Color = BRONZE,
 			Material = Enum.Material.Neon,
 		},
 		{
 			Hand = "LeftHand",
 			Size = Vector3.new(0.25, 2.6, 2.1),
 			Offset = CFrame.new(-0.35, 0.6, 0),
-			Color = Color3.fromRGB(70, 90, 160),
+			Color = Color3.fromRGB(140, 150, 165), -- acero en tonos medios
 			Material = Enum.Material.Metal,
 		},
 		{
 			Hand = "LeftHand",
 			Size = Vector3.new(0.27, 0.9, 0.9),
 			Offset = CFrame.new(-0.36, 0.6, 0),
-			Color = HOLY,
+			Color = BRONZE,
 			Material = Enum.Material.Neon,
 		},
 	},
 	-- Arco en la izquierda, curvado hacia adelante (se arma en WeaponService).
 	Ranger = {},
-	-- Bastón con orbe violeta.
+	-- Bastón con orbe cobalto.
 	Mage = {
 		{
 			Hand = "RightHand",
@@ -900,7 +923,7 @@ local Weapons: { [string]: { WeaponPart } } = {
 			Hand = "RightHand",
 			Size = Vector3.one * 0.7,
 			Offset = CFrame.new(0, 4.5, 0),
-			Color = ARCANE,
+			Color = COBALT,
 			Material = Enum.Material.Neon,
 			Shape = Enum.PartType.Ball,
 		},
@@ -984,6 +1007,14 @@ do
 			Material = Enum.Material.Wood,
 		})
 	end
+	-- Empuñadura con el color de la clase.
+	table.insert(bow, {
+		Hand = "LeftHand",
+		Size = Vector3.new(0.24, 0.6, 0.28),
+		Offset = CFrame.new(0, 0, 0.02),
+		Color = MUSTARD,
+		Material = Enum.Material.Fabric,
+	})
 	local tip = radius * (1 - math.cos(half))
 	local reach = radius * math.sin(half)
 	table.insert(bow, {

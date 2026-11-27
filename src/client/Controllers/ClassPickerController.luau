@@ -66,6 +66,15 @@ function ClassPickerController:Start()
 		button.Text = class.Name
 		button.Parent = list
 		Instance.new("UICorner", button).CornerRadius = UDim.new(0, 6)
+		-- Franja con el color de la clase (GUIA-VISUAL.md).
+		local stripe = Instance.new("Frame")
+		stripe.Name = "ClassColor"
+		stripe.Size = UDim2.new(0, 5, 1, -10)
+		stripe.Position = UDim2.fromOffset(5, 5)
+		stripe.BackgroundColor3 = class.Color
+		stripe.BorderSizePixel = 0
+		stripe.Parent = button
+		Instance.new("UICorner", stripe).CornerRadius = UDim.new(0, 2)
 		button.Activated:Connect(function()
 			Remotes.Event("SelectClass"):FireServer(id)
 		end)
