@@ -61,8 +61,10 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [ ] Sonidos propios de mobs y jefe con ElevenLabs (hoy reusan los de las clases con otro tono)
 
 ### Controles
-- [ ] PC: teclas 1 a 6, Q esquivar, R definitiva
-- [ ] Móvil: botones en arco alrededor del pulgar derecho
+- [x] PC: teclas 1 a 6, Q esquivar, R definitiva. Los espacios 4 a 6 se ven bloqueados (Nv 10, 20 y 30) hasta las especializaciones de la Fase 2
+- [x] Definitiva con barra de carga: se llena con el daño hecho, la curación y el daño recibido (doble); unas 2 por pelea contra el jefe de prueba. Una definitiva provisoria por clase: Torbellino, Martillo del alba, Andanada, Lluvia de meteoros, Himno divino y Pacto de sombras
+- [x] Móvil: botones en arco alrededor del pulgar derecho (ataque, saltar, 1 a 3, esquivar con cargas, definitiva con % y cambiar objetivo); reemplaza el botón de salto de Roblox. Probado en el simulador de iPhone 17 Pro
+- [ ] Teclas reasignables (en el menú de opciones, más adelante)
 
 ### Diseño (fuera del código)
 - [ ] Guía visual en borrador
@@ -105,4 +107,5 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Plan: todos los sonidos del juego por categoría con su fuente y su fase; catálogo nuevo [AUDIO.md](AUDIO.md) con guía de estilo; sección "Sonidos" en las fichas |
 | 26 nov 2026 | Fijar objetivo automático con T para cambiar. Las 6 clases jugables con sus 3 activas de clase, Maná, curación, daño en el tiempo, proyectiles y selector de clase provisorio; 22 sonidos nuevos con ElevenLabs (unos 360 créditos). Las activas de clase del Paladín, Ranger, Sacerdote y Brujo se definieron ahora (ver PLAN.md) |
 | 26 nov 2026 | Subárea de prueba en caja gris con 3 mobs (Goblin Saqueador, Araña Escupidora, Lobo Gris) y jefe de prueba de 2 fases (Ogro del Claro). IA en servidor: patrulla, detecta, persigue, avisa con zona roja en el suelo, ataca y vuelve inmune a su sitio. Daño a jugadores con invulnerabilidad del esquivar. Fichas llenas. Arreglado: las barras de vida desaparecían al morir el jugador |
+| 26 nov 2026 | Controles: teclas 1 a 6 y R; barra de definitiva y una definitiva provisoria por clase; botones táctiles en arco para móvil. 16 sonidos de mobs y jefe generados con ElevenLabs, sin subir todavía (la red de la oficina bloquea Roblox) |
 | 26 nov 2026 | Primeros sonidos propios con ElevenLabs (combo, Tajo, Grito, Embestida, esquivar, impacto y crítico) subidos a Roblox; place guardado en Roblox para poder subir assets; la precarga deja los sonidos vivos para que suenen sin retraso (de ~330 ms a 1 frame) |

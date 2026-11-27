@@ -39,6 +39,28 @@ function DamageService.OnDamaged(listener: DamagedListener)
 	table.insert(damagedListeners, listener)
 end
 
+type PlayerListener = (character: Model, amount: number, source: Player?) -> ()
+local healedListeners: { PlayerListener } = {}
+local hurtListeners: { PlayerListener } = {}
+
+-- Avisa cada curación real (lo que subió la vida) con quién curó.
+function DamageService.OnHealed(listener: PlayerListener)
+	table.insert(healedListeners, listener)
+end
+
+-- Avisa cada vez que un jugador recibe daño de un enemigo.
+function DamageService.OnPlayerHurt(listener: PlayerListener)
+	table.insert(hurtListeners, listener)
+end
+
+local function notify(listeners: { PlayerListener }, character: Model, amount: number, source: Player?)
+	if amount > 0 then
+		for _, listener in listeners do
+			task.spawn(listener, character, amount, source)
+		end
+	end
+end
+
 -- Devuelve el daño que realmente se aplicó (0 si el objetivo ya no tenía vida).
 function DamageService.Apply(
 	target: Model,
@@ -81,6 +103,7 @@ function DamageService.DamagePlayer(character: Model, amount: number, impact: st
 	end
 	local dealt = math.min(amount, humanoid.Health)
 	humanoid:TakeDamage(amount)
+	notify(hurtListeners, character, dealt, nil)
 	table.insert(pending, { Target = character, Amount = amount, Crit = false, Impact = impact, Incoming = true })
 	return dealt
 end
@@ -94,6 +117,7 @@ function DamageService.Heal(character: Model, amount: number, source: Player?): 
 	end
 	local healed = math.min(amount, humanoid.MaxHealth - humanoid.Health)
 	humanoid.Health += healed
+	notify(healedListeners, character, healed, source)
 	table.insert(pending, { Target = character, Amount = amount, Crit = false, Source = source, Heal = true })
 	return healed
 end

@@ -119,6 +119,14 @@ local function preventTripping(character: Model)
 	end
 end
 
+-- Esquivar (tecla Q o botón táctil).
+DodgeController.Dodge = tryDodge
+
+-- Cargas actuales (con fracción de la que se recupera) para los botones táctiles.
+function DodgeController.Charges(): number
+	return meter:Get(os.clock())
+end
+
 function DodgeController:Start()
 	player.CharacterAdded:Connect(preventTripping)
 	if player.Character then
@@ -131,6 +139,10 @@ function DodgeController:Start()
 		end
 	end)
 
+	-- En pantallas táctiles las cargas se ven en el botón de esquivar.
+	if UserInputService.TouchEnabled then
+		return
+	end
 	local fills = buildHud()
 	RunService.RenderStepped:Connect(function()
 		local current = meter:Get(os.clock())

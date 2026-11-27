@@ -202,6 +202,11 @@ function TargetController.FaceIfWithin(maxDistance: number): Model?
 	return enemy
 end
 
+-- Pasa al siguiente enemigo (tecla T o botón táctil).
+function TargetController.Switch()
+	switchTarget()
+end
+
 function TargetController:Start()
 	ring = buildRing()
 

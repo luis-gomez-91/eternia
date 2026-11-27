@@ -3,6 +3,9 @@
 -- falta, a quién); el servidor revisa clase, distancia, ritmo, tiempos de espera
 -- y recurso, y aplica el resultado.
 --
+-- Definitiva: la de la clase (Classes.Ultimate) se usa con la barra llena
+-- (UltimateService) en vez de gastar recurso.
+--
 -- Recurso: atributos Resource y MaxResource del jugador (Energía o Maná según la
 -- clase, ver Data/Classes). La Energía la genera el ataque básico; el Maná se
 -- recupera solo y un poco con el ataque básico. Las activas lo gastan.
@@ -19,6 +22,7 @@ local Remotes = require(ReplicatedStorage.Shared.Remotes)
 local Targeting = require(ReplicatedStorage.Shared.Targeting)
 local CueService = require(script.Parent.CueService)
 local DamageService = require(script.Parent.DamageService)
+local UltimateService = require(script.Parent.UltimateService)
 
 type ActiveDef = AbilityData.ActiveDef
 
@@ -341,7 +345,12 @@ local activeHandlers: { [AbilityData.ActiveKind]: Handler } = {
 local function useActive(player: Player, abilityId: string, target: unknown)
 	local class = getClass(player)
 	local def = AbilityData.Actives[abilityId]
-	if not class or not def or not table.find(class.Actives, abilityId) then
+	if not class or not def then
+		return
+	end
+	-- La definitiva se paga con la barra llena en vez de recurso.
+	local isUltimate = abilityId == class.Ultimate
+	if not isUltimate and not table.find(class.Actives, abilityId) then
 		return
 	end
 	local root = getAliveRoot(player)
@@ -357,7 +366,11 @@ local function useActive(player: Player, abilityId: string, target: unknown)
 	if now < (state.readyAt[abilityId] or 0) - TIMING_TOLERANCE then
 		return
 	end
-	if getResource(player) < def.Cost then
+	if isUltimate then
+		if not UltimateService.IsFull(player) then
+			return
+		end
+	elseif getResource(player) < def.Cost then
 		return
 	end
 
@@ -365,7 +378,11 @@ local function useActive(player: Player, abilityId: string, target: unknown)
 	if not used then
 		return
 	end
-	addResource(player, -def.Cost)
+	if isUltimate then
+		UltimateService.Consume(player)
+	else
+		addResource(player, -def.Cost)
+	end
 	state.readyAt[abilityId] = now + def.Cooldown
 	state.globalReadyAt = now + AbilityData.GlobalCooldown
 	CueService.Broadcast(player, def.Cue, cueTarget)

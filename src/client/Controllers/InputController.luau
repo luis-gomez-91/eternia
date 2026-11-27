@@ -2,7 +2,7 @@
 -- Controles del jugador. Envía intenciones al servidor; nunca decide el resultado.
 -- Clic izquierdo: ataque básico. Mantenerlo apretado sigue el ritmo del combo
 -- (o de los disparos), usando los mismos tiempos que valida el servidor.
--- Teclas 1-6, Q y R llegan más adelante en la Fase 0.
+-- En pantallas táctiles el botón de ataque llama a SetAttacking (MobileController).
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -28,10 +28,20 @@ local function currentBasicAttack(): AbilityData.BasicAttack?
 	return class and AbilityData.Abilities[class.BasicAttack]
 end
 
+local holding = false
+local startLoop: () -> ()
+
+-- Mantener apretado el ataque básico desde otro control (botón táctil).
+function InputController.SetAttacking(pressed: boolean)
+	holding = pressed
+	if pressed and startLoop then
+		task.spawn(startLoop)
+	end
+end
+
 function InputController:Start()
 	local useAbility = Remotes.Event("UseAbility")
 
-	local holding = false
 	local looping = false
 	local comboIndex = 0
 	local lastSwing = -math.huge
@@ -73,6 +83,7 @@ function InputController:Start()
 		end
 		looping = false
 	end
+	startLoop = attackLoop
 
 	UserInputService.InputBegan:Connect(function(input, gameProcessed)
 		if gameProcessed then

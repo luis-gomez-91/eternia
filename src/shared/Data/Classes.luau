@@ -17,6 +17,7 @@ export type ClassDef = {
 	-- Energía: empieza en 0 y la genera el ataque básico.
 	ResourceRegen: number,
 	Actives: { string }, -- activas de clase, en orden de tecla (1, 2, 3)
+	Ultimate: string, -- definitiva (tecla R); provisoria hasta las especializaciones
 }
 
 local Classes: { [string]: ClassDef } = {
@@ -30,6 +31,7 @@ local Classes: { [string]: ClassDef } = {
 		MaxResource = 100,
 		ResourceRegen = 0,
 		Actives = { "Cleave", "BattleShout", "Charge" },
+		Ultimate = "Whirlwind",
 	},
 	Paladin = {
 		Id = "Paladin",
@@ -41,6 +43,7 @@ local Classes: { [string]: ClassDef } = {
 		MaxResource = 100,
 		ResourceRegen = 0,
 		Actives = { "HolyStrike", "Consecration", "HealingLight" },
+		Ultimate = "DawnHammer",
 	},
 	Ranger = {
 		Id = "Ranger",
@@ -52,6 +55,7 @@ local Classes: { [string]: ClassDef } = {
 		MaxResource = 100,
 		ResourceRegen = 0,
 		Actives = { "PowerShot", "ArrowRain", "Disengage" },
+		Ultimate = "Volley",
 	},
 	Mage = {
 		Id = "Mage",
@@ -63,6 +67,7 @@ local Classes: { [string]: ClassDef } = {
 		MaxResource = 150,
 		ResourceRegen = 0.02,
 		Actives = { "ArcaneOrb", "Blink", "Fireball" },
+		Ultimate = "MeteorShower",
 	},
 	Priest = {
 		Id = "Priest",
@@ -74,6 +79,7 @@ local Classes: { [string]: ClassDef } = {
 		MaxResource = 150,
 		ResourceRegen = 0.02,
 		Actives = { "Smite", "Heal", "HolyNova" },
+		Ultimate = "DivineHymn",
 	},
 	Warlock = {
 		Id = "Warlock",
@@ -85,6 +91,7 @@ local Classes: { [string]: ClassDef } = {
 		MaxResource = 150,
 		ResourceRegen = 0.02,
 		Actives = { "Corruption", "DrainLife", "ShadowBlast" },
+		Ultimate = "ShadowPact",
 	},
 }
 

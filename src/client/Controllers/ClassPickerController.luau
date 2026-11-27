@@ -5,6 +5,7 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
 
 local Classes = require(ReplicatedStorage.Shared.Data.Classes)
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
@@ -28,6 +29,12 @@ function ClassPickerController:Start()
 	list.AutomaticSize = Enum.AutomaticSize.Y
 	list.BackgroundTransparency = 1
 	list.Parent = gui
+	-- En pantallas táctiles, más chico para no tapar el joystick.
+	if UserInputService.TouchEnabled then
+		local scale = Instance.new("UIScale")
+		scale.Scale = 0.6
+		scale.Parent = list
+	end
 	local layout = Instance.new("UIListLayout")
 	layout.Padding = UDim.new(0, 4)
 	layout.SortOrder = Enum.SortOrder.LayoutOrder

@@ -497,6 +497,159 @@ local Cues: { [string]: Cue } = {
 		),
 	},
 
+	-- Definitivas provisorias (tecla R): versiones más grandes de efectos que
+	-- ya existen, con sonidos de las clases hasta generar los propios.
+	Whirlwind = {
+		Pose = "WarriorCleave",
+		Effects = (function()
+			local list: { EffectDef } = {}
+			local def = Actives.Whirlwind
+			for i = 0, (def.Ticks :: number) - 1 do
+				local delay = (def.Delay :: number) + i * (def.Interval :: number)
+				table.insert(list, { Kind = "Slash", Color = EMBER, Delay = delay, Size = 9, Span = 360, Sweep = 1 })
+				table.insert(list, {
+					Kind = "Ring",
+					Color = GOLD,
+					Delay = delay,
+					Duration = 0.35,
+					Size = (def.Radius :: number) * 2,
+					Height = -2.8,
+				})
+			end
+			table.insert(list, { Kind = "Trail", Color = EMBER, Duration = 1.4 })
+			return list
+		end)(),
+		Sound = sound("Cleave", 0.8, 0, { Pitch = 0.85 }),
+	},
+	DawnHammer = {
+		Pose = "PaladinSlam",
+		Effects = {
+			{ Kind = "Column", Color = HOLY, Delay = 0.25, Duration = 0.5, Size = 24 },
+			{ Kind = "Burst", Color = LIGHT, Delay = 0.45, Duration = 0.5, Size = 20 },
+			{
+				Kind = "Ring",
+				Color = HOLY,
+				Delay = 0.45,
+				Duration = 0.6,
+				Size = (Actives.DawnHammer.Radius :: number) * 2,
+				Height = -2.8,
+			},
+		},
+		Sound = sound("HolyStrike", 0.9, 0, { Pitch = 0.8 }),
+	},
+	Volley = {
+		Pose = "BowSky",
+		Effects = {
+			{
+				Kind = "Ring",
+				Color = NATURE,
+				Duration = 0.8,
+				Size = (Actives.Volley.Radius :: number) * 2,
+				AtTarget = true,
+				Ground = true,
+			},
+			{
+				Kind = "Rain",
+				Color = GOLD,
+				Delay = (Actives.Volley.Delay :: number) - 0.25,
+				Duration = (Actives.Volley.Ticks :: number) * (Actives.Volley.Interval :: number) + 0.2,
+				Size = (Actives.Volley.Radius :: number) * 2,
+				AtTarget = true,
+				Ground = true,
+			},
+		},
+		Sound = sound("ArrowRain", 0.8, 0, { Pitch = 0.9 }),
+	},
+	MeteorShower = {
+		Pose = "CastOverhead",
+		Effects = (function()
+			local list: { EffectDef } = {
+				{
+					Kind = "Field",
+					Color = FIRE,
+					Duration = 1.8,
+					Size = (Actives.MeteorShower.Radius :: number) * 2,
+					AtTarget = true,
+					Ground = true,
+				},
+			}
+			local def = Actives.MeteorShower
+			for i = 0, (def.Ticks :: number) - 1 do
+				local delay = (def.Delay :: number) + i * (def.Interval :: number)
+				table.insert(list, {
+					Kind = "Column",
+					Color = FIRE,
+					Delay = delay - 0.15,
+					Duration = 0.3,
+					Size = 30,
+					AtTarget = true,
+					Ground = true,
+				})
+				table.insert(list, {
+					Kind = "Burst",
+					Color = EMBER,
+					Delay = delay,
+					Duration = 0.4,
+					Size = (def.Radius :: number) * 1.6,
+					AtTarget = true,
+					Ground = true,
+				})
+			end
+			return list
+		end)(),
+		Sound = sound(
+			"FireballExplosion",
+			0.85,
+			0,
+			{ Delay = Actives.MeteorShower.Delay, AtTarget = true, Pitch = 0.75 }
+		),
+	},
+	DivineHymn = {
+		Pose = "CastRaise",
+		Effects = {
+			{ Kind = "Aura", Color = LIGHT, Duration = 1.2 },
+			{
+				Kind = "Burst",
+				Color = LIGHT,
+				Delay = 0.38,
+				Duration = 0.6,
+				Size = (Actives.DivineHymn.Radius :: number) * 2,
+			},
+			{
+				Kind = "Ring",
+				Color = HEAL,
+				Delay = 0.4,
+				Duration = 0.7,
+				Size = (Actives.DivineHymn.Radius :: number) * 2 + 2,
+				Height = -2.8,
+			},
+		},
+		Sound = sound("PriestHeal", 0.85, 0, { Pitch = 0.85 }),
+	},
+	ShadowPact = {
+		Pose = "CastChannel",
+		Effects = {
+			{ Kind = "Aura", Color = SHADOW, Duration = 1 },
+			{
+				Kind = "Beam",
+				Color = SHADOW,
+				EndColor = FEL,
+				Delay = 0.3,
+				Duration = 0.5,
+				From = "RightHand",
+			},
+			{
+				Kind = "Burst",
+				Color = SHADOW,
+				Delay = Actives.ShadowPact.Delay,
+				Duration = 0.5,
+				Size = 10,
+				AtTarget = true,
+			},
+		},
+		Sound = sound("ShadowBlast", 0.85, 0, { Pitch = 0.8 }),
+	},
+
 	-- Esquivar (todas las clases)
 	Dodge = {
 		Pose = "Dodge",

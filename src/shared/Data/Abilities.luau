@@ -3,8 +3,8 @@
 -- el cliente para el ritmo de los controles, el servidor para validar.
 -- Distancias en studs (1 stud ≈ 0,28 m).
 --
--- Fase 0: cada clase tiene su ataque básico y sus 3 activas de clase
--- (las mismas para sus 3 especializaciones). Ver PLAN.md, "Clases".
+-- Fase 0: cada clase tiene su ataque básico, sus 3 activas de clase (las mismas
+-- para sus 3 especializaciones) y una definitiva provisoria. Ver PLAN.md, "Clases".
 
 export type BasicHit = {
 	Damage: number,
@@ -399,7 +399,106 @@ local Actives: { [string]: ActiveDef } = {
 		Radius = 8,
 		Delay = 0.6,
 	},
+
+	-- Definitivas provisorias (Fase 0), una por clase, con la tecla R. Se usan
+	-- con la barra de definitiva llena en vez de recurso (Cost 0). Las finales
+	-- son una por especialización, en el nivel 50 (Fase 2).
+	Whirlwind = {
+		Id = "Whirlwind",
+		Cue = "Whirlwind",
+		Name = "Torbellino",
+		Kind = "Area",
+		Cost = 0,
+		Cooldown = 1,
+		Damage = 35,
+		Radius = 11,
+		AtSelf = true,
+		Delay = 0.1,
+		Ticks = 4,
+		Interval = 0.35,
+	},
+	DawnHammer = {
+		Id = "DawnHammer",
+		Cue = "DawnHammer",
+		Name = "Martillo del alba",
+		Kind = "Area",
+		Impact = "Holy",
+		Cost = 0,
+		Cooldown = 1,
+		Damage = 70,
+		Radius = 14,
+		AtSelf = true,
+		Delay = 0.45,
+		Heal = 0.4,
+	},
+	Volley = {
+		Id = "Volley",
+		Cue = "Volley",
+		Name = "Andanada",
+		Kind = "Area",
+		Impact = "Arrow",
+		Cost = 0,
+		Cooldown = 1,
+		Damage = 28,
+		Range = 45,
+		ArcDot = 0.8,
+		Radius = 11,
+		Delay = 0.6,
+		Ticks = 5,
+		Interval = 0.3,
+	},
+	MeteorShower = {
+		Id = "MeteorShower",
+		Cue = "MeteorShower",
+		Name = "Lluvia de meteoros",
+		Kind = "Area",
+		Impact = "Fire",
+		Cost = 0,
+		Cooldown = 1,
+		Damage = 55,
+		Range = 40,
+		ArcDot = 0.8,
+		Radius = 10,
+		Delay = 1,
+		Ticks = 3,
+		Interval = 0.35,
+	},
+	DivineHymn = {
+		Id = "DivineHymn",
+		Cue = "DivineHymn",
+		Name = "Himno divino",
+		Kind = "Area",
+		Impact = "Holy",
+		Cost = 0,
+		Cooldown = 1,
+		Damage = 30,
+		Radius = 16,
+		AtSelf = true,
+		Delay = 0.4,
+		Heal = 0.5,
+	},
+	ShadowPact = {
+		Id = "ShadowPact",
+		Cue = "ShadowPact",
+		Name = "Pacto de sombras",
+		Kind = "Strike",
+		Impact = "Shadow",
+		Cost = 0,
+		Cooldown = 1,
+		Damage = 90,
+		Range = 38,
+		ArcDot = 0.8,
+		Delay = 0.5,
+		Drain = 0.5,
+		Dot = { Damage = 15, Ticks = 4, Interval = 1 },
+	},
 }
+
+-- Barra de definitiva: puntos para llenarla. Suman el daño hecho, la curación
+-- hecha y el daño recibido (este último vale el doble). Con unos 3.000 de daño
+-- contra el jefe de prueba se llena unas 2 veces por pelea.
+local ULTIMATE_FILL = 1500
+local ULTIMATE_TAKEN_WEIGHT = 2
 
 -- Tipos que necesitan un enemigo elegido para usarse.
 local NEEDS_TARGET: { [ActiveKind]: boolean } = {
@@ -456,6 +555,8 @@ return table.freeze({
 	Actives = table.freeze(Actives),
 	NeedsTarget = needsTarget,
 	GlobalCooldown = GLOBAL_COOLDOWN,
+	UltimateFill = ULTIMATE_FILL,
+	UltimateTakenWeight = ULTIMATE_TAKEN_WEIGHT,
 	BaseCritChance = BASE_CRIT_CHANCE,
 	Dodge = table.freeze(DODGE),
 })

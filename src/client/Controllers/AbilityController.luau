@@ -1,6 +1,8 @@
 --!strict
--- Activas de clase con las teclas 1, 2 y 3, y su barra en pantalla
--- (Energía o Maná arriba y un espacio por habilidad con su tiempo de espera).
+-- Activas con las teclas 1 a 6 y la definitiva con R, y su barra en pantalla
+-- (Energía o Maná arriba, un espacio por habilidad con su tiempo de espera y
+-- la definitiva con su barra de carga). Los espacios 4 a 6 son de las
+-- habilidades de especialización (Fase 2): por ahora se ven bloqueados.
 -- El cliente predice esperas y recurso con los mismos datos que el servidor
 -- para no mandar pedidos que se van a rechazar; el servidor sigue decidiendo.
 -- Los movimientos (Embestida, Parpadeo, Retirada) se hacen aquí para que
@@ -19,7 +21,22 @@ local Dash = require(script.Parent.Parent.Util.Dash)
 local FeedbackController = require(script.Parent.FeedbackController)
 local TargetController = require(script.Parent.TargetController)
 
-local KEYS = { Enum.KeyCode.One, Enum.KeyCode.Two, Enum.KeyCode.Three }
+local KEYS = {
+	Enum.KeyCode.One,
+	Enum.KeyCode.Two,
+	Enum.KeyCode.Three,
+	Enum.KeyCode.Four,
+	Enum.KeyCode.Five,
+	Enum.KeyCode.Six,
+}
+local ULTIMATE_KEY = Enum.KeyCode.R
+-- Nivel en que se desbloquea cada habilidad de especialización (espacios 4 a 6).
+local SPEC_LEVELS = { [4] = 10, [5] = 20, [6] = 30 }
+local ULTIMATE_COLOR = Color3.fromRGB(255, 120, 40)
+-- Ancho de la barra de recurso en pantallas táctiles.
+local TOUCH_BAR_WIDTH = 200
+-- Abajo, un poco a la izquierda del centro: lejos del arco del pulgar.
+local TOUCH_BAR_POSITION = UDim2.new(0.4, 0, 1, -40)
 local RESOURCE_COLORS = {
 	Energy = Color3.fromRGB(240, 190, 50),
 	Mana = Color3.fromRGB(70, 140, 255),
@@ -97,10 +114,23 @@ local function leap(root: BasePart, def: AbilityData.ActiveDef)
 	Dash.Start(root, back, (def.Distance :: number) / duration, duration)
 end
 
-local function tryUse(slot: number)
+local function getUltimateCharge(): number
+	local value = player:GetAttribute("UltimateCharge")
+	return if typeof(value) == "number" then value else 0
+end
+
+-- Habilidad del espacio `slot` (1 a 6) o la definitiva ("Ultimate").
+local function abilityAt(slot: number | "Ultimate"): (string?, AbilityData.ActiveDef?)
 	local class = getClass()
-	local abilityId = class and class.Actives[slot]
-	local def = abilityId and AbilityData.Actives[abilityId]
+	if not class then
+		return nil, nil
+	end
+	local abilityId = if slot == "Ultimate" then class.Ultimate else class.Actives[slot]
+	return abilityId, abilityId and AbilityData.Actives[abilityId]
+end
+
+local function tryUse(slot: number | "Ultimate")
+	local abilityId, def = abilityAt(slot)
 	local root = getAliveRoot()
 	if not abilityId or not def or not root then
 		return
@@ -110,7 +140,11 @@ local function tryUse(slot: number)
 	if now < globalReadyAt or now < (readyAt[abilityId] or 0) then
 		return
 	end
-	if getResource() < def.Cost then
+	if slot == "Ultimate" then
+		if getUltimateCharge() < 1 then
+			return
+		end
+	elseif getResource() < def.Cost then
 		return
 	end
 
@@ -139,9 +173,39 @@ local function tryUse(slot: number)
 	FeedbackController.PlayLocal(def.Cue, target)
 end
 
-type Slot = { frame: Frame, shade: Frame, timer: TextLabel }
+-- Usar un espacio (1 a 6) o la definitiva desde otro control (botones táctiles).
+AbilityController.Use = tryUse
 
-local function buildHud(): (Frame, TextLabel, { Slot })
+export type SlotInfo = {
+	name: string,
+	remaining: number, -- segundos de espera que faltan
+	total: number, -- espera completa de la que se está descontando
+	usable: boolean, -- hay recurso (o la barra de definitiva está llena)
+	charge: number?, -- definitiva: carga de 0 a 1
+}
+
+-- Estado de un espacio para dibujarlo, o nil si está vacío.
+function AbilityController.Info(slot: number | "Ultimate"): SlotInfo?
+	local abilityId, def = abilityAt(slot)
+	if not abilityId or not def then
+		return nil
+	end
+	local now = os.clock()
+	local own = (readyAt[abilityId] or 0) - now
+	local global = globalReadyAt - now
+	local charge = if slot == "Ultimate" then getUltimateCharge() else nil
+	return {
+		name = def.Name,
+		remaining = math.max(own, global, 0),
+		total = if own >= global then def.Cooldown else AbilityData.GlobalCooldown,
+		usable = if charge then charge >= 1 else getResource() >= def.Cost,
+		charge = charge,
+	}
+end
+
+type Slot = { frame: Frame, shade: Frame, timer: TextLabel, name: TextLabel, charge: Frame? }
+
+local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, Frame)
 	local gui = Instance.new("ScreenGui")
 	gui.Name = "AbilityHud"
 	gui.ResetOnSpawn = false
@@ -149,7 +213,7 @@ local function buildHud(): (Frame, TextLabel, { Slot })
 	local root = Instance.new("Frame")
 	root.AnchorPoint = Vector2.new(0.5, 1)
 	root.Position = UDim2.new(0.5, 0, 1, -62)
-	root.Size = UDim2.fromOffset(#KEYS * (SLOT_SIZE + 8), SLOT_SIZE + 16)
+	root.Size = UDim2.fromOffset((#KEYS + 1) * (SLOT_SIZE + 8) + 12, SLOT_SIZE + 16)
 	root.BackgroundTransparency = 1
 	root.Parent = gui
 
@@ -188,11 +252,16 @@ local function buildHud(): (Frame, TextLabel, { Slot })
 	layout.Padding = UDim.new(0, 8)
 	layout.Parent = row
 
-	local slots: { Slot } = {}
-	for i in KEYS do
+	local slots: { [number | "Ultimate"]: Slot } = {}
+	local order: { number | "Ultimate" } = { 1, 2, 3, 4, 5, 6, "Ultimate" }
+	for index, i in order do
+		local isUltimate = i == "Ultimate"
 		local frame = Instance.new("Frame")
 		frame.Name = `Slot{i}`
-		frame.LayoutOrder = i
+		frame.LayoutOrder = index
+		if isUltimate then
+			frame.LayoutOrder = index + 1 -- después del separador
+		end
 		frame.Size = UDim2.fromOffset(SLOT_SIZE, SLOT_SIZE)
 		frame.BackgroundColor3 = Color3.fromRGB(60, 50, 45)
 		frame.ClipsDescendants = true
@@ -223,7 +292,7 @@ local function buildHud(): (Frame, TextLabel, { Slot })
 		key.TextSize = 13
 		key.TextColor3 = Color3.fromRGB(240, 190, 50)
 		key.TextXAlignment = Enum.TextXAlignment.Left
-		key.Text = tostring(i)
+		key.Text = if isUltimate then "R" else tostring(i)
 		key.ZIndex = 3
 		key.Parent = frame
 
@@ -246,11 +315,37 @@ local function buildHud(): (Frame, TextLabel, { Slot })
 		timer.ZIndex = 3
 		timer.Parent = frame
 
-		slots[i] = { frame = frame, shade = shade, timer = timer }
+		-- Definitiva: barra que sube desde abajo mientras se carga.
+		local charge: Frame? = nil
+		if isUltimate then
+			frame.BackgroundColor3 = Color3.fromRGB(70, 40, 30)
+			local fill = Instance.new("Frame")
+			fill.AnchorPoint = Vector2.new(0, 1)
+			fill.Position = UDim2.fromScale(0, 1)
+			fill.Size = UDim2.fromScale(1, 0)
+			fill.BackgroundColor3 = ULTIMATE_COLOR
+			fill.BackgroundTransparency = 0.45
+			fill.BorderSizePixel = 0
+			fill.ZIndex = 0
+			fill.Parent = frame
+			local stroke = Instance.new("UIStroke")
+			stroke.Color = ULTIMATE_COLOR
+			stroke.Thickness = 2
+			stroke.Parent = frame
+			charge = fill
+		end
+
+		slots[i] = { frame = frame, shade = shade, timer = timer, name = name, charge = charge }
 	end
+	-- Espacio vacío entre la barra de 6 y la definitiva.
+	local spacer = Instance.new("Frame")
+	spacer.BackgroundTransparency = 1
+	spacer.Size = UDim2.fromOffset(4, SLOT_SIZE)
+	spacer.LayoutOrder = #order
+	spacer.Parent = row
 
 	gui.Parent = player:WaitForChild("PlayerGui")
-	return energyFill, energyText, slots
+	return energyFill, energyText, slots, row
 end
 
 function AbilityController:Start()
@@ -261,10 +356,15 @@ function AbilityController:Start()
 		local slot = table.find(KEYS, input.KeyCode)
 		if slot then
 			tryUse(slot)
+		elseif input.KeyCode == ULTIMATE_KEY then
+			tryUse("Ultimate")
 		end
 	end)
 
-	local energyFill, energyText, slots = buildHud()
+	local energyFill, energyText, slots, row = buildHud()
+	local hud = row.Parent :: Frame
+	local hudSize = hud.Size
+	local hudPosition = hud.Position
 	RunService.RenderStepped:Connect(function()
 		local energy, maxEnergy = getResource()
 		energyFill.Size = UDim2.fromScale(if maxEnergy > 0 then energy / maxEnergy else 0, 1)
@@ -273,24 +373,37 @@ function AbilityController:Start()
 		local kind = if class then class.Resource else "Energy"
 		energyFill.BackgroundColor3 = RESOURCE_COLORS[kind]
 		energyText.Text = `{RESOURCE_NAMES[kind]} {math.floor(energy)}`
-		local now = os.clock()
+		-- En pantallas táctiles las habilidades están en los botones del pulgar:
+		-- queda solo la barra de recurso, angosta para no pasar bajo el arco.
+		local touch = UserInputService.TouchEnabled
+		row.Visible = not touch
+		hud.Size = if touch then UDim2.fromOffset(TOUCH_BAR_WIDTH, hud.Size.Y.Offset) else hudSize
+		hud.Position = if touch then TOUCH_BAR_POSITION else hudPosition
 		for i, slot in slots do
-			local abilityId = class and class.Actives[i]
-			local def = abilityId and AbilityData.Actives[abilityId]
-			slot.frame.Visible = def ~= nil
-			if not abilityId or not def then
+			local info = AbilityController.Info(i)
+			local specLevel = if typeof(i) == "number" then SPEC_LEVELS[i] else nil
+			slot.frame.Visible = info ~= nil or specLevel ~= nil
+			if not info then
+				-- Bloqueado hasta la especialización.
+				slot.name.Text = if specLevel then `Nv {specLevel}` else ""
+				slot.frame.BackgroundTransparency = 0.7
+				slot.shade.Size = UDim2.fromScale(1, 0)
+				slot.timer.Text = ""
 				continue
 			end
-			(slot.frame:FindFirstChild("AbilityName") :: TextLabel).Text = def.Name
-
-			local remaining = math.max((readyAt[abilityId] or 0) - now, globalReadyAt - now, 0)
-			local total = if (readyAt[abilityId] or 0) - now >= globalReadyAt - now
-				then def.Cooldown
-				else AbilityData.GlobalCooldown
-			slot.shade.Size = UDim2.fromScale(1, if remaining > 0 then remaining / total else 0)
-			slot.timer.Text = if remaining >= 1 then tostring(math.ceil(remaining)) else ""
-			-- Sin recurso suficiente: el espacio se ve apagado.
-			slot.frame.BackgroundTransparency = if energy < def.Cost then 0.6 else 0
+			slot.name.Text = info.name
+			slot.shade.Size = UDim2.fromScale(1, if info.remaining > 0 then info.remaining / info.total else 0)
+			slot.timer.Text = if info.remaining >= 1 then tostring(math.ceil(info.remaining)) else ""
+			local charge = slot.charge
+			if charge and info.charge then
+				charge.Size = UDim2.fromScale(1, info.charge)
+				-- Llena: late para avisar que se puede usar.
+				charge.BackgroundTransparency = if info.charge >= 1 then 0.25 + 0.2 * math.sin(os.clock() * 6) else 0.45
+				slot.frame.BackgroundTransparency = 0
+			else
+				-- Sin recurso suficiente: el espacio se ve apagado.
+				slot.frame.BackgroundTransparency = if info.usable then 0 else 0.6
+			end
 		end
 	end)
 end
