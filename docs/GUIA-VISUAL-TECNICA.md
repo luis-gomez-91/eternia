@@ -184,7 +184,7 @@ Validan la guía **juntos**, como un mismo juego. Sus conceptos 2D aprobados, qu
   - **Ojos en Neon.**
   - **Garrote grande** de madera, de al menos 0,5 studs de grosor.
   - Ropa de cuero y, como propuesta por su nombre, una bolsa de botín a la espalda.
-- **Paleta:** piel verde oliva `#5F8C3C` (lejos del verde menta y del verde ácido), cuero `#64462D`, madera `#6E4B28`, **ojos ámbar en Neon** (`#FFB428` como propuesta). No rojos: un rojo permanente le quitaría fuerza al rojo de peligro, que solo aparece al cargar un ataque. Pendiente: los cuerpos provisorios del juego todavía usan ojos rojos; se cambian cuando se haga el modelo.
+- **Paleta:** piel verde oliva `#5F8C3C` (lejos del verde menta y del verde ácido), cuero `#64462D`, madera `#6E4B28`, **ojos ámbar en Neon** `#E67814` (el `#FFB428` propuesto antes se veía amarillo con Neon, igual que los ojos del lobo). No rojos: un rojo permanente le quitaría fuerza al rojo de peligro, que solo aparece al cargar un ataque. El cuerpo provisorio del juego ya los usa.
 - **Silueta:** orejas y garrote visibles de frente; la postura agachada lo distingue de un jugador.
 - **Materiales:** SmoothPlastic en el cuerpo y la ropa; Wood en el garrote; Neon solo en los ojos.
 - **Detalle:** menos de 3.000 triángulos y una textura de paleta de 512 px.

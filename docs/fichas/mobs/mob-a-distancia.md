@@ -7,7 +7,7 @@
 Dispara desde lejos. Obliga a moverse y a acercarse o usar habilidades de distancia. Los pilares de su campamento cortan los escupitajos: enseñan a cubrirse.
 
 ## Aspecto
-Araña grande morada oscura, con una marca verde brillante en el abdomen, ojos rojos y colmillos verdes. Provisorio: esferas y patas de bloques (`Spider`).
+Araña grande morada oscura, con una marca verde brillante en el abdomen, ojos ámbar y colmillos verdes. Provisorio: esferas y patas de bloques (`Spider`).
 
 ## Comportamiento
 - **Patrulla:** casi quieta (5), hasta 6 studs de su sitio.

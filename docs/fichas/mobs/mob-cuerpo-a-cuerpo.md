@@ -7,7 +7,7 @@
 Se acerca y golpea. Enseña a esquivar y a pegar entre sus ataques. Es el mob más común: aparece en grupos de 3.
 
 ## Aspecto
-Goblin bajo y verde, orejas largas, ojos rojos y un garrote de madera. Provisorio: bloques simples (`server/Mobs/Bodies`, `Goblin`).
+Goblin bajo y verde, orejas largas, ojos ámbar y un garrote de madera. Provisorio: bloques simples (`server/Mobs/Bodies`, `Goblin`).
 
 ## Comportamiento
 - **Patrulla:** camina despacio (6) a puntos al azar hasta 8 studs de su sitio.

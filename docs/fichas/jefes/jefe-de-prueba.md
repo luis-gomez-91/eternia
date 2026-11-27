@@ -7,7 +7,7 @@
 Jefe de 2 fases para probar el combate de la Fase 0: leer avisos en el suelo, salir de zonas, pegar en las ventanas y manejar ayudantes.
 
 ## Aspecto
-Ogro grande de piel marrón clara, panza enorme, colmillos, ojos rojos y un garrote gigante. Provisorio: bloques (`Ogre`), unas 3 veces la altura de un jugador.
+Ogro grande de piel marrón clara, panza enorme, colmillos, ojos ámbar y un garrote gigante. Provisorio: bloques (`Ogre`), unas 3 veces la altura de un jugador.
 
 ## Qué pone a prueba
 Rol principal: **Daño**. Por qué: en la Fase 0 se juega solo o en grupos sin roles; pide moverse bien y pegar en las ventanas. En difícil pasará a probar al tank (Garrotazo fuerte que debe recibir de frente).
