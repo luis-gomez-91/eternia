@@ -63,8 +63,16 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 ### Controles
 - [x] PC: teclas 1 a 6, Q esquivar, R definitiva. Los espacios 4 a 6 se ven bloqueados (Nv 10, 20 y 30) hasta las especializaciones de la Fase 2
 - [x] Definitiva con barra de carga: se llena con el daño hecho, la curación y el daño recibido (doble); unas 2 por pelea contra el jefe de prueba. Una definitiva provisoria por clase: Torbellino, Martillo del alba, Andanada, Lluvia de meteoros, Himno divino y Pacto de sombras
-- [x] Móvil: botones en arco alrededor del pulgar derecho (ataque, saltar, 1 a 3, esquivar con cargas, definitiva con % y cambiar objetivo); reemplaza el botón de salto de Roblox. Probado en el simulador de iPhone 17 Pro
+- [x] Móvil: botones en arco alrededor del pulgar derecho (ataque, saltar, 1 a 3, esquivar con cargas, definitiva con % y cambiar objetivo); reemplaza el botón de salto de Roblox. Probado en el simulador de iPhone 17 Pro y en un celular real
+- [x] Las habilidades con objetivo respetan el foco: van al enemigo fijado o no se usan si está lejos
 - [ ] Teclas reasignables (en el menú de opciones, más adelante)
+
+### Publicación de prueba
+- [x] Juego publicado en privado como "Eternia — Desarrollo", con descripción y género
+- [x] Clasificación de contenido: Minimal en Roblox, E (ESRB) y PEGI 3, sin restricciones por región
+- [x] Cuentas de prueba con permiso Playtest (luis_gomu y tiburonssin1991); se entra con el enlace o el QR del juego
+- [ ] Confirmar que las cuentas de prueba entran al juego (el botón Jugar salía en gris antes de la clasificación)
+- [ ] Prueba de rendimiento en la tablet Redmi
 
 ### Diseño (fuera del código)
 - [x] Guía visual en borrador: [GUIA-VISUAL.md](GUIA-VISUAL.md), con anexo técnico [GUIA-VISUAL-TECNICA.md](GUIA-VISUAL-TECNICA.md) (presupuestos orientativos, fichas y checklist)
@@ -108,6 +116,7 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Subárea de prueba en caja gris con 3 mobs (Goblin Saqueador, Araña Escupidora, Lobo Gris) y jefe de prueba de 2 fases (Ogro del Claro). IA en servidor: patrulla, detecta, persigue, avisa con zona roja en el suelo, ataca y vuelve inmune a su sitio. Daño a jugadores con invulnerabilidad del esquivar. Fichas llenas. Arreglado: las barras de vida desaparecían al morir el jugador |
 | 26 nov 2026 | Controles: teclas 1 a 6 y R; barra de definitiva y una definitiva provisoria por clase; botones táctiles en arco para móvil. 16 sonidos de mobs y jefe generados con ElevenLabs, sin subir todavía (la red de la oficina bloquea Roblox) |
 | 26 nov 2026 | Guía visual en borrador: estilo low-poly estilizado, colores reservados de combate, siluetas por clase y reglas de enemigos, efectos e interfaz. La curación pasa a verde menta y el veneno y la magia vil a verde ácido, para no confundirlos |
+| 26 nov 2026 | Juego publicado en privado ("Eternia — Desarrollo"), clasificación de contenido Minimal / PEGI 3 y cuentas de prueba con Playtest. Primera prueba en un celular real: el botón de saltar no funcionaba (el control de Roblox borraba la orden) y la Embestida iba al enemigo más cercano en vez del fijado; ambos corregidos |
 | 26 nov 2026 | Dispositivos de prueba: tablet Redmi para rendimiento, Poco X8 Pro e iPhone 17 Pro para lectura (no hay un teléfono de gama media). Ajustes de consistencia en el anexo |
 | 26 nov 2026 | Anexo técnico corregido: límites reales de texturas de Roblox (4096 px normales, 1024 px PBR), ojos ámbar para el goblin (pendiente en el modelo), estabilidad de fotogramas en las mediciones, instancing, armaduras y silueta solo para personajes. Sigue en borrador |
 | 26 nov 2026 | Guía visual completada sin cambiar el estilo ni los colores: geometría, materiales (Metal en armas y armaduras), luz, cámara, R15, niveles de enemigos y tiempos de animación. Nuevo anexo técnico con presupuestos orientativos, fichas de los 3 conceptos y checklist. Sigue en borrador |

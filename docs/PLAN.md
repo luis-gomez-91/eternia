@@ -316,7 +316,7 @@ Las otras 2 ramas del Mage usan las mismas 3 habilidades de clase y cambian el r
 
 - **Barra:** ataque básico, esquivar, 6 habilidades y la definitiva. En móvil, botones en arco alrededor del pulgar derecho.
 - **Esquivar:** un dash corto con 2 cargas que se recuperan en 4 segundos.
-- **Fijar objetivo:** automático al enemigo más cercano en el centro de la pantalla, con botón para cambiar.
+- **Fijar objetivo:** automático al enemigo más cercano en el centro de la pantalla, con botón para cambiar. Las habilidades que necesitan objetivo van siempre al fijado; si está fuera de alcance no se usan (no saltan a otro enemigo). Sin objetivo fijado, van al primero al frente.
 - **PC y consola:** teclas 1 a 6, Q para esquivar, R para la definitiva, todo reasignable.
 
 ### Stats
@@ -806,6 +806,7 @@ Como gran parte del público es menor de edad, el juego no permite comercio, fil
 - Todo texto escrito por jugadores (chat, nombres de mascotas) pasa por el filtro de Roblox.
 - Botón de reportar jugador en el menú de cada jugador y al final de cada partida.
 - Silenciar y bloquear jugadores desde su perfil.
+- Clasificación de contenido de Roblox (cuestionario de madurez e IARC) al día: se repite cada vez que el juego agrega contenido que cambie las respuestas (más violencia, sangre, miedo, compras o chat propio).
 - Panel de administración interno para revisar reportes, ver historial de un jugador y aplicar sanciones.
 
 ### Cuidado de menores
