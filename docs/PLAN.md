@@ -726,11 +726,12 @@ Volumen estimado: unas 250 animaciones (unas 110 de clases, 60 de mobs y 90 de j
 Cada habilidad lleva un ícono en su botón, porque en un botón de móvil de 44 px un nombre no se alcanza a leer. El nombre se ve al pasar el mouse o al dejar el dedo apretado, y en el libro de habilidades.
 
 - **Cuántos:** unos 170. Por clase son 27 (3 activas de clase y, por cada especialización, 3 activas, 4 pasivas y la definitiva), o sea 162 entre las 6 clases. A eso se suman el ataque básico de cada clase y el esquivar.
-- **Estilo:** sigue la [guía visual](GUIA-VISUAL.md#interfaz). Una figura central con contorno grueso, sin texto dentro, que se entienda a 44 px. Los colores son los de su clase y siguen los colores reservados de la guía: verde menta solo si cura, azul cielo si defiende y nunca el rojo de peligro.
+- **Estilo:** sigue la [guía visual](GUIA-VISUAL.md#interfaz). Ilustración pintada de borde a borde con luz dramática y un solo motivo grande, sin texto dentro, que se entienda a 44 px. El color de la clase es una guía (fondo o brillo) y manda el del elemento; se respetan los colores reservados: verde menta solo si cura y nunca el rojo de peligro.
 - **Tipo por marco:** el marco lo pone la interfaz, no la imagen. Cuadrado para las activas, redondo para las pasivas y naranja de definitiva para la R. Así una misma imagen sirve en la barra, en el árbol de puntos y en el libro de habilidades.
-- **Cómo se hacen:** con IA de imágenes, usando un texto base igual para todos, y retocados en Figma para unificar el contorno y el encuadre. Se pueden encargar a un artista de Talent Hub si la IA no llega al nivel de la guía.
-- **Formato:** PNG de 256 × 256 con fondo transparente alrededor de la figura. Se suben por tandas con Open Cloud, igual que los sonidos.
+- **Cómo se hacen:** con IA de imágenes por API, desde un script, con un texto de estilo igual para todos más uno por habilidad (`assets/icons/prompts.json`). Se generan varias versiones de cada una y se elige. Se pueden encargar a un artista de Talent Hub si la IA no llega al nivel de la guía.
+- **Formato:** PNG cuadrado de 256 × 256, opaco. Se suben por tandas con Open Cloud como Image, igual que los sonidos.
 - **Por datos:** el ID de cada ícono va en `Data/Abilities` (campo `Icon`). Una habilidad sin ícono muestra su nombre, así que cambiar o agregar un ícono no toca código.
+- **Aprobación:** cada tanda se muestra antes de subirla, en grande y a tamaño de botón, y solo se sube a Roblox cuando está aprobada.
 - **Prueba:** cada tanda se mira en el Poco X8 Pro y en el iPhone a tamaño real. Se aprueba si se distinguen las 6 habilidades de la barra sin leer nada.
 
 **Por fases**

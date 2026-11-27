@@ -1,0 +1,122 @@
+{
+  "Cleave": {
+    "file": "warrior/Cleave.png",
+    "assetId": "83120447753827",
+    "source": "candidates/Cleave/gemini-3.1-flash-image_3.jpg"
+  },
+  "BattleShout": {
+    "file": "warrior/BattleShout.png",
+    "assetId": "92721561938638",
+    "source": "candidates/BattleShout/gemini-3.1-flash-image_3.jpg"
+  },
+  "Charge": {
+    "file": "warrior/Charge.png",
+    "assetId": "127130803326420",
+    "source": "candidates/Charge/gemini-3.1-flash-image_2.jpg"
+  },
+  "Whirlwind": {
+    "file": "warrior/Whirlwind.png",
+    "assetId": "70485699850451",
+    "source": "candidates/Whirlwind/gemini-3.1-flash-image_1.jpg"
+  },
+  "HolyStrike": {
+    "file": "paladin/HolyStrike.png",
+    "assetId": "72535989943506",
+    "source": "candidates/HolyStrike/gemini-3.1-flash-image_3.jpg"
+  },
+  "Consecration": {
+    "file": "paladin/Consecration.png",
+    "assetId": "111956222476091",
+    "source": "candidates/Consecration/gemini-3.1-flash-image_2.jpg"
+  },
+  "HealingLight": {
+    "file": "paladin/HealingLight.png",
+    "assetId": "82274935017050",
+    "source": "candidates/HealingLight/gemini-3.1-flash-image_2.jpg"
+  },
+  "DawnHammer": {
+    "file": "paladin/DawnHammer.png",
+    "assetId": "77447008813583",
+    "source": "candidates/DawnHammer/gemini-3.1-flash-image_1.jpg"
+  },
+  "PowerShot": {
+    "file": "ranger/PowerShot.png",
+    "assetId": "79066903599955",
+    "source": "candidates/PowerShot/gemini-3.1-flash-image_1.jpg"
+  },
+  "ArrowRain": {
+    "file": "ranger/ArrowRain.png",
+    "assetId": "119338109628759",
+    "source": "candidates/ArrowRain/gemini-3.1-flash-image_1.jpg"
+  },
+  "Disengage": {
+    "file": "ranger/Disengage.png",
+    "assetId": "84586715026915",
+    "source": "candidates/Disengage/gemini-3.1-flash-image_1.jpg"
+  },
+  "Volley": {
+    "file": "ranger/Volley.png",
+    "assetId": "83590150421872",
+    "source": "candidates/Volley/gemini-3.1-flash-image_1.jpg"
+  },
+  "ArcaneOrb": {
+    "file": "mage/ArcaneOrb.png",
+    "assetId": "100348224842789",
+    "source": "candidates/ArcaneOrb/gemini-3.1-flash-image_1.jpg"
+  },
+  "Blink": {
+    "file": "mage/Blink.png",
+    "assetId": "117971607227249",
+    "source": "candidates/Blink/gemini-3.1-flash-image_1.jpg"
+  },
+  "Fireball": {
+    "file": "mage/Fireball.png",
+    "assetId": "115453557511246",
+    "source": "candidates/Fireball/gemini-3.1-flash-image_1.jpg"
+  },
+  "MeteorShower": {
+    "file": "mage/MeteorShower.png",
+    "assetId": "126009370361460",
+    "source": "candidates/MeteorShower/gemini-3.1-flash-image_1.jpg"
+  },
+  "Smite": {
+    "file": "priest/Smite.png",
+    "assetId": "111874713537447",
+    "source": "candidates/Smite/gemini-3.1-flash-image_1.jpg"
+  },
+  "Heal": {
+    "file": "priest/Heal.png",
+    "assetId": "108733629382809",
+    "source": "candidates/Heal/gemini-3.1-flash-image_1.jpg"
+  },
+  "HolyNova": {
+    "file": "priest/HolyNova.png",
+    "assetId": "84710246428537",
+    "source": "candidates/HolyNova/gemini-3.1-flash-image_1.jpg"
+  },
+  "DivineHymn": {
+    "file": "priest/DivineHymn.png",
+    "assetId": "131337215788772",
+    "source": "candidates/DivineHymn/gemini-3.1-flash-image_1.jpg"
+  },
+  "Corruption": {
+    "file": "warlock/Corruption.png",
+    "assetId": "94299462145310",
+    "source": "candidates/Corruption/gemini-3.1-flash-image_1.jpg"
+  },
+  "DrainLife": {
+    "file": "warlock/DrainLife.png",
+    "assetId": "104984132615928",
+    "source": "candidates/DrainLife/gemini-3.1-flash-image_1.jpg"
+  },
+  "ShadowBlast": {
+    "file": "warlock/ShadowBlast.png",
+    "assetId": "96003169501636",
+    "source": "candidates/ShadowBlast/gemini-3.1-flash-image_1.jpg"
+  },
+  "ShadowPact": {
+    "file": "warlock/ShadowPact.png",
+    "assetId": "118667443740862",
+    "source": "candidates/ShadowPact/gemini-3.1-flash-image_1.jpg"
+  }
+}

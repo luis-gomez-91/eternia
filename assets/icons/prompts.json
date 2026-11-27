@@ -1,0 +1,38 @@
+{
+  "_comment": "Instrucciones para generar los íconos de habilidades con IA (GUIA-VISUAL.md, Íconos). style va al principio de cada una; class agrega el color de la clase como guía; cada habilidad describe su motivo. Escrito en inglés porque los modelos de imágenes lo siguen mejor.",
+  "style": "Hand-painted fantasy RPG ability icon. Square, full bleed: the painting fills the whole square edge to edge, no border, no frame, no text, no letters, no UI. One single large central motif that fills most of the square and stays readable when shrunk to 44 pixels. Painterly digital illustration with strong dramatic lighting: a bright glowing focal point and edges falling off into deep shadow, soft vignette. High contrast between the motif and the background, rich saturated colors, visible brush strokes. Original design.",
+  "class": {
+    "warrior": "Color accent: deep crimson red and polished steel, warm ember glow.",
+    "paladin": "Color accent: warm bronze gold and radiant holy white light.",
+    "ranger": "Color accent: mustard yellow and golden light, natural wood and leather, forest dusk background.",
+    "mage": "Color accent: deep cobalt blue arcane energy.",
+    "priest": "Color accent: warm white holy light with soft gold.",
+    "warlock": "Color accent: deep purple shadow with sickly acid yellow-green fel fire."
+  },
+  "abilities": {
+    "Cleave": { "class": "warrior", "prompt": "A broad steel sword mid-swing, leaving a wide glowing crescent arc of crimson energy across the square, sparks flying." },
+    "BattleShout": { "class": "warrior", "prompt": "A curved iron-banded war horn blasting out visible shockwave rings of red-orange energy, embers swirling." },
+    "Charge": { "class": "warrior", "prompt": "A crimson and steel kite shield rushing forward at great speed, motion streaks and dust trailing behind it." },
+    "Whirlwind": { "class": "warrior", "prompt": "Two steel swords spinning in a circular blur at the center of a crimson whirlwind of wind and sparks." },
+    "HolyStrike": { "class": "paladin", "prompt": "A golden flanged mace head bursting with rays of holy white light, viewed close up." },
+    "Consecration": { "class": "paladin", "prompt": "A glowing golden holy sigil circle burned into stone ground, pillars of warm light rising from it." },
+    "HealingLight": { "class": "paladin", "prompt": "An open armored gauntlet palm-up radiating soft mint green healing light, small golden sparkles around it." },
+    "DawnHammer": { "class": "paladin", "prompt": "A giant golden warhammer descending in front of a blazing rising sun, radiant beams spreading behind it." },
+    "PowerShot": { "class": "ranger", "prompt": "A single arrow released from a fully drawn wooden longbow, the arrow glowing with a bright yellow streak of power." },
+    "ArrowRain": { "class": "ranger", "prompt": "Dozens of arrows falling steeply from a dusky sky in a dense rain, golden glints on their tips." },
+    "Disengage": { "class": "ranger", "prompt": "A hooded ranger silhouette leaping backwards in a high arc, cloak flowing, dust kicked up below, wind streaks." },
+    "Volley": { "class": "ranger", "prompt": "A wide fan of glowing arrows launched upward all at once, golden yellow light trails." },
+    "ArcaneOrb": { "class": "mage", "prompt": "A swirling sphere of cobalt blue arcane energy with small glowing runes orbiting it." },
+    "Blink": { "class": "mage", "prompt": "A bright blue four-pointed starburst teleport flash, with a faint fading afterimage trail of blue sparkles to one side." },
+    "Fireball": { "class": "mage", "prompt": "A roaring fireball with a short flaming tail, bright orange and yellow fire, deep cobalt blue background." },
+    "MeteorShower": { "class": "mage", "prompt": "Three flaming meteors streaking diagonally down from a dark cobalt night sky, long orange fire trails." },
+    "Smite": { "class": "priest", "prompt": "A bolt of holy white-gold light striking straight down from the heavens and bursting on the ground." },
+    "Heal": { "class": "priest", "prompt": "Gentle cupped hands holding a glowing orb of mint green healing light, warm white sparkles rising." },
+    "HolyNova": { "class": "priest", "prompt": "A radiant ring of holy white light exploding outward from a bright center, soft gold edges." },
+    "DivineHymn": { "class": "priest", "prompt": "Large luminous wings of white light around a golden halo, floating glowing musical notes." },
+    "Corruption": { "class": "warlock", "prompt": "A dripping sphere of purple shadow with sickly acid green veins spreading across it." },
+    "DrainLife": { "class": "warlock", "prompt": "A wisp of glowing life essence being pulled through the air by purple shadow tendrils toward a clawed hand, acid green sparks." },
+    "ShadowBlast": { "class": "warlock", "prompt": "An explosion of dark purple shadow flames with a blazing acid green core." },
+    "ShadowPact": { "class": "warlock", "prompt": "A single glowing acid green demonic eye opening inside swirling purple shadow smoke." }
+  }
+}
