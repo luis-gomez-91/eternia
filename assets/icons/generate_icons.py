@@ -8,6 +8,12 @@ de imágenes pedidas en candidates/usage.json para no pasarse del presupuesto.
 Uso:
   python3 -I assets/icons/generate_icons.py Fireball Cleave --model gemini-3.1-flash-image --count 3
   python3 -I assets/icons/generate_icons.py all --count 3
+  python3 -I assets/icons/generate_icons.py all --prompts assets/concepts/prompts.json --count 2
+
+Con --prompts sirve para otras imágenes (por ejemplo, los conceptos de arte): los
+candidatos van a la carpeta candidates/ junto a ese prompts.json. Cada entrada puede
+tener "class" (agrega el color de la clase) y "aspect" (por defecto 1:1). La cuenta
+de imágenes es una sola para todo el proyecto.
 
 La clave va en .env como GEMINI_API_KEY.
 """
@@ -55,15 +61,16 @@ def save_usage(usage):
 
 def build_prompt(prompts, ability_id):
     entry = prompts["abilities"][ability_id]
-    return f"{prompts['style']} {prompts['class'][entry['class']]} Motif: {entry['prompt']}"
+    accent = prompts.get("class", {}).get(entry.get("class"), "")
+    return " ".join(part for part in (prompts["style"], accent, f"Motif: {entry['prompt']}") if part)
 
 
-def generate(key, model, prompt):
+def generate(key, model, prompt, aspect="1:1"):
     """Pide una imagen con curl (el Python de python.org no trae certificados SSL).
     La clave va por la entrada estándar, no en los argumentos del proceso."""
     body = {
         "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": "1:1"}},
+        "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": aspect}},
     }
     with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
         json.dump(body, f)
@@ -101,10 +108,12 @@ def main():
     parser.add_argument("abilities", nargs="+", help="Ids de prompts.json, o 'all'")
     parser.add_argument("--model", default="gemini-3.1-flash-image")
     parser.add_argument("--count", type=int, default=3)
+    parser.add_argument("--prompts", default=os.path.join(HERE, "prompts.json"))
     args = parser.parse_args()
 
-    with open(os.path.join(HERE, "prompts.json")) as f:
+    with open(args.prompts) as f:
         prompts = json.load(f)
+    out_dir = os.path.join(os.path.dirname(os.path.abspath(args.prompts)), "candidates")
     ids = list(prompts["abilities"]) if args.abilities == ["all"] else args.abilities
     for ability_id in ids:
         if ability_id not in prompts["abilities"]:
@@ -117,16 +126,19 @@ def main():
 
     key = load_key()
     for ability_id in ids:
-        folder = os.path.join(OUT_DIR, ability_id)
+        folder = os.path.join(out_dir, ability_id)
         os.makedirs(folder, exist_ok=True)
         prompt = build_prompt(prompts, ability_id)
-        for n in range(1, args.count + 1):
+        aspect = prompts["abilities"][ability_id].get("aspect", "1:1")
+        for _ in range(args.count):
+            # siguiente número libre, sin importar la extensión (Gemini suele devolver .jpg)
+            taken = {os.path.splitext(f)[0] for f in os.listdir(folder)}
+            n = 1
+            while f"{args.model}_{n}" in taken:
+                n += 1
             name = f"{args.model}_{n}"
-            while os.path.exists(os.path.join(folder, f"{name}.png")):
-                n += args.count
-                name = f"{args.model}_{n}"
             try:
-                image, mime, meta = generate(key, args.model, prompt)
+                image, mime, meta = generate(key, args.model, prompt, aspect)
             except RuntimeError as err:
                 print(f"{ability_id}: error: {err}", flush=True)
                 if "RESOURCE_EXHAUSTED" in str(err) or '"code": 429' in str(err):

@@ -153,7 +153,7 @@ Recomendación inicial, a validar con mediciones:
 
 ## Los 3 conceptos de prueba
 
-Validan la guía **juntos**, como un mismo juego. Cada ficha sirve para revisar un resultado y también como instrucción para generarlo con IA. Todos se presentan con la misma luz (tarde, hora 14:30) y las mismas tomas:
+Validan la guía **juntos**, como un mismo juego. Sus conceptos 2D aprobados, que sirven de referencia para modelarlos, están en [assets/concepts/](../assets/concepts/). Cada ficha sirve para revisar un resultado y también como instrucción para generarlo con IA. Todos se presentan con la misma luz (tarde, hora 14:30) y las mismas tomas:
 
 1. Frente y perfil a 15 studs, con la cámara estándar de tercera persona.
 2. La misma toma reducida a un cuarto (tamaño de celular).

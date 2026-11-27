@@ -1,0 +1,22 @@
+{
+  "_comment": "Conceptos 2D de los 3 conceptos de prueba (GUIA-VISUAL-TECNICA.md, 'Los 3 conceptos de prueba'), generados con Gemini antes de modelarlos en 3D. Se generan con: python3 -I assets/icons/generate_icons.py all --prompts assets/concepts/prompts.json --count 2",
+  "style": "Concept art for a stylized low-poly 3D fantasy action RPG. Faceted flat-shaded geometry with slightly beveled edges, flat saturated colors, clean silhouettes readable from far away, soft warm afternoon light. No black outlines, no realism, no photographic textures, no fine engravings, no text, no labels, no watermark.",
+  "abilities": {
+    "Warrior": {
+      "aspect": "16:9",
+      "prompt": "Character concept sheet on a plain light grey background: the same armored warrior shown full body twice, from the front and from the side, standing in a neutral pose. Simple blocky game-avatar proportions. Very large pauldrons, each wider than the shoulder and sticking out to the sides, giving an inverted V silhouette. Steel chest plate, leather belt and boots. A broad sword about as long as the character's torso and head together, with a wide blade, held in the right hand. Palette: medium steel grey armor with bright cool highlights, deep crimson red cloth tabard and trim, brown leather. No helmet visor details, plain faceted plates."
+    },
+    "Goblin": {
+      "aspect": "16:9",
+      "prompt": "Character concept sheet on a plain light grey background: the same goblin raider enemy shown full body twice, from the front and from the side. Deeply hunched crouching posture, a bit shorter than a human. Very long pointed ears sticking out horizontally to the sides, much wider than its head. Small glowing amber eyes, mean menacing face with small sharp teeth, not cute, not a toy. Muted olive green skin, ragged brown leather clothes, a big thick club made of plain brown wood held in one hand, a lumpy sack of loot tied on its back."
+    },
+    "MillClearing": {
+      "aspect": "16:9",
+      "prompt": "Environment concept seen from a third-person game camera, looking down at about 30 degrees: the Mill Clearing, a bright open grassy clearing for fighting inside a dark forest. Grass ground with a lighter dirt path winding through it, low-poly trees ringing the edge of the clearing with only two or three tree types, grey slate rocks, an old wooden windmill in the background, a few wooden crates and a small goblin camp at one side, a mossy shrine stone glowing with a soft purple light as a point of interest. Light shafts between the trees and low fog at the forest edge. Palette of dark greens and muted purples with medium-low saturation; the clearing floor is clear and readable; simple background without fine detail."
+    },
+    "JointShot": {
+      "aspect": "16:9",
+      "prompt": "In-game style shot from a third-person camera behind and above the player: in a bright grassy forest clearing with a dirt path, a wooden windmill far in the background and dark green forest edges with low fog, an armored warrior with huge steel pauldrons, crimson tabard and a broad sword faces a hunched olive green goblin with huge horizontal ears, amber eyes, a wooden club raised behind its head and a loot sack on its back. A translucent red danger circle on the ground in front of the goblin shows where its attack will land. Both characters stand out clearly against the ground."
+    }
+  }
+}

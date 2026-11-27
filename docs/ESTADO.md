@@ -69,20 +69,21 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [x] Íconos en los botones por datos (campo `Icon`); el nombre se ve al pasar el mouse o con el dedo apretado
 - [x] Íconos de las 18 activas de clase y las 6 definitivas: pintados con IA (Gemini), elegidos y subidos a Roblox ([PLAN.md](PLAN.md#íconos-de-habilidades))
 - [ ] Efectos, arma provisoria y acento de la UI de cada clase con su color nuevo ([GUIA-VISUAL.md](GUIA-VISUAL.md#código-de-color-de-combate-reservado))
-- [ ] Confirmar en el celular que los íconos se leen mejor que el nombre y que el toque corto usa la habilidad (en el simulador no se pudo probar el toque corto)
+- [ ] Confirmar en el celular que los íconos se leen mejor que el nombre y que el toque corto usa la habilidad (en el simulador no se pudo probar el toque corto) — **postergado**: por ahora solo Studio y simulador
 - [x] Prueba de hechizo con carga: Bola de fuego del Mage con 1 s, movimiento al 50% y esquivar que cancela sin gastar; probada en PC y móvil (reglas en [PLAN.md](PLAN.md#hechizos-con-carga))
 
 ### Publicación de prueba
 - [x] Juego publicado en privado como "Eternia — Desarrollo", con descripción y género
 - [x] Clasificación de contenido: Minimal en Roblox, E (ESRB) y PEGI 3, sin restricciones por región
 - [x] Cuentas de prueba con permiso Playtest (luis_gomu y tiburonssin1991); se entra con el enlace o el QR del juego
-- [ ] Confirmar que las cuentas de prueba entran al juego (el botón Jugar salía en gris antes de la clasificación)
-- [ ] Prueba de rendimiento en la tablet Redmi
+- [ ] Confirmar que las cuentas de prueba entran al juego (el botón Jugar salía en gris antes de la clasificación) — **postergado**: por ahora solo Studio y simulador
+- [ ] Prueba de rendimiento en la tablet Redmi — **postergado**: por ahora solo Studio y simulador
 
 ### Diseño (fuera del código)
 - [x] Guía visual en borrador: [GUIA-VISUAL.md](GUIA-VISUAL.md), con anexo técnico [GUIA-VISUAL-TECNICA.md](GUIA-VISUAL-TECNICA.md) (presupuestos orientativos, fichas y checklist)
-- [ ] 3 conceptos de prueba (Warrior con armadura, Goblin Saqueador, rincón del Claro del Molino) aprobados juntos con la checklist del anexo
-- [ ] Medir en los dispositivos de prueba (tablet Redmi para rendimiento; Poco X8 Pro e iPhone para lectura): distancia de cámara, luz (Voxel o ShadowMap) y presupuestos por escena
+- [x] Conceptos 2D de los 3 conceptos de prueba y de la toma conjunta aprobados: [assets/concepts/](../assets/concepts/) (generados con Gemini desde las fichas del anexo)
+- [ ] 3 conceptos de prueba en 3D (Warrior con armadura, Goblin Saqueador, rincón del Claro del Molino) aprobados juntos con la checklist del anexo (la parte de rendimiento en la tablet, postergada)
+- [ ] Medir en los dispositivos de prueba (tablet Redmi para rendimiento; Poco X8 Pro e iPhone para lectura): distancia de cámara, luz (Voxel o ShadowMap) y presupuestos por escena — **postergado**: por ahora solo Studio y simulador
 - [x] Plantillas de fichas (zona, mazmorra, jefe, NPC, mob) — ver [fichas/](fichas/)
 - [x] Fichas del jefe de prueba y los 3 mobs llenas (estado: En caja gris)
 
@@ -135,3 +136,6 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 27 nov 2026 | Primera tanda de íconos no aprobada. Color propio por clase en la guía visual (Warrior carmesí, Paladín dorado bronce, Ranger mostaza, Mage cobalto, Sacerdote blanco cálido, Brujo morado), ajustado para no chocar con los colores reservados. Los íconos se aprueban antes de subirlos |
 | 27 nov 2026 | Los íconos de habilidades pasan a ilustración pintada de borde a borde, opaca y con luz dramática (inspirada en los RPG clásicos), generada con IA de imágenes por API. Instrucciones en `assets/icons/prompts.json`; tope de 10 USD para la prueba de los 24 íconos. Los botones muestran el ícono a tamaño completo |
 | 27 nov 2026 | Íconos pintados de las 24 habilidades generados con Gemini (`gemini-3.1-flash-image`, 43 imágenes en total con las pruebas), elegidos, recortados a 256 px y subidos a Roblox. Probados en PC y en el simulador de iPhone 17 Pro: cargan los 24 y se apagan en espera o sin recurso en los dos controles. El proyecto de Google llegó a su tope de gasto mensual a mitad de la tanda |
+| 27 nov 2026 | Se postergan las pruebas en dispositivos reales (celular, tablet Redmi, mediciones) y la prueba de las cuentas de Playtest para no frenar el avance; mientras tanto se prueba en Studio y en su simulador de dispositivos |
+| 27 nov 2026 | La IA de mallas de Roblox no respetó la ficha del Goblin (orejas cortas, verde lima, armas inventadas), así que primero se hacen conceptos 2D con Gemini (`assets/concepts/prompts.json`, mismo script de los íconos con `--prompts`). Aprobados el Warrior con hombreras en punta, el Goblin, el Claro del Molino visto desde la cámara de juego y la toma conjunta; quedan como referencia para modelar en 3D |
+| 27 nov 2026 | Goblin en 3D con las herramientas de IA de Roblox usando el concepto aprobado como referencia: 3 intentos más, ninguno cumple la ficha (modelo por piezas: redondo y de juguete; mallas: orejas cortas, verde lima y garrote chico). Los modelos 3D de los conceptos necesitan otro camino (artista o Blender, importados con Open Cloud) |

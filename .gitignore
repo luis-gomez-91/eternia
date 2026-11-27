@@ -31,3 +31,4 @@ trace.json
 assets/icons/candidates/
 .DS_Store
 __pycache__/
+assets/concepts/candidates/
