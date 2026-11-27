@@ -878,7 +878,7 @@ Cada pieza del juego (zona, mazmorra, jefe, NPC, mob) pasa por los mismos 5 paso
 1. **Ficha en papel:** qué es, qué hace y por qué es divertido, con la plantilla de su tipo.
 2. **Concepto visual:** 2 o 3 imágenes de referencia (Higgsfield o un artista) para fijar el aspecto.
 3. **Caja gris:** versión jugable hecha con bloques en Roblox Studio, sin arte final. El combate sí lleva feedback provisorio (animaciones, efectos y sonidos simples) para que se entienda al jugarlo.
-4. **Prueba:** se juega con testers. Si no es divertido, se vuelve al paso 1 o 3. Nada pasa al arte final sin aprobar aquí.
+4. **Prueba:** se prueba jugando. Si no es divertido, se vuelve al paso 1 o 3. Nada pasa al arte final sin aprobar aquí.
 5. **Arte final:** modelos (Blender), texturas, efectos, sonido y música.
 
 **Qué se diseña en cada fase**
@@ -916,7 +916,7 @@ Las fichas viven en [fichas/](fichas/), y cada una enlaza a su concepto visual y
 - Feedback provisorio de combate: animación, efecto y sonido simples para cada ataque y habilidad, definidos por datos para cambiarlos por el arte final sin tocar código.
 - Una subárea gris con 3 tipos de mobs y un jefe con 2 fases.
 - Controles de PC y móvil.
-- **Terminado cuando:** 10 testers juegan 20 minutos, entienden el combate sin explicación y quieren seguir.
+- **Terminado cuando:** al probarlo en PC y en móvil, el combate se entiende sin explicación y dan ganas de seguir jugando.
 
 ### Fase 1 — Núcleo técnico (mes 1,5 a 3)
 
@@ -1012,12 +1012,12 @@ Se quitaron los sistemas de WoW que no alimentan el ciclo de pelear, sacar loot 
 
 ## Riesgos principales
 
-El mayor riesgo es que el combate no se sienta bien en móvil; por eso la Fase 0 no se da por terminada hasta que los testers quieran seguir jugando.
+El mayor riesgo es que el combate no se sienta bien en móvil; por eso la Fase 0 no se da por terminada hasta que, al probarlo, den ganas de seguir jugando.
 
 |   |   |   |   |
 |---|---|---|---|
 |Riesgo|Probabilidad|Impacto|Plan|
-|El combate no engancha|Media|Muy alto|Fase 0 con testers reales; no avanzar sin cumplir su criterio|
+|El combate no engancha|Media|Muy alto|Probar cada cambio de combate en PC y móvil; no avanzar sin cumplir el criterio de la Fase 0|
 |18 especializaciones desbalanceadas|Alta|Alto|Zona de práctica con mediciones, analítica de tasa de victoria y parches cada 2 semanas|
 |Pocos tanks y sanadores en la cola|Alta|Alto|Mazmorra normal jugable sin roles, bono a roles que faltan, roles fáciles de jugar|
 |Lag con 30 jugadores y muchos efectos|Media|Alto|Presupuestos de rendimiento, pruebas en móvil de gama media desde la Fase 1|

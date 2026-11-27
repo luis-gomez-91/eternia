@@ -8,7 +8,7 @@ Resumen de lo hecho y lo pendiente. El diseño completo está en [PLAN.md](PLAN.
 
 | Fase | Meses | Estado | Terminado cuando |
 |---|---|---|---|
-| 0 — Prototipo de combate | 0 a 1,5 | 🟡 En curso | 10 testers juegan 20 min, entienden el combate sin explicación y quieren seguir |
+| 0 — Prototipo de combate | 0 a 1,5 | 🟡 En curso | Al probarlo en PC y móvil, el combate se entiende sin explicación y dan ganas de seguir |
 | 1 — Núcleo técnico | 1,5 a 3 | ⚪ Pendiente | 30 jugadores juegan 1 hora sin errores de datos ni lag notable |
 | 2 — Clases | 3 a 4,5 | ⚪ Pendiente | Cada especialización mata al muñeco dentro del 10% del promedio de su rol; tank y sanador cumplen en prueba de jefe |
 | 3 — Mundo y mazmorras | 4,5 a 7 | ⚪ Pendiente | Se llega del nivel 1 al 50 y se matan los 15 jefes (hito: beta temprana, zonas 1 y 2) |
@@ -71,9 +71,6 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [x] Plantillas de fichas (zona, mazmorra, jefe, NPC, mob) — ver [fichas/](fichas/)
 - [x] Fichas del jefe de prueba y los 3 mobs llenas (estado: En caja gris)
 
-### Prueba
-- [ ] Sesión con 10 testers de 20 minutos
-
 ## Decisiones pendientes
 
 - [ ] ¿Normal de mazmorra jugable solo, o siempre en grupo?
@@ -109,4 +106,5 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Subárea de prueba en caja gris con 3 mobs (Goblin Saqueador, Araña Escupidora, Lobo Gris) y jefe de prueba de 2 fases (Ogro del Claro). IA en servidor: patrulla, detecta, persigue, avisa con zona roja en el suelo, ataca y vuelve inmune a su sitio. Daño a jugadores con invulnerabilidad del esquivar. Fichas llenas. Arreglado: las barras de vida desaparecían al morir el jugador |
 | 26 nov 2026 | Controles: teclas 1 a 6 y R; barra de definitiva y una definitiva provisoria por clase; botones táctiles en arco para móvil. 16 sonidos de mobs y jefe generados con ElevenLabs, sin subir todavía (la red de la oficina bloquea Roblox) |
 | 26 nov 2026 | Guía visual en borrador: estilo low-poly estilizado, colores reservados de combate, siluetas por clase y reglas de enemigos, efectos e interfaz. La curación pasa a verde menta y el veneno y la magia vil a verde ácido, para no confundirlos |
+| 26 nov 2026 | Se quita la sesión con 10 testers: cada cambio se prueba en casa en PC y móvil |
 | 26 nov 2026 | Primeros sonidos propios con ElevenLabs (combo, Tajo, Grito, Embestida, esquivar, impacto y crítico) subidos a Roblox; place guardado en Roblox para poder subir assets; la precarga deja los sonidos vivos para que suenen sin retraso (de ~330 ms a 1 frame) |
