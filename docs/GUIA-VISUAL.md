@@ -61,6 +61,8 @@ Estos colores ya están en el juego (`Data/Feedback`, `EnemyUIController`, `MobF
 | Sacerdote | Blanco cálido `#FFF4D6`, con dorado | Las curaciones siguen en verde menta |
 | Brujo | Morado `#8A3FD0`, con verde ácido vil | El verde vil sigue siendo amarillento, nunca menta |
 
+Los colores están en `Data/Classes` (campo `Color`) y de ahí los toman los efectos (`Data/Feedback`), el arma provisoria y la interfaz (borde de los botones de habilidad y franja del selector de clase). **En el suelo no va un color de clase rojo:** los anillos y zonas del Warrior usan acero, para que el único rojo en el suelo sea el de peligro.
+
 **Rarezas:** Común gris `#B4B4B4`, Raro azul `#3C8CFF`, Épico morado `#A04BFF`, Legendario naranja `#FF8C1E`. Se ven en bordes, haces de luz del loot y textos.
 
 ## Personajes (jugadores)

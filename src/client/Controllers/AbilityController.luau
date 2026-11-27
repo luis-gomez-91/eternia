@@ -385,6 +385,7 @@ type Slot = {
 	name: TextLabel,
 	icon: ImageLabel,
 	charge: Frame?,
+	accent: UIStroke?, -- borde con el color de la clase (no en la definitiva)
 }
 
 -- Espacio con el mouse encima: su nombre se muestra arriba (los íconos no llevan texto).
@@ -542,7 +543,25 @@ local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, F
 			charge = fill
 		end
 
-		slots[i] = { frame = frame, shade = shade, timer = timer, name = name, icon = icon, charge = charge }
+		-- Borde con el color de la clase (GUIA-VISUAL.md); la definitiva tiene el suyo.
+		local accent: UIStroke? = nil
+		if not isUltimate then
+			local stroke = Instance.new("UIStroke")
+			stroke.Thickness = 2
+			stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+			stroke.Parent = frame
+			accent = stroke
+		end
+
+		slots[i] = {
+			frame = frame,
+			shade = shade,
+			timer = timer,
+			name = name,
+			icon = icon,
+			charge = charge,
+			accent = accent,
+		}
 	end
 	-- Espacio vacío entre la barra de 6 y la definitiva.
 	local spacer = Instance.new("Frame")
@@ -633,6 +652,12 @@ function AbilityController:Start()
 			local info = AbilityController.Info(i)
 			local specLevel = if typeof(i) == "number" then SPEC_LEVELS[i] else nil
 			slot.frame.Visible = info ~= nil or specLevel ~= nil
+			local accent = slot.accent
+			if accent then
+				accent.Color = if class then class.Color else Color3.new(1, 1, 1)
+				-- Bloqueado o sin recurso, el borde también se apaga.
+				accent.Transparency = if info and info.usable then 0.1 else 0.7
+			end
 			if not info then
 				-- Bloqueado hasta la especialización.
 				slot.name.Text = if specLevel then `Nv {specLevel}` else ""
