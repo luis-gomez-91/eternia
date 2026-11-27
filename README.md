@@ -57,4 +57,4 @@ Las claves van en un archivo `.env` en la raíz (Git lo ignora), por ejemplo:
 ELEVENLABS_API_KEY=...
 ```
 
-Estado del proyecto: [docs/ESTADO.md](docs/ESTADO.md) · Diseño: [docs/PLAN.md](docs/PLAN.md) · Audio: [docs/AUDIO.md](docs/AUDIO.md) · Fichas: [docs/fichas/](docs/fichas/)
+Estado del proyecto: [docs/ESTADO.md](docs/ESTADO.md) · Diseño: [docs/PLAN.md](docs/PLAN.md) · Audio: [docs/AUDIO.md](docs/AUDIO.md) · Guía visual: [docs/GUIA-VISUAL.md](docs/GUIA-VISUAL.md) · Fichas: [docs/fichas/](docs/fichas/)

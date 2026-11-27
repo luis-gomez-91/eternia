@@ -104,7 +104,7 @@ local function attachHealthBar(model: Model)
 	end)
 end
 
-local HEAL_COLOR = Color3.fromRGB(110, 255, 130)
+local HEAL_COLOR = Color3.fromRGB(120, 255, 170)
 local INCOMING_COLOR = Color3.fromRGB(255, 70, 60)
 
 type NumberKind = "Hit" | "Tick" | "Heal" | "Incoming" | "Dodged"

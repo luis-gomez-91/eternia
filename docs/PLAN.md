@@ -593,13 +593,13 @@ Todo lo que se vende es cosmético o de comodidad; nunca stats, equipo, material
 
 ## Arte, estilo visual y audio
 
-El estilo es fantasía estilizada y low-poly, con colores saturados y siluetas claras, porque se ve bien en móvil y corre en equipos modestos. Antes de producir assets hay que cerrar una guía visual de una página.
+El estilo es fantasía estilizada y low-poly, con colores saturados y siluetas claras, porque se ve bien en móvil y corre en equipos modestos. Antes de producir assets hay que cerrar una guía visual de una página: [GUIA-VISUAL.md](GUIA-VISUAL.md) (borrador).
 
 ### Guía visual
 
 - **Personajes:** avatares R15 de Roblox con armaduras como accesorios; cada clase se reconoce por su silueta (escudo grande, capa, sombrero de mago, capucha).
 - **Proporciones:** ligeramente exageradas (armas y hombreras grandes).
-- **Legibilidad del combate:** zonas de peligro enemigas en rojo, efectos aliados en verde o azul, curación en dorado. Ningún efecto tapa las marcas del suelo.
+- **Legibilidad del combate:** zonas de peligro enemigas en rojo, curación en verde menta, defensa en azul y críticos en dorado; veneno y magia vil en verde ácido para no confundirse con la curación. Ningún efecto tapa las marcas del suelo.
 - **Rarezas:** gris, azul, morado y naranja en bordes, haces de luz del loot y textos.
 - **UI:** marcos de piedra y metal simples, iconos con contorno grueso, textos grandes legibles en móvil (mínimo 14 px).
 
