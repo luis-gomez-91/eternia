@@ -44,7 +44,17 @@ wally install
 | `src/client/Controllers` | StarterPlayerScripts | Controladores del cliente (controles, cámara, UI...) |
 | `src/shared/Data` | ReplicatedStorage | Contenido del juego como tablas (clases, habilidades, mobs) |
 | `src/shared/Remotes.luau` | ReplicatedStorage | Definición única de todos los remotos |
+| `src/client/Feedback` | StarterPlayerScripts | Poses y efectos de combate que usa `FeedbackController` |
+| `assets/audio` | — (se sube a Roblox) | Sonidos finales generados; `generated.json` guarda texto, variante e ID de cada uno |
 
 Cada módulo en `Services` o `Controllers` se carga solo y puede tener `Init()` (preparar) y `Start()` (arrancar).
 
-Estado del proyecto: [docs/ESTADO.md](docs/ESTADO.md) · Diseño: [docs/PLAN.md](docs/PLAN.md) · Fichas: [docs/fichas/](docs/fichas/)
+## Claves locales
+
+Las claves van en un archivo `.env` en la raíz (Git lo ignora), por ejemplo:
+
+```
+ELEVENLABS_API_KEY=...
+```
+
+Estado del proyecto: [docs/ESTADO.md](docs/ESTADO.md) · Diseño: [docs/PLAN.md](docs/PLAN.md) · Audio: [docs/AUDIO.md](docs/AUDIO.md) · Guía visual: [docs/GUIA-VISUAL.md](docs/GUIA-VISUAL.md) ([anexo técnico](docs/GUIA-VISUAL-TECNICA.md)) · Fichas: [docs/fichas/](docs/fichas/)

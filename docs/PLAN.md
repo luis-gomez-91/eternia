@@ -2,7 +2,7 @@
 
 25 nov 2026 · @Luis
 
-> Avance y tareas: ver [ESTADO.md](ESTADO.md).
+> **Fase actual: 0 — Prototipo de combate.** Lo hecho y lo pendiente, con la tabla de fases, está en [ESTADO.md](ESTADO.md).
 
 ## Resumen
 
@@ -263,6 +263,41 @@ Hay 3 tipos de habilidad, además del ataque básico:
 
 El ataque básico no gasta recurso ni tiene espera: con Energía la genera y con Maná recupera un poco. Las 3 habilidades de clase son las mismas para las 3 especializaciones; lo que cambia de una rama a otra son las otras 3 activas, las 4 pasivas y la definitiva.
 
+#### Hechizos con carga
+
+Casi todo es instantáneo, porque el combate pide moverse y esquivar las zonas rojas, y en móvil quedarse quieto se siente lento. Algunos hechizos grandes llevan una carga corta para darles peso y un riesgo a cambio de más daño o curación.
+
+- **Carga:** de 0,5 a 1,5 s. El hechizo sale solo al terminar, hacia el objetivo fijado.
+- **Canalizado:** el efecto ocurre mientras dura (de 1,5 a 3 s). Se puede cortar antes y se pierde lo que faltaba.
+- **Moverse:** mientras se carga o se canaliza, el personaje se mueve al 50% de su velocidad.
+- **Esquivar cancela.** Una carga cancelada no gasta recurso ni empieza la espera. Un canalizado se cobra al empezar, así que cortarlo pierde lo que faltaba.
+- **El objetivo cuenta:** si el objetivo fijado muere o se sale de alcance durante la carga, se cancela sin gastar nada.
+- **Recibir daño no interrumpe.** Interrumpir queda solo para mecánicas especiales de jefes, que avisan antes.
+- **Pagan el riesgo:** pegan o curan bastante más que una instantánea del mismo costo. El número exacto se ajusta en la Fase 2 con el muñeco.
+- **Se ve:** barra de carga sobre el personaje y sobre el botón, y un brillo que los demás también ven (en PvP se puede anticipar).
+- **Nunca llevan carga:** el ataque básico, las 3 habilidades de clase (así los niveles 1 a 9 son simples), los desplazamientos, las defensivas, las de tank y las definitivas.
+
+|   |   |   |
+|---|---|---|
+|Clase|Especialización|Hechizos con carga|
+|Warrior|Todas|Ninguno|
+|Paladín|Sagrado|Luz sagrada (carga 1 s): la curación grande a un aliado|
+|Paladín|Protección y Castigo|Ninguno|
+|Ranger|Tirador|Disparo apuntado (carga 1 s)|
+|Ranger|Bestias|Llamar bestia (carga 1,5 s)|
+|Ranger|Trampero|Ninguno|
+|Mage|Fuego|Bola de fuego (carga 1 s)|
+|Mage|Escarcha|Ventisca (canalizado 3 s)|
+|Mage|Arcano|Explosión arcana (carga 0,75 s) y Misiles arcanos (canalizado 1,5 s)|
+|Sacerdote|Luz|Círculo de sanación (carga 1 s)|
+|Sacerdote|Disciplina|Ninguno: es el sanador que cura mientras se mueve|
+|Sacerdote|Sombra|Tortura mental (canalizado 2 s)|
+|Brujo|Maldiciones|Ninguno: aplica daño en el tiempo y sigue moviéndose|
+|Brujo|Invocación|Invocar diablillo e Invocar guardián (carga 1,5 s)|
+|Brujo|Caos|Descarga del caos (carga 1 s)|
+
+Así cada clase de tela tiene ramas con carga y ramas más móviles, y quien prefiera no cargar tiene una opción en el Sacerdote (Disciplina) y en el Brujo (Maldiciones).
+
 #### Ejemplo: Mage de Fuego en nivel 50
 
 |   |   |   |   |   |   |
@@ -271,7 +306,7 @@ El ataque básico no gasta recurso ni tiene espera: con Energía la genera y con
 |1|Orbe arcano|Activa de clase|Lanza un orbe que atraviesa a todos los enemigos en línea.|15|6 s|
 |3|Parpadeo|Activa de clase|Teletransporte de 10 m hacia adelante.|10|12 s|
 |6|Barrera de maná|Activa de clase|Escudo que absorbe daño igual al 20% de tu vida durante 6 s.|20|25 s|
-|10|Bola de fuego|Activa de Fuego|Bola que explota al impactar y deja al enemigo ardiendo 4 s.|20|3 s|
+|10|Bola de fuego|Activa de Fuego|Carga 1 s y lanza una bola que explota al impactar y deja al enemigo ardiendo 4 s.|20|3 s|
 |15|Ignición|Pasiva|Los críticos dejan al enemigo ardiendo 4 s más.|—|—|
 |20|Muro de llamas|Activa de Fuego|Muro de 8 m que quema a quien lo cruce durante 6 s.|30|15 s|
 |25|Calor creciente|Pasiva|Cada Bola de fuego que acierta da +5% de crítico, hasta 5 veces. Se reinicia al hacer un crítico.|—|—|
@@ -283,7 +318,7 @@ El ataque básico no gasta recurso ni tiene espera: con Energía la genera y con
 **Cómo se juega en una pelea:**
 
 1. Pones el Muro de llamas entre tú y el grupo de enemigos.
-2. Lanzas Bola de fuego una y otra vez. Cada acierto sube Calor creciente hasta que sale un crítico, y ese crítico, gracias a Ignición, deja al enemigo ardiendo más tiempo.
+2. Lanzas Bola de fuego una y otra vez, moviéndote despacio mientras carga y esquivando si viene un golpe (esquivar cancela la carga sin gastar maná). Cada acierto sube Calor creciente hasta que sale un crítico, y ese crítico, gracias a Ignición, deja al enemigo ardiendo más tiempo.
 3. Con los enemigos juntos y ardiendo (Pirómano les suma 10% de daño), tiras la Lluvia de meteoros.
 4. Mientras esperas los cooldowns, usas el ataque básico para recuperar maná.
 5. Si algo se te acerca, Parpadeo para alejarte o Barrera de maná si no alcanzas a escapar.
@@ -297,13 +332,26 @@ El ataque básico no gasta recurso ni tiene espera: con Energía la genera y con
 - Fénix al rango 3: 2 puntos.
 - Total: 41. Parpadeo y Barrera quedan sin maximizar. Otro jugador podría subir la Barrera y dejar el Orbe más bajo para aguantar más.
 
+Las habilidades de clase del Warrior son Tajo (golpe amplio a todos los enemigos al frente), Grito de batalla (más daño por unos segundos y Energía al instante) y Embestida (carga hasta un enemigo y lo golpea).
+
+Las de las otras clases (las 3 primeras, iguales para sus 3 especializaciones):
+
+|   |   |   |   |
+|---|---|---|---|
+|Clase|Nivel 1|Nivel 3|Nivel 6|
+|Paladín|Golpe sagrado: golpe fuerte con luz sobre el objetivo|Consagración: suelo sagrado que daña alrededor durante 6 s|Luz sanadora: cura 25% de vida a uno mismo y aliados cercanos|
+|Ranger|Disparo potente: flecha tensada que hace mucho daño|Lluvia de flechas: área en el objetivo con 3 pulsos|Retirada: salto hacia atrás|
+|Mage|Orbe arcano|Parpadeo|Barrera de maná (en el prototipo se prueba Bola de fuego en su lugar)|
+|Sacerdote|Castigo: luz que cae sobre el objetivo|Curación: cura 30% a uno mismo y aliados cercanos|Nova sagrada: daña alrededor y cura un poco al grupo|
+|Brujo|Corrupción: daño en el tiempo|Drenar vida: daño en el tiempo que cura al que lo lanza|Explosión de sombra: área en el objetivo|
+
 Las otras 2 ramas del Mage usan las mismas 3 habilidades de clase y cambian el resto. Escarcha usa Lanza de hielo, Nova helada y Ventisca, con pasivas que hacen más daño a enemigos ralentizados o congelados. Arcano usa Explosión arcana, Misiles arcanos y Poder arcano, con pasivas de cargas arcanas: cada Explosión suma una carga que sube el daño y el costo de maná, y los Misiles las gastan.
 
 ### Controles
 
 - **Barra:** ataque básico, esquivar, 6 habilidades y la definitiva. En móvil, botones en arco alrededor del pulgar derecho.
 - **Esquivar:** un dash corto con 2 cargas que se recuperan en 4 segundos.
-- **Fijar objetivo:** automático al enemigo más cercano en el centro de la pantalla, con botón para cambiar.
+- **Fijar objetivo:** automático al enemigo más cercano en el centro de la pantalla, con botón para cambiar. Las habilidades que necesitan objetivo van siempre al fijado; si está fuera de alcance no se usan (no saltan a otro enemigo). Sin objetivo fijado, van al primero al frente.
 - **PC y consola:** teclas 1 a 6, Q para esquivar, R para la definitiva, todo reasignable.
 
 ### Stats
@@ -580,15 +628,11 @@ Todo lo que se vende es cosmético o de comodidad; nunca stats, equipo, material
 
 ## Arte, estilo visual y audio
 
-El estilo es fantasía estilizada y low-poly, con colores saturados y siluetas claras, porque se ve bien en móvil y corre en equipos modestos. Antes de producir assets hay que cerrar una guía visual de una página.
+El estilo es fantasía estilizada y low-poly, con colores saturados y siluetas claras, porque se ve bien en móvil y corre en equipos modestos. Antes de producir assets hay que cerrar una guía visual de una página: [GUIA-VISUAL.md](GUIA-VISUAL.md) (borrador).
 
 ### Guía visual
 
-- **Personajes:** avatares R15 de Roblox con armaduras como accesorios; cada clase se reconoce por su silueta (escudo grande, capa, sombrero de mago, capucha).
-- **Proporciones:** ligeramente exageradas (armas y hombreras grandes).
-- **Legibilidad del combate:** zonas de peligro enemigas en rojo, efectos aliados en verde o azul, curación en dorado. Ningún efecto tapa las marcas del suelo.
-- **Rarezas:** gris, azul, morado y naranja en bordes, haces de luz del loot y textos.
-- **UI:** marcos de piedra y metal simples, iconos con contorno grueso, textos grandes legibles en móvil (mínimo 14 px).
+Las reglas de estilo (geometría, materiales, luz, colores reservados de combate, siluetas de clase, niveles de enemigos, animación, efectos e interfaz) están en [GUIA-VISUAL.md](GUIA-VISUAL.md). Las medidas para Roblox, los presupuestos orientativos, las fichas de los 3 conceptos de prueba y la checklist de aprobación están en [GUIA-VISUAL-TECNICA.md](GUIA-VISUAL-TECNICA.md).
 
 ### Ambiente por zona
 
@@ -605,9 +649,7 @@ El estilo es fantasía estilizada y low-poly, con colores saturados y siluetas c
 ### Presupuestos de rendimiento
 
 - Meta: 60 FPS en PC y 30 FPS estables en un teléfono de gama media.
-- Mobs: menos de 3.000 triángulos; jefes: menos de 15.000.
-- Texturas de 512 px en general y 1024 px solo para jefes.
-- Partículas: máximo 200 activas por efecto, con versión reducida en gráficos bajos.
+- Presupuestos por asset y por escena (triángulos, texturas, partículas, luces, draw calls): orientativos y pendientes de medir en los dispositivos de prueba, en [GUIA-VISUAL-TECNICA.md](GUIA-VISUAL-TECNICA.md#presupuestos-orientativos). Referencias iniciales: mobs con menos de 3.000 triángulos y jefes con menos de 15.000.
 - Zonas: StreamingEnabled y LOD para que solo cargue lo cercano.
 
 ### Audio
@@ -615,17 +657,90 @@ El estilo es fantasía estilizada y low-poly, con colores saturados y siluetas c
 - Música propia por zona, mazmorra y jefe; capa de combate que entra al pelear.
 - Efectos de sonido de impacto claros por clase (metal, flechas, magia).
 - Aviso sonoro antes de cada ataque fuerte de jefe.
-- Volumen separado de música, efectos y voces en ajustes.
+- Volumen separado de música, efectos, ambiente y voces en ajustes (un SoundGroup por cada uno).
 - Solo audio con licencia comercial o hecho por el equipo.
+
+**De dónde sale cada sonido**
+
+Regla: lo que identifica a Eternia y el jugador recuerda se genera con **ElevenLabs**; lo que solo tiene que estar ahí y nadie nota sale de **Roblox genérico** (Creator Store, solo catálogos con licencia como ProSoundEffects y APM Music).
+
+|   |   |   |
+|---|---|---|
+|Categoría|Ejemplos|Fuente|
+|Clases|Ataques básicos, habilidades, definitivas, esquivar, recibir golpe, morir|ElevenLabs|
+|Voces|Gritos, esfuerzos y quejidos sin palabras (sirven en todos los idiomas)|ElevenLabs|
+|Impactos|Por material (metal, carne, madera, piedra, magia) y crítico|ElevenLabs|
+|Mobs|Detectar al jugador, atacar, recibir golpe, morir|ElevenLabs|
+|Jefes|Aviso de ataque fuerte, ataques, cambio de fase, rugido, muerte|ElevenLabs|
+|Ambiente|Fondo continuo de cada zona y de la Ciudadela|Roblox genérico; detalles propios de cada zona (criaturas, lava, viento helado) con ElevenLabs|
+|Interfaz|Clics, abrir y cerrar paneles, error|Roblox genérico|
+|Momentos clave|Subir de nivel, loot por rareza, mejora en el herrero, desbloquear portal, logros|ElevenLabs|
+|Movimiento|Pasos por superficie, saltar, caer|Roblox genérico|
+|Monturas, mascotas, eventos y PvP|Sonidos de cada montura y mascota, estandarte capturado, cuenta atrás, victoria|ElevenLabs|
+|Música|Zonas, mazmorras, jefes, capa de combate|APM Music para prototipo y beta; la final es decisión pendiente (ElevenLabs Music o compositor)|
+
+El fondo continuo de las zonas queda en Roblox genérico porque un ambiente largo que se repite sin cortes sale mejor de una librería profesional que generado.
+
+**Catálogo:** cada sonido del juego tiene una fila en [AUDIO.md](AUDIO.md) con dónde suena, su fuente, el texto usado en ElevenLabs y su ID en Roblox. Así se puede regenerar o hacer variantes con el mismo estilo. Las fichas de zona, mob y jefe tienen una sección "Sonidos" que enlaza a su parte del catálogo.
+
+**Cuándo se hace cada cosa**
+
+|   |   |
+|---|---|
+|Fase|Sonidos finales|
+|1 — Núcleo técnico|Warrior y Mage completos, impactos, interfaz y momentos clave|
+|2 — Clases|Las 6 clases y 18 especializaciones|
+|3 en adelante|Mobs, jefes y ambiente de cada zona junto con su arte final; monturas, mascotas, eventos y PvP en su fase|
+
+**Costo:** medido en la primera tanda (27 variantes, 22 s de audio, 117 créditos): unos **5 créditos por segundo generado**. Con 3 variantes por sonido, un sonido de combate de 1 s cuesta unos 15 créditos. Estimado del catálogo completo (unos 400 sonidos más los detalles de ambiente): entre 6.000 y 10.000 créditos, repartidos por fases.
+
+**Reglas**
+
+- Nunca audio subido por usuarios del Creator Store con origen desconocido: muchos son recortes de otros juegos o películas.
+- Todo texto de ElevenLabs sigue la guía de estilo de [AUDIO.md](AUDIO.md) para que el juego suene coherente.
+- Antes de subir, cada sonido se recorta y se normaliza en Audacity para que todos suenen parecido de fuerte.
+- Se sube por tandas con Open Cloud, porque cada audio pasa por moderación y hay un límite de subidas al mes (más alto con la cuenta verificada).
+- Los IDs viven solo en los datos (`Data/Feedback`): cambiar un sonido no toca código.
 
 ### Flujo de arte
 
 1. Concept art y moodboard por zona y jefe (IA de imágenes como Higgsfield o Midjourney, retocado por un artista).
-2. Guía visual aprobada.
+2. Guía visual aprobada: los 3 conceptos de prueba pasan juntos la checklist de [GUIA-VISUAL-TECNICA.md](GUIA-VISUAL-TECNICA.md#checklist-de-aprobación).
 3. Bloqueo de la zona en Roblox Studio con piezas grises.
 4. Modelado en Blender (o base generada con Meshy o Tripo y limpiada en Blender).
-5. Texturas y materiales, importación a Studio y prueba en móvil.
+5. Texturas y materiales con paletas compartidas, importación a Studio y prueba en móvil dentro de los presupuestos del anexo técnico.
 6. Iluminación, efectos, sonido y pulido.
+
+### Animación, efectos y sonido de combate
+
+Van juntos y en 3 niveles, para que cada prueba se entienda y el arte final no obligue a tocar código:
+
+1. **Provisorio:** cada habilidad, mob o jefe entra a la caja gris con animación, efecto y sonido simples, hechos por quien programa la mecánica.
+2. **Sistema (Fase 1):** todo se define por datos (IDs de animación, efecto y sonido por habilidad), con precarga, avisos de ataques enemigos y modo de gráficos bajos. Pasar al arte final es cambiar IDs.
+3. **Final:** primero Warrior y Mage como referencia de calidad y de tiempo por habilidad; después el resto según la tabla de fases.
+
+Volumen estimado: unas 250 animaciones (unas 110 de clases, 60 de mobs y 90 de jefes), además de sus efectos y sonidos.
+
+### Íconos de habilidades
+
+Cada habilidad lleva un ícono en su botón, porque en un botón de móvil de 44 px un nombre no se alcanza a leer. El nombre se ve al pasar el mouse o al dejar el dedo apretado, y en el libro de habilidades.
+
+- **Cuántos:** unos 170. Por clase son 27 (3 activas de clase y, por cada especialización, 3 activas, 4 pasivas y la definitiva), o sea 162 entre las 6 clases. A eso se suman el ataque básico de cada clase y el esquivar.
+- **Estilo:** sigue la [guía visual](GUIA-VISUAL.md#interfaz). Una figura central con contorno grueso, sin texto dentro, que se entienda a 44 px. Los colores son los de su clase y siguen los colores reservados de la guía: verde menta solo si cura, azul cielo si defiende y nunca el rojo de peligro.
+- **Tipo por marco:** el marco lo pone la interfaz, no la imagen. Cuadrado para las activas, redondo para las pasivas y naranja de definitiva para la R. Así una misma imagen sirve en la barra, en el árbol de puntos y en el libro de habilidades.
+- **Cómo se hacen:** con IA de imágenes, usando un texto base igual para todos, y retocados en Figma para unificar el contorno y el encuadre. Se pueden encargar a un artista de Talent Hub si la IA no llega al nivel de la guía.
+- **Formato:** PNG de 256 × 256 con fondo transparente alrededor de la figura. Se suben por tandas con Open Cloud, igual que los sonidos.
+- **Por datos:** el ID de cada ícono va en `Data/Abilities` (campo `Icon`). Una habilidad sin ícono muestra su nombre, así que cambiar o agregar un ícono no toca código.
+- **Prueba:** cada tanda se mira en el Poco X8 Pro y en el iPhone a tamaño real. Se aprueba si se distinguen las 6 habilidades de la barra sin leer nada.
+
+**Por fases**
+
+|   |   |
+|---|---|
+|Fase|Íconos|
+|0 — Prototipo|Provisorios para las 18 activas de clase y las 6 definitivas, para confirmar en móvil que se entienden mejor que el texto|
+|2 — Clases|Los de las 18 especializaciones (activas, pasivas y definitivas), hechos con la regla ya probada|
+|7 — Pulido|Revisión final para que todos se vean parejos|
 
 ## Idiomas y localización
 
@@ -673,7 +788,8 @@ El juego se construye en Roblox Studio, con el código en Git y el arte 3D en Bl
 |Concept art|Higgsfield o Midjourney|Moodboards, concept de zonas y jefes|De pago|
 |Marketing|Higgsfield, CapCut|Trailers y videos cortos|De pago con plan gratis|
 |UI|Figma|Diseñar pantallas e iconos antes de llevarlos a Studio|Gratis o de pago|
-|Audio|Audacity, biblioteca de audio de Roblox, música con licencia|Música y efectos|Gratis o de pago|
+|Audio|ElevenLabs Sound Effects|Sonidos propios: clases, voces, impactos, mobs, jefes, momentos clave, monturas y eventos|De pago (el plan gratis no permite uso comercial)|
+|Audio|Audacity, biblioteca de audio de Roblox, música con licencia|Recortar y normalizar; ambiente, interfaz y música|Gratis o de pago|
 |Planificación|Notion, Trello o Linear|Tareas, documentos y tablero por fase|Gratis o de pago|
 |Comunidad|Discord y grupo de Roblox|Avisos, reportes de bugs y beta testers|Gratis|
 |Analítica|Analytics de Roblox Creator Hub|Retención, embudos, economía, ingresos|Gratis|
@@ -746,6 +862,7 @@ Como gran parte del público es menor de edad, el juego no permite comercio, fil
 - Todo texto escrito por jugadores (chat, nombres de mascotas) pasa por el filtro de Roblox.
 - Botón de reportar jugador en el menú de cada jugador y al final de cada partida.
 - Silenciar y bloquear jugadores desde su perfil.
+- Clasificación de contenido de Roblox (cuestionario de madurez e IARC) al día: se repite cada vez que el juego agrega contenido que cambie las respuestas (más violencia, sangre, miedo, compras o chat propio).
 - Panel de administración interno para revisar reportes, ver historial de un jugador y aplicar sanciones.
 
 ### Cuidado de menores
@@ -811,8 +928,8 @@ Cada pieza del juego (zona, mazmorra, jefe, NPC, mob) pasa por los mismos 5 paso
 
 1. **Ficha en papel:** qué es, qué hace y por qué es divertido, con la plantilla de su tipo.
 2. **Concepto visual:** 2 o 3 imágenes de referencia (Higgsfield o un artista) para fijar el aspecto.
-3. **Caja gris:** versión jugable hecha con bloques en Roblox Studio, sin arte.
-4. **Prueba:** se juega con testers. Si no es divertido, se vuelve al paso 1 o 3. Nada pasa al arte final sin aprobar aquí.
+3. **Caja gris:** versión jugable hecha con bloques en Roblox Studio, sin arte final. El combate sí lleva feedback provisorio (animaciones, efectos y sonidos simples) para que se entienda al jugarlo.
+4. **Prueba:** se prueba jugando. Si no es divertido, se vuelve al paso 1 o 3. Nada pasa al arte final sin aprobar aquí.
 5. **Arte final:** modelos (Blender), texturas, efectos, sonido y música.
 
 **Qué se diseña en cada fase**
@@ -820,14 +937,14 @@ Cada pieza del juego (zona, mazmorra, jefe, NPC, mob) pasa por los mismos 5 paso
 |   |   |   |   |
 |---|---|---|---|
 |Fase|Ficha y concepto|Caja gris jugable|Arte final|
-|0 — Prototipo|Guía visual en borrador; plantillas de fichas; jefe de prueba y 3 mobs|Subárea de prueba y jefe de prueba|Nada|
-|1 — Núcleo técnico|Guía visual final; Ciudadela y sus NPCs; Bosque Sombrío completo y su mazmorra con 3 jefes|Ciudadela|Personaje base y armaduras iniciales; kit de piezas del Bosque|
-|2 — Clases|Aspecto de las 6 clases y efectos de sus habilidades; Arenas Rojas y su mazmorra con 3 jefes|Bosque Sombrío y mazmorra 1; zona de práctica|Ciudadela y Bosque Sombrío; efectos de habilidades|
-|3 — Mundo y mazmorras|Picos Helados, Pantano Maldito y Volcán Infernal con sus mazmorras y 9 jefes; NPCs de cada zona|Arenas Rojas y zonas 3 a 5 con sus mazmorras|Arenas Rojas y mazmorra 2 (para la beta del mes 7); música de zonas 1 y 2|
-|4 — Progresión|Aspecto del equipo por rareza, legendarios, monturas, mascotas e iconos|—|Picos Helados y Pantano Maldito con sus mazmorras; objetos y monturas|
-|5 — Endgame y PvP|Efectos visuales de los afijos de Sellos; mapas de Estandarte y Arena|Mapas de PvP|Volcán Infernal y mazmorra 5; mapas de PvP|
-|6 — Social y tienda|Cosméticos de la tienda y del pase de Temporada 1; primer evento|Evento 1|Cosméticos, tienda e interfaz final|
-|7 — Pulido y lanzamiento|Temporada 2 y siguiente evento|Evento 2|Pulido general, trailer, thumbnails e icono|
+|0 — Prototipo|Guía visual en borrador; plantillas de fichas; jefe de prueba y 3 mobs|Subárea de prueba y jefe de prueba|Nada (solo feedback provisorio de combate)|
+|1 — Núcleo técnico|Guía visual final; Ciudadela y sus NPCs; Bosque Sombrío completo y su mazmorra con 3 jefes|Ciudadela|Personaje base y armaduras iniciales; kit de piezas del Bosque; Warrior y Mage con animaciones, efectos y sonidos finales como referencia de calidad|
+|2 — Clases|Aspecto de las 6 clases, efectos e íconos de sus habilidades; Arenas Rojas y su mazmorra con 3 jefes|Bosque Sombrío y mazmorra 1; zona de práctica|Ciudadela y Bosque Sombrío; animaciones, efectos y sonidos de las 6 clases y 18 especializaciones|
+|3 — Mundo y mazmorras|Picos Helados, Pantano Maldito y Volcán Infernal con sus mazmorras y 9 jefes; NPCs de cada zona|Arenas Rojas y zonas 3 a 5 con sus mazmorras|Arenas Rojas y mazmorra 2 (para la beta del mes 7); música de zonas 1 y 2; animaciones, avisos y sonidos de los mobs y jefes de las zonas 1 y 2|
+|4 — Progresión|Aspecto del equipo por rareza, legendarios, monturas, mascotas e iconos|—|Picos Helados y Pantano Maldito con sus mazmorras, mobs y jefes animados; objetos; monturas y mascotas animadas|
+|5 — Endgame y PvP|Efectos visuales de los afijos de Sellos; mapas de Estandarte y Arena|Mapas de PvP|Volcán Infernal y mazmorra 5 con sus mobs y jefes animados; mapas de PvP; efectos de afijos y del PvP|
+|6 — Social y tienda|Cosméticos de la tienda y del pase de Temporada 1; primer evento|Evento 1|Cosméticos, tienda e interfaz final; emotes y efectos cosméticos|
+|7 — Pulido y lanzamiento|Temporada 2 y siguiente evento|Evento 2|Pulido general (incluye timing de animaciones y efectos, y versión de gráficos bajos), trailer, thumbnails e icono|
 
 Regla: una pieza no entra a construcción sin su ficha aprobada, y no entra a arte final sin pasar la prueba en caja gris.
 
@@ -847,9 +964,12 @@ Las fichas viven en [fichas/](fichas/), y cada una enlaza a su concepto visual y
 ### Fase 0 — Prototipo de combate (meses 0 a 1,5)
 
 - Warrior y Mage con 3 habilidades cada uno, ataque básico y esquivar.
+- Feedback provisorio de combate: animación, efecto y sonido simples para cada ataque y habilidad, definidos por datos para cambiarlos por el arte final sin tocar código.
 - Una subárea gris con 3 tipos de mobs y un jefe con 2 fases.
 - Controles de PC y móvil.
-- **Terminado cuando:** 10 testers juegan 20 minutos, entienden el combate sin explicación y quieren seguir.
+- Prueba de hechizo con carga: Bola de fuego del Mage con 1 s, movimiento al 50% y cancelación al esquivar, para confirmar en PC y móvil las reglas de [Hechizos con carga](#hechizos-con-carga).
+- Íconos provisorios para las 18 activas de clase y las 6 definitivas, para confirmar en móvil que se leen mejor que el nombre (ver [Íconos de habilidades](#íconos-de-habilidades)).
+- **Terminado cuando:** al probarlo en PC y en móvil, el combate se entiende sin explicación y dan ganas de seguir jugando.
 
 ### Fase 1 — Núcleo técnico (mes 1,5 a 3)
 
@@ -858,6 +978,8 @@ Las fichas viven en [fichas/](fichas/), y cada una enlaza a su concepto visual y
 - Combate validado en servidor, amenaza, IA de mobs y sistema de jefes por datos.
 - UI base: vida, recurso, barra de habilidades, inventario.
 - Sistema de localización listo: todo el texto en tablas, en español e inglés, y glosario de nombres iniciado.
+- Sistema de feedback de combate por datos: animaciones, efectos y sonidos con precarga, avisos de ataques enemigos (zona roja en el suelo y sonido) y modo de gráficos bajos.
+- Sonidos finales de Warrior y Mage, impactos, interfaz y momentos clave (ver [AUDIO.md](AUDIO.md)).
 - Guía visual aprobada.
 - **Terminado cuando:** 30 jugadores juegan 1 hora sin errores de datos ni lag notable.
 
@@ -865,6 +987,7 @@ Las fichas viven en [fichas/](fichas/), y cada una enlaza a su concepto visual y
 
 - Las 6 clases y 18 especializaciones con sus habilidades, pasivas y definitivas.
 - Árbol de puntos, cambio de especialización y zona de práctica.
+- Íconos de las 18 especializaciones: activas, pasivas y definitivas.
 - **Terminado cuando:** cada especialización mata al muñeco de práctica en un tiempo dentro del 10% del promedio de su rol, y el tank y el sanador cumplen su rol en una prueba de jefe.
 
 ### Fase 3 — Mundo y mazmorras (mes 4,5 a 7)
@@ -943,12 +1066,12 @@ Se quitaron los sistemas de WoW que no alimentan el ciclo de pelear, sacar loot 
 
 ## Riesgos principales
 
-El mayor riesgo es que el combate no se sienta bien en móvil; por eso la Fase 0 no se da por terminada hasta que los testers quieran seguir jugando.
+El mayor riesgo es que el combate no se sienta bien en móvil; por eso la Fase 0 no se da por terminada hasta que, al probarlo, den ganas de seguir jugando.
 
 |   |   |   |   |
 |---|---|---|---|
 |Riesgo|Probabilidad|Impacto|Plan|
-|El combate no engancha|Media|Muy alto|Fase 0 con testers reales; no avanzar sin cumplir su criterio|
+|El combate no engancha|Media|Muy alto|Probar cada cambio de combate en PC y móvil; no avanzar sin cumplir el criterio de la Fase 0|
 |18 especializaciones desbalanceadas|Alta|Alto|Zona de práctica con mediciones, analítica de tasa de victoria y parches cada 2 semanas|
 |Pocos tanks y sanadores en la cola|Alta|Alto|Mazmorra normal jugable sin roles, bono a roles que faltan, roles fáciles de jugar|
 |Lag con 30 jugadores y muchos efectos|Media|Alto|Presupuestos de rendimiento, pruebas en móvil de gama media desde la Fase 1|
@@ -956,6 +1079,7 @@ El mayor riesgo es que el combate no se sienta bien en móvil; por eso la Fase 0
 |Contenido se acaba rápido|Media|Alto|Sellos, PvP, colecciones y temporadas cada 8 semanas|
 |Retraso del calendario|Alta|Medio|Beta temprana en el mes 7 y fases con criterio claro para recortar a tiempo|
 |Arte inconsistente por usar IA|Media|Medio|Guía visual aprobada antes de producir y retoque manual|
+|Cuello de botella de animación (unas 250 animaciones)|Alta|Alto|Animador contratado en Talent Hub antes de terminar la Fase 1; Warrior y Mage como referencia para medir el tiempo real; provisorias mientras tanto|
 |Trampas que rompen la economía|Media|Alto|Servidor autoritativo, alertas por ganancias anormales y baneos|
 |El juego no se descubre en Roblox|Media|Muy alto|Thumbnails y videos cuidados, comunidad desde la beta, eventos con fecha|
 
@@ -968,7 +1092,8 @@ Marca cada una cuando la decidas; lo que está en el doc es la recomendación.
 - ¿Nombres finales de zonas, mazmorras y jefes?
 - ¿Estilo visual: low-poly estilizado, o más detallado?
 - ¿Tamaño del equipo y quién hace código, arte 3D, animación y música?
-- ¿Presupuesto para herramientas de pago y para contratar en Talent Hub?
+- ¿Presupuesto para herramientas de pago (incluye ElevenLabs) y para contratar en Talent Hub?
+- ¿Música final: generada con ElevenLabs Music o hecha por un compositor?
 - ¿Precio del pase de temporada y de los Cristales?
 - ¿Beta temprana abierta a todos o solo por invitación de Discord?
 - ¿Idiomas al lanzamiento: solo español, o español e inglés?

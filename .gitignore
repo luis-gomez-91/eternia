@@ -25,3 +25,6 @@ trace.json
 # Wally packages
 /Packages
 /ServerPackages
+
+# Claves locales (ElevenLabs, etc.): nunca a Git
+.env

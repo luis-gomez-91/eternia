@@ -19,7 +19,7 @@ Una pieza no entra a construcción sin su ficha aprobada, ni a arte final sin pa
 
 | Ficha | Tipo | Fase | Estado |
 |---|---|---|---|
-| [Jefe de prueba](jefes/jefe-de-prueba.md) | Jefe | 0 | Borrador |
-| [Mob cuerpo a cuerpo](mobs/mob-cuerpo-a-cuerpo.md) | Mob | 0 | Borrador |
-| [Mob a distancia](mobs/mob-a-distancia.md) | Mob | 0 | Borrador |
-| [Mob de carga](mobs/mob-de-carga.md) | Mob | 0 | Borrador |
+| [Ogro del Claro (jefe de prueba)](jefes/jefe-de-prueba.md) | Jefe | 0 | En caja gris |
+| [Goblin Saqueador (cuerpo a cuerpo)](mobs/mob-cuerpo-a-cuerpo.md) | Mob | 0 | En caja gris |
+| [Araña Escupidora (a distancia)](mobs/mob-a-distancia.md) | Mob | 0 | En caja gris |
+| [Lobo Gris (de carga)](mobs/mob-de-carga.md) | Mob | 0 | En caja gris |
