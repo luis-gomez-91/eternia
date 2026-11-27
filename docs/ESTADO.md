@@ -69,7 +69,7 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 ### Diseño (fuera del código)
 - [x] Guía visual en borrador: [GUIA-VISUAL.md](GUIA-VISUAL.md), con anexo técnico [GUIA-VISUAL-TECNICA.md](GUIA-VISUAL-TECNICA.md) (presupuestos orientativos, fichas y checklist)
 - [ ] 3 conceptos de prueba (Warrior con armadura, Goblin Saqueador, rincón del Claro del Molino) aprobados juntos con la checklist del anexo
-- [ ] Medir en un teléfono real: distancia de cámara, luz (Voxel o ShadowMap) y presupuestos por escena
+- [ ] Medir en los dispositivos de prueba (tablet Redmi para rendimiento; Poco X8 Pro e iPhone para lectura): distancia de cámara, luz (Voxel o ShadowMap) y presupuestos por escena
 - [x] Plantillas de fichas (zona, mazmorra, jefe, NPC, mob) — ver [fichas/](fichas/)
 - [x] Fichas del jefe de prueba y los 3 mobs llenas (estado: En caja gris)
 
@@ -108,6 +108,7 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Subárea de prueba en caja gris con 3 mobs (Goblin Saqueador, Araña Escupidora, Lobo Gris) y jefe de prueba de 2 fases (Ogro del Claro). IA en servidor: patrulla, detecta, persigue, avisa con zona roja en el suelo, ataca y vuelve inmune a su sitio. Daño a jugadores con invulnerabilidad del esquivar. Fichas llenas. Arreglado: las barras de vida desaparecían al morir el jugador |
 | 26 nov 2026 | Controles: teclas 1 a 6 y R; barra de definitiva y una definitiva provisoria por clase; botones táctiles en arco para móvil. 16 sonidos de mobs y jefe generados con ElevenLabs, sin subir todavía (la red de la oficina bloquea Roblox) |
 | 26 nov 2026 | Guía visual en borrador: estilo low-poly estilizado, colores reservados de combate, siluetas por clase y reglas de enemigos, efectos e interfaz. La curación pasa a verde menta y el veneno y la magia vil a verde ácido, para no confundirlos |
+| 26 nov 2026 | Dispositivos de prueba: tablet Redmi para rendimiento, Poco X8 Pro e iPhone 17 Pro para lectura (no hay un teléfono de gama media). Ajustes de consistencia en el anexo |
 | 26 nov 2026 | Anexo técnico corregido: límites reales de texturas de Roblox (4096 px normales, 1024 px PBR), ojos ámbar para el goblin (pendiente en el modelo), estabilidad de fotogramas en las mediciones, instancing, armaduras y silueta solo para personajes. Sigue en borrador |
 | 26 nov 2026 | Guía visual completada sin cambiar el estilo ni los colores: geometría, materiales (Metal en armas y armaduras), luz, cámara, R15, niveles de enemigos y tiempos de animación. Nuevo anexo técnico con presupuestos orientativos, fichas de los 3 conceptos y checklist. Sigue en borrador |
 | 26 nov 2026 | Se quita la sesión con 10 testers: cada cambio se prueba en casa en PC y móvil |

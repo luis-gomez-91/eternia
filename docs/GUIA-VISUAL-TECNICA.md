@@ -2,7 +2,7 @@
 
 **Estado:** Borrador, pendiente de aprobación · **Última actualización:** 26 nov 2026
 
-Especificaciones para producir arte que cumpla la [guía visual](GUIA-VISUAL.md) en Roblox. Las reglas de estilo, los colores reservados, las clases y los enemigos se definen **solo** en la guía; aquí están las medidas, los presupuestos, las fichas de los 3 conceptos y la checklist. **Todos los números marcados como orientativos se validan en Studio y en un teléfono real antes de fijarlos.**
+Especificaciones para producir arte que cumpla la [guía visual](GUIA-VISUAL.md) en Roblox. Las reglas de estilo, los colores reservados, las clases y los enemigos se definen **solo** en la guía; aquí están las medidas, los presupuestos, las fichas de los 3 conceptos y la checklist. **Todos los números marcados como orientativos se validan en Studio y en los [dispositivos de prueba](#dispositivos-de-prueba) antes de fijarlos.**
 
 ## Configuración actual (medida el 26 nov 2026)
 
@@ -15,9 +15,21 @@ Especificaciones para producir arte que cumpla la [guía visual](GUIA-VISUAL.md)
 | Materiales en uso | SmoothPlastic, Metal, Wood, Fabric y Neon (efectos y ojos) | Cuerpos provisorios y efectos |
 | UI móvil | Diseñada para 400 px de alto y escalada con UIScale (0,8 a 1,6); zonas seguras del dispositivo | `MobileController` |
 
+## Dispositivos de prueba
+
+No hay un teléfono de gama media disponible. Se prueba con lo que hay en casa, cada uno para algo distinto:
+
+| Dispositivo | Para qué |
+|---|---|
+| **Tablet Redmi** (modelo por confirmar) | **Dispositivo de rendimiento:** el más modesto disponible. Aquí se miden los 30 FPS estables, el tiempo por fotograma y los tirones |
+| **Poco X8 Pro** | Celular Android: tamaño de botones, textos y lectura en pantalla chica. Para rendimiento, solo con la calidad gráfica de Roblox al mínimo y como referencia secundaria |
+| **iPhone 17 Pro** | Celular iOS: muesca, zonas seguras y lectura. No sirve para medir rendimiento (es de gama alta) |
+
+La meta del plan (30 FPS estables en un teléfono de gama media) se confirma más adelante con las métricas de rendimiento por dispositivo que da Roblox cuando haya jugadores reales. Si la tablet Redmi resulta más potente que un teléfono de gama media, los presupuestos se ajustan con esas métricas.
+
 ## Cámara y legibilidad
 
-Con un campo de visión vertical de 70°, la altura que se ve a una distancia *d* es de unos 1,4 × *d* studs. Estimación hecha con el simulador de iPhone 17 Pro horizontal (unos 380 px de alto útiles). Es solo una referencia de cálculo, no el teléfono de pruebas: ese será uno de gama media real, todavía por elegir.
+Con un campo de visión vertical de 70°, la altura que se ve a una distancia *d* es de unos 1,4 × *d* studs. Estimación hecha con el simulador de iPhone 17 Pro horizontal (unos 380 px de alto útiles). Es solo una referencia de cálculo; las capturas de validación se hacen en los [dispositivos de prueba](#dispositivos-de-prueba).
 
 | Distancia de cámara | Píxeles por stud | Qué significa |
 |---|---|---|
@@ -25,7 +37,7 @@ Con un campo de visión vertical de 70°, la altura que se ve a una distancia *d
 | 30 studs | ≈ 9 | Un detalle de 0,25 studs ocupa 2 px: no existe |
 | 60 studs | ≈ 4,5 | Solo se leen siluetas y colores |
 
-Reglas orientativas derivadas (a validar con capturas en el teléfono de pruebas):
+Reglas orientativas derivadas (a validar con capturas en el Poco X8 Pro y el iPhone):
 
 - Lo que identifica algo (pieza de clase, arma, orejas del goblin) mide **1 stud o más** en su lado mayor y **0,5 studs o más** de grosor.
 - Detalles de menos de 0,25 studs no se modelan: van en la textura o no van.
@@ -74,7 +86,7 @@ Tiempos que ya usan los mobs (`Data/Mobs`) y que se mantienen como regla para el
 
 ## Presupuestos orientativos
 
-Puntos de partida, **pendientes de validación en dispositivos reales**. Roblox limita cada malla a 20.000 triángulos; los límites de texturas están en [Materiales y texturas](#materiales-y-texturas-en-roblox).
+Puntos de partida, **pendientes de validación en dispositivos reales**. Según la [documentación de Roblox](https://create.roblox.com/docs/art/modeling/specifications) (nov 2026), una malla individual no puede pasar de 20.000 triángulos; los ítems de avatar (cuerpos, accesorios rígidos y ropa en capas) tienen sus propios límites, más bajos. Se revisa la documentación vigente al importar. Los límites de texturas están en [Materiales y texturas](#materiales-y-texturas-en-roblox).
 
 ### Por asset
 
@@ -92,7 +104,7 @@ Puntos de partida, **pendientes de validación en dispositivos reales**. Roblox 
 
 ### Por escena (se mide, no se adivina)
 
-Objetivos del plan ([PLAN.md](PLAN.md), "Presupuestos de rendimiento"): **30 FPS estables como mínimo en un teléfono de gama media** y **60 FPS como objetivo en PC**. Se valida la estabilidad, no solo el promedio:
+Objetivos del plan ([PLAN.md](PLAN.md), "Presupuestos de rendimiento"): **30 FPS estables como mínimo en un teléfono de gama media** y **60 FPS como objetivo en PC**. Mientras no haya uno, el mínimo se mide en la tablet Redmi ([dispositivos de prueba](#dispositivos-de-prueba)). Se valida la estabilidad, no solo el promedio:
 
 - Tiempo por fotograma (frame time) durante la prueba completa, en milisegundos: 33,3 ms equivale a 30 FPS y 16,7 ms a 60 FPS.
 - Tirones: cantidad de fotogramas que pasan claramente del tiempo objetivo, sobre todo al entrar en combate, al usar definitivas y en el cambio de fase del jefe.
@@ -113,14 +125,14 @@ Los demás valores no tienen número todavía: se miden en el teléfono de refer
 - `RenderFidelity` en Automatic (baja el detalle a distancia).
 - `CastShadow` apagado en piezas chicas y en efectos.
 - `CanTouch` y `CanQuery` apagados en decorado sin función.
-- Todo lo repetido (árboles, rocas, cajas) usa el mismo MeshId **y** la misma textura, material y configuración de render. Roblox solo agrupa las copias (instancing) cuando todo eso coincide: el mismo MeshId con otra textura o material cuenta como un objeto distinto.
+- Todo lo repetido (árboles, rocas, cajas) usa el mismo MeshId **y** la misma textura, material y configuración de render compatible. Roblox solo agrupa las copias (instancing) cuando todo eso coincide: el mismo MeshId con otra textura o material cuenta como un objeto distinto.
 - Instance Streaming activo; los modelos grandes se agrupan para que carguen por zonas.
 
 ## Iluminación
 
 Recomendación inicial, a validar con mediciones:
 
-- Mantener **Voxel** (lo que hay hoy) mientras se mide. Probar **ShadowMap** en la subárea si las sombras de Voxel no dan suficiente volumen, y adoptarlo solo si mantiene 30 FPS estables en el teléfono de pruebas. **Future** no se usa salvo que una medición lo justifique.
+- Mantener **Voxel** (lo que hay hoy) mientras se mide. Probar **ShadowMap** en la subárea si las sombras de Voxel no dan suficiente volumen, y adoptarlo solo si mantiene 30 FPS estables en la tablet Redmi. **Future** no se usa salvo que una medición lo justifique.
 - Subir el ambiente (hoy negro) a un tono medio para que el lado en sombra de personajes y enemigos no se vuelva negro.
 - Bloom bajo; DepthOfField apagado o muy suave en juego (desenfoca enemigos lejanos); SunRays y Atmosphere según la zona.
 - Luces dinámicas solo en efectos de vida corta y puntos de interés (fogatas, portales).
@@ -155,7 +167,7 @@ Validan la guía **juntos**, como un mismo juego. Cada ficha sirve para revisar 
 - **Paleta:** metal acero en tonos medios `#8C96A5`, brillos `#E1EBFF`, acento de brasa `#FF8C3C`, cuero `#644630`.
 - **Silueta:** forma de V invertida por las hombreras; la espada se distingue del cuerpo de frente y de perfil.
 - **Materiales:** Metal en armadura y espada; SmoothPlastic en cuero y tela. Sin Neon.
-- **Detalle:** caras planas, biselado leve en los bordes de las placas. Menos de 4.000 triángulos para la armadura y menos de 1.500 para la espada.
+- **Detalle:** caras planas, biselado leve en los bordes de las placas. Menos de 4.000 triángulos para el conjunto completo de piezas de armadura (no por pieza; cada pieza se revisa aparte) y menos de 1.500 para la espada.
 - **No debe:** usar verde menta, azul cielo ni dorado crítico como color principal; tener contorno negro; tener grabados finos o realismo.
 - **Aprobado si:**
   - En negro sólido se reconoce como Warrior sin ver el color.
@@ -194,7 +206,7 @@ Validan la guía **juntos**, como un mismo juego. Cada ficha sirve para revisar 
   - Como propuesta por el nombre de la subárea, el molino de madera al fondo y cajas de un campamento goblin.
   - Rayos de luz entre los árboles y niebla baja en el borde del bosque.
 - **Paleta:** la del Bosque Sombrío ([PLAN.md](PLAN.md), "Ambiente por zona"): verde oscuro y morado con saturación media-baja; el camino es un tono más claro que el pasto.
-- **Silueta:** el claro se lee como espacio abierto para pelear, con bordes de árboles bien marcados.
+- **Composición y lectura espacial:** el claro se lee como espacio abierto para pelear, con bordes de árboles bien marcados.
 - **Materiales:** Grass y terreno en el suelo; Wood en el molino, cercas y cajas; Slate en rocas. Neon solo en efectos (luciérnagas de noche, punto de interés).
 - **Detalle:** árboles de menos de 800 triángulos y piezas grandes de menos de 2.000; paleta compartida; todo lo repetido con el mismo MeshId.
 - **No debe:**
@@ -204,7 +216,7 @@ Validan la guía **juntos**, como un mismo juego. Cada ficha sirve para revisar 
 - **Aprobado si:**
   - Una zona roja de peligro se ve claramente sobre su suelo desde la cámara estándar.
   - El Warrior y el Goblin destacan sobre el escenario en la toma conjunta.
-  - Mantiene 30 FPS estables (sin tirones notorios) en el teléfono de pruebas con los mobs de la subárea.
+  - Mantiene 30 FPS estables (sin tirones notorios) en la tablet Redmi con los mobs de la subárea.
 
 ## Checklist de aprobación
 
@@ -217,13 +229,13 @@ La guía se aprueba solo si **los 3 conceptos pasan todo, juntos**. Si uno falla
 - [ ] Ningún conflicto con los colores reservados de combate, clase y rareza
 - [ ] Geometría y texturas dentro de los presupuestos orientativos
 - [ ] Hecho con técnicas posibles en Roblox (sin shaders, con paleta compartida y R15)
-- [ ] Rendimiento aceptable: 30 FPS estables en el teléfono de pruebas de gama media, medidos también por tiempo de fotograma y tirones
+- [ ] Rendimiento aceptable: 30 FPS estables en la tablet Redmi, medidos también por tiempo de fotograma y tirones
 - [ ] En combate: zonas rojas visibles, personaje no tapado por efectos, enemigos distinguibles
 - [ ] Coherencia con el resto de los assets existentes
 
 ## Pendiente de validar
 
-- Teléfono de pruebas: uno de gama media real (el iPhone 17 Pro del simulador solo sirvió para estimar).
+- Confirmar el modelo de la tablet Redmi y, con jugadores reales, contrastar con las métricas de rendimiento por dispositivo de Roblox.
 - Distancia de cámara habitual y si se limita el zoom máximo.
 - Voxel o ShadowMap, nivel de ambiente y configuración de los efectos de luz dentro del proyecto.
 - Valores de presupuesto por asset y por escena, medidos en ese teléfono.

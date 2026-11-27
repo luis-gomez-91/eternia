@@ -614,7 +614,7 @@ Las reglas de estilo (geometría, materiales, luz, colores reservados de combate
 ### Presupuestos de rendimiento
 
 - Meta: 60 FPS en PC y 30 FPS estables en un teléfono de gama media.
-- Presupuestos por asset y por escena (triángulos, texturas, partículas, luces, draw calls): orientativos y pendientes de medir en un teléfono real, en [GUIA-VISUAL-TECNICA.md](GUIA-VISUAL-TECNICA.md#presupuestos-orientativos). Referencias iniciales: mobs con menos de 3.000 triángulos y jefes con menos de 15.000.
+- Presupuestos por asset y por escena (triángulos, texturas, partículas, luces, draw calls): orientativos y pendientes de medir en los dispositivos de prueba, en [GUIA-VISUAL-TECNICA.md](GUIA-VISUAL-TECNICA.md#presupuestos-orientativos). Referencias iniciales: mobs con menos de 3.000 triángulos y jefes con menos de 15.000.
 - Zonas: StreamingEnabled y LOD para que solo cargue lo cercano.
 
 ### Audio
