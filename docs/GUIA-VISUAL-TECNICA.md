@@ -17,7 +17,7 @@ Especificaciones para producir arte que cumpla la [guía visual](GUIA-VISUAL.md)
 
 ## Cámara y legibilidad
 
-Con un campo de visión vertical de 70°, la altura que se ve a una distancia *d* es de unos 1,4 × *d* studs. En un iPhone 17 Pro horizontal (unos 380 px de alto útiles):
+Con un campo de visión vertical de 70°, la altura que se ve a una distancia *d* es de unos 1,4 × *d* studs. Estimación hecha con el simulador de iPhone 17 Pro horizontal (unos 380 px de alto útiles). Es solo una referencia de cálculo, no el teléfono de pruebas: ese será uno de gama media real, todavía por elegir.
 
 | Distancia de cámara | Píxeles por stud | Qué significa |
 |---|---|---|
@@ -25,7 +25,7 @@ Con un campo de visión vertical de 70°, la altura que se ve a una distancia *d
 | 30 studs | ≈ 9 | Un detalle de 0,25 studs ocupa 2 px: no existe |
 | 60 studs | ≈ 4,5 | Solo se leen siluetas y colores |
 
-Reglas orientativas derivadas (a validar con capturas en el teléfono):
+Reglas orientativas derivadas (a validar con capturas en el teléfono de pruebas):
 
 - Lo que identifica algo (pieza de clase, arma, orejas del goblin) mide **1 stud o más** en su lado mayor y **0,5 studs o más** de grosor.
 - Detalles de menos de 0,25 studs no se modelan: van en la textura o no van.
@@ -42,7 +42,8 @@ Roblox **no permite shaders propios**. El aspecto sale de los materiales del mot
   1. **Textura de paleta compartida:** una imagen pequeña con celdas de color plano; en Blender, las UV de cada cara se ponen sobre la celda de su color. Muchos modelos comparten la misma imagen.
   2. **Piezas separadas con su Color:** para cosas simples o del escenario, varias piezas con el color de la propiedad `Color` y un material del motor.
 - **Materiales:** los de la [guía](GUIA-VISUAL.md#materiales). Si un material del motor no basta, se usa una variante de material (MaterialVariant) compartida, nunca una textura nueva por objeto.
-- **Texturas (orientativo):** 256 px para armas, accesorios y piezas chicas; 512 px en general; 1024 px solo para jefes (máximo de Roblox). Antes de crear una textura nueva, se revisa si sirve una existente.
+- **Límites de Roblox (documentación oficial, nov 2026):** las texturas normales admiten hasta 4096 × 4096 px; los mapas de SurfaceAppearance (PBR), hasta 1024 × 1024 en general, con límites más bajos para algunos mapas y tipos de asset (por ejemplo, 256 px para los mapas que no son de color en accesorios rígidos). Roblox además baja la calidad de las texturas según el dispositivo y la carga.
+- **Presupuesto práctico (orientativo):** 256 px para armas, accesorios y piezas chicas; 512 px en general; 1024 px solo para jefes. Son decisiones nuestras de rendimiento, por debajo de esos límites. Antes de crear una textura nueva, se revisa si sirve una existente.
 - **Sin** texturas fotográficas, mapas de normales de detalle fino ni SurfaceAppearance realista.
 
 ## Personajes R15
@@ -73,13 +74,13 @@ Tiempos que ya usan los mobs (`Data/Mobs`) y que se mantienen como regla para el
 
 ## Presupuestos orientativos
 
-Puntos de partida, **pendientes de validación en dispositivos reales**. Roblox limita cada malla importada (hoy 20.000 triángulos) y cada imagen a 1024 px.
+Puntos de partida, **pendientes de validación en dispositivos reales**. Roblox limita cada malla a 20.000 triángulos; los límites de texturas están en [Materiales y texturas](#materiales-y-texturas-en-roblox).
 
 ### Por asset
 
 | Asset | Triángulos | Texturas | Otras reglas |
 |---|---|---|---|
-| Set de armadura de clase (todas sus piezas) | < 4.000 | 1 de 512 px | Máximo 6 accesorios |
+| Set de armadura de clase (todas sus piezas juntas) | < 4.000 en total | 1 de 512 px | Máximo 6 accesorios. Cada pieza se revisa aparte según cómo se implemente (accesorio rígido o ropa en capas), con sus propios límites de Roblox |
 | Arma o accesorio | < 1.500 | 256 px | — |
 | Mob normal | < 3.000 (referencia actual) | 1 de 512 px | — |
 | Élite | < 5.000 | 1 de 512 px | — |
@@ -91,10 +92,17 @@ Puntos de partida, **pendientes de validación en dispositivos reales**. Roblox 
 
 ### Por escena (se mide, no se adivina)
 
-Estos valores no tienen número todavía: se miden en el teléfono de referencia con el MicroProfiler y las estadísticas de render de Studio en la subárea de prueba y en el combate más cargado (jefe con todos los efectos).
+Objetivos del plan ([PLAN.md](PLAN.md), "Presupuestos de rendimiento"): **30 FPS estables como mínimo en un teléfono de gama media** y **60 FPS como objetivo en PC**. Se valida la estabilidad, no solo el promedio:
+
+- Tiempo por fotograma (frame time) durante la prueba completa, en milisegundos: 33,3 ms equivale a 30 FPS y 16,7 ms a 60 FPS.
+- Tirones: cantidad de fotogramas que pasan claramente del tiempo objetivo, sobre todo al entrar en combate, al usar definitivas y en el cambio de fase del jefe.
+- El peor 1% de los fotogramas, además del promedio.
+- Temperatura y caída de rendimiento tras 10 minutos de juego seguido en el teléfono.
+
+Los demás valores no tienen número todavía: se miden en el teléfono de referencia con el MicroProfiler y las estadísticas de render de Studio en la subárea de prueba y en el combate más cargado (jefe con todos los efectos).
 
 - Llamadas de dibujo (draw calls) y triángulos visibles.
-- Cantidad de MeshParts y de MeshIds y texturas distintas (cuantas menos, mejor: Roblox agrupa copias iguales).
+- Cantidad de MeshParts y de combinaciones distintas de MeshId, textura y material (cuantas menos, mejor: Roblox agrupa las copias idénticas).
 - Partículas activas, emisores y luces dinámicas a la vez.
 - Superficies transparentes superpuestas (cada capa cuesta).
 - Humanoids activos (los mobs usan uno cada uno).
@@ -105,14 +113,14 @@ Estos valores no tienen número todavía: se miden en el teléfono de referencia
 - `RenderFidelity` en Automatic (baja el detalle a distancia).
 - `CastShadow` apagado en piezas chicas y en efectos.
 - `CanTouch` y `CanQuery` apagados en decorado sin función.
-- Todo lo repetido (árboles, rocas, cajas) usa el mismo MeshId y la misma textura.
+- Todo lo repetido (árboles, rocas, cajas) usa el mismo MeshId **y** la misma textura, material y configuración de render. Roblox solo agrupa las copias (instancing) cuando todo eso coincide: el mismo MeshId con otra textura o material cuenta como un objeto distinto.
 - Instance Streaming activo; los modelos grandes se agrupan para que carguen por zonas.
 
 ## Iluminación
 
 Recomendación inicial, a validar con mediciones:
 
-- Mantener **Voxel** (lo que hay hoy) mientras se mide. Probar **ShadowMap** en la subárea si las sombras de Voxel no dan suficiente volumen, y adoptarlo solo si mantiene 30 FPS en el teléfono de referencia. **Future** no se usa salvo que una medición lo justifique.
+- Mantener **Voxel** (lo que hay hoy) mientras se mide. Probar **ShadowMap** en la subárea si las sombras de Voxel no dan suficiente volumen, y adoptarlo solo si mantiene 30 FPS estables en el teléfono de pruebas. **Future** no se usa salvo que una medición lo justifique.
 - Subir el ambiente (hoy negro) a un tono medio para que el lado en sombra de personajes y enemigos no se vuelva negro.
 - Bloom bajo; DepthOfField apagado o muy suave en juego (desenfoca enemigos lejanos); SunRays y Atmosphere según la zona.
 - Luces dinámicas solo en efectos de vida corta y puntos de interés (fogatas, portales).
@@ -129,7 +137,7 @@ Recomendación inicial, a validar con mediciones:
 | Barras de vida | Sobre el enemigo y barra del jefe arriba | Igual, a la misma escala |
 
 - Consola (gamepad y distancia de TV) es una posible ampliación futura, fuera del alcance actual. [PLAN.md](PLAN.md) la nombra en "Controles", pero el juego todavía no tiene soporte de gamepad ni reglas de interfaz para TV.
-- Pendiente, en la UI provisoria (se corrige al hacer la UI final): el botón "Cambiar objetivo" mide unos 40 px reales en un iPhone (bajo el mínimo de 44) y varios textos usan de 11 a 13 px.
+- Pendiente, en la UI provisoria (se corrige al hacer la UI final): el botón "Cambiar objetivo" mide unos 40 px reales en el simulador de iPhone (bajo el mínimo de 44) y varios textos usan de 11 a 13 px.
 
 ## Los 3 conceptos de prueba
 
@@ -137,7 +145,7 @@ Validan la guía **juntos**, como un mismo juego. Cada ficha sirve para revisar 
 
 1. Frente y perfil a 15 studs, con la cámara estándar de tercera persona.
 2. La misma toma reducida a un cuarto (tamaño de celular).
-3. La silueta en negro sólido.
+3. La silueta en negro sólido (solo Warrior y Goblin; el escenario se valida por composición, lectura del espacio y contraste).
 4. Los tres juntos en una misma imagen: el Warrior frente al Goblin en el rincón del Claro del Molino.
 
 ### 1. Warrior con armadura
@@ -164,7 +172,7 @@ Validan la guía **juntos**, como un mismo juego. Cada ficha sirve para revisar 
   - **Ojos en Neon.**
   - **Garrote grande** de madera, de al menos 0,5 studs de grosor.
   - Ropa de cuero y, como propuesta por su nombre, una bolsa de botín a la espalda.
-- **Paleta:** piel verde oliva `#5F8C3C` (lejos del verde menta y del verde ácido), cuero `#64462D`, madera `#6E4B28`, ojos rojo o ámbar en Neon.
+- **Paleta:** piel verde oliva `#5F8C3C` (lejos del verde menta y del verde ácido), cuero `#64462D`, madera `#6E4B28`, **ojos ámbar en Neon** (`#FFB428` como propuesta). No rojos: un rojo permanente le quitaría fuerza al rojo de peligro, que solo aparece al cargar un ataque. Pendiente: los cuerpos provisorios del juego todavía usan ojos rojos; se cambian cuando se haga el modelo.
 - **Silueta:** orejas y garrote visibles de frente; la postura agachada lo distingue de un jugador.
 - **Materiales:** SmoothPlastic en el cuerpo y la ropa; Wood en el garrote; Neon solo en los ojos.
 - **Detalle:** menos de 3.000 triángulos y una textura de paleta de 512 px.
@@ -196,25 +204,26 @@ Validan la guía **juntos**, como un mismo juego. Cada ficha sirve para revisar 
 - **Aprobado si:**
   - Una zona roja de peligro se ve claramente sobre su suelo desde la cámara estándar.
   - El Warrior y el Goblin destacan sobre el escenario en la toma conjunta.
-  - Mantiene 30 FPS en el teléfono de referencia con los mobs de la subárea.
+  - Mantiene 30 FPS estables (sin tirones notorios) en el teléfono de pruebas con los mobs de la subárea.
 
 ## Checklist de aprobación
 
 La guía se aprueba solo si **los 3 conceptos pasan todo, juntos**. Si uno falla, se corrige y se vuelve a revisar el conjunto.
 
-- [ ] Silueta reconocible en negro sólido (cada uno)
+- [ ] Silueta reconocible en negro sólido (Warrior y Goblin)
+- [ ] Escenario legible por composición, lectura del espacio y contraste: claro abierto para pelear, camino visible, bordes marcados, personajes destacados
 - [ ] Lectura correcta a tamaño reducido (un cuarto, como en celular)
 - [ ] Paleta de Eternia y del Bosque Sombrío; los tres se ven del mismo juego en la toma conjunta
 - [ ] Ningún conflicto con los colores reservados de combate, clase y rareza
 - [ ] Geometría y texturas dentro de los presupuestos orientativos
 - [ ] Hecho con técnicas posibles en Roblox (sin shaders, con paleta compartida y R15)
-- [ ] Rendimiento aceptable en el teléfono de referencia (30 FPS)
+- [ ] Rendimiento aceptable: 30 FPS estables en el teléfono de pruebas de gama media, medidos también por tiempo de fotograma y tirones
 - [ ] En combate: zonas rojas visibles, personaje no tapado por efectos, enemigos distinguibles
 - [ ] Coherencia con el resto de los assets existentes
 
 ## Pendiente de validar
 
-- Teléfono de referencia para las mediciones (gama media).
+- Teléfono de pruebas: uno de gama media real (el iPhone 17 Pro del simulador solo sirvió para estimar).
 - Distancia de cámara habitual y si se limita el zoom máximo.
 - Voxel o ShadowMap, nivel de ambiente y configuración de los efectos de luz dentro del proyecto.
 - Valores de presupuesto por asset y por escena, medidos en ese teléfono.

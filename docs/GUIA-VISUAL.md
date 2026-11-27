@@ -70,7 +70,7 @@ Avatares R15 de Roblox con armaduras como accesorios modulares, compatibles con 
 ## Enemigos
 
 - Cuatro niveles: **normal** (silueta simple), **élite** (más grande, con una pieza distintiva), **jefe intermedio** (silueta y movimientos propios) y **jefe final** (diseño único, gran presencia, ataques reconocibles).
-- Más saturados que el fondo de su zona, con **ojos en Neon** para leer hacia dónde miran.
+- Más saturados que el fondo de su zona, con **ojos en Neon** para leer hacia dónde miran (ámbar u otro color de la familia, no el rojo de peligro).
 - Nunca usan verde menta ni azul cielo: esos colores son de los jugadores.
 - Una familia (por ejemplo, los goblins: verde oliva, orejas largas, cuero) comparte paleta y forma base, pero cada tipo cambia la silueta, no solo el color.
 
