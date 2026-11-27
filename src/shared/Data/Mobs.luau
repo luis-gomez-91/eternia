@@ -60,6 +60,8 @@ export type MobDef = {
 	KeepDistance: number?, -- a distancia: retrocede si el jugador se acerca más
 	RespawnTime: number,
 	Attacks: { string }, -- en orden de prioridad
+	AggroCue: string?, -- señal al detectar al jugador (Data/Feedback)
+	DeathCue: string?, -- señal al morir
 	Phases: { PhaseDef }?, -- jefes
 	Boss: boolean?,
 }
@@ -77,7 +79,7 @@ local Attacks: { [string]: AttackDef } = {
 		Length = 6.5,
 		Width = 5,
 		Impact = "Melee",
-		Cue = "MobSwing",
+		Cue = "GoblinClub",
 	},
 	-- Araña Escupidora: escupitajo de veneno en línea recta.
 	SpiderSpit = {
@@ -92,7 +94,7 @@ local Attacks: { [string]: AttackDef } = {
 		Width = 2.5,
 		Speed = 45,
 		Impact = "Venom",
-		Cue = "MobSpit",
+		Cue = "SpiderSpit",
 	},
 	-- Araña Escupidora: mordida si el jugador se le pega.
 	SpiderBite = {
@@ -106,7 +108,7 @@ local Attacks: { [string]: AttackDef } = {
 		Length = 5,
 		Width = 4,
 		Impact = "Venom",
-		Cue = "MobBite",
+		Cue = "SpiderBite",
 	},
 	-- Lobo Gris: avisa y embiste en línea recta.
 	WolfCharge = {
@@ -122,8 +124,8 @@ local Attacks: { [string]: AttackDef } = {
 		Width = 4,
 		Speed = 55,
 		Impact = "Melee",
-		Cue = "MobCharge",
-		WarnCue = "MobGrowl",
+		Cue = "WolfCharge",
+		WarnCue = "WolfGrowl",
 	},
 	-- Lobo Gris: mordida de cerca entre embestidas.
 	WolfBite = {
@@ -137,7 +139,7 @@ local Attacks: { [string]: AttackDef } = {
 		Length = 6,
 		Width = 4.5,
 		Impact = "Melee",
-		Cue = "MobBite",
+		Cue = "WolfBite",
 	},
 
 	-- Jefe de prueba: Ogro del Claro.
@@ -209,6 +211,8 @@ local Mobs: { [string]: MobDef } = {
 		LinkRange = 14,
 		LeashRange = 50,
 		RespawnTime = 30,
+		AggroCue = "GoblinAggro",
+		DeathCue = "GoblinDeath",
 		Attacks = { "GoblinClub" },
 	},
 	VenomSpider = {
@@ -226,6 +230,8 @@ local Mobs: { [string]: MobDef } = {
 		LeashRange = 50,
 		KeepDistance = 12,
 		RespawnTime = 30,
+		AggroCue = "SpiderAggro",
+		DeathCue = "SpiderDeath",
 		Attacks = { "SpiderBite", "SpiderSpit" },
 	},
 	GreyWolf = {
@@ -242,6 +248,8 @@ local Mobs: { [string]: MobDef } = {
 		LinkRange = 16,
 		LeashRange = 55,
 		RespawnTime = 30,
+		AggroCue = "WolfGrowl",
+		DeathCue = "WolfDeath",
 		Attacks = { "WolfCharge", "WolfBite" },
 	},
 	ClearingOgre = {
@@ -259,6 +267,8 @@ local Mobs: { [string]: MobDef } = {
 		LeashRange = 38,
 		RespawnTime = 45,
 		Boss = true,
+		AggroCue = "OgreAggro",
+		DeathCue = "OgreDeath",
 		Attacks = { "OgreStomp", "OgreSmash" },
 		Phases = {
 			{ Below = 1, Attacks = { "OgreStomp", "OgreSmash" } },
@@ -280,6 +290,9 @@ for id, attack in Attacks do
 end
 for id, mob in Mobs do
 	assert(mob.Id == id, `Mob {id} con Id distinto`)
+	for _, cueId in { mob.AggroCue, mob.DeathCue } do
+		assert(typeof(cueId) == "string", `{id}: falta AggroCue o DeathCue`)
+	end
 	for _, attackId in mob.Attacks do
 		assert(Attacks[attackId], `{id}: ataque desconocido {attackId}`)
 	end

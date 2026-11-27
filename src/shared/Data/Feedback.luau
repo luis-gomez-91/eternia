@@ -110,12 +110,40 @@ local SOUND_IDS = {
 	ShadowBlast = "rbxassetid://102715922573898",
 }
 
+-- Sonidos ya generados (assets/audio) que falta subir a Roblox: mientras no
+-- tengan ID suenan con uno provisorio y otro tono. Al subirlos, pasar su ID a
+-- SOUND_IDS y borrar la fila de aquí.
+local PENDING_UPLOAD: { [string]: { Use: string, Pitch: number } } = {
+	GoblinAggro = { Use = "Dodge", Pitch = 1.6 },
+	GoblinAttack = { Use = "WarriorCombo2", Pitch = 0.75 },
+	GoblinDeath = { Use = "Dodge", Pitch = 0.7 },
+	SpiderAggro = { Use = "Corruption", Pitch = 1.8 },
+	SpiderSpit = { Use = "Corruption", Pitch = 1.5 },
+	SpiderDeath = { Use = "Corruption", Pitch = 0.8 },
+	WolfGrowl = { Use = "BattleShout", Pitch = 1.6 },
+	WolfCharge = { Use = "Charge", Pitch = 0.85 },
+	WolfBite = { Use = "Impact", Pitch = 1.35 },
+	WolfDeath = { Use = "Dodge", Pitch = 0.6 },
+	OgreRoar = { Use = "BattleShout", Pitch = 0.55 },
+	OgreSmash = { Use = "PaladinSmash", Pitch = 0.6 },
+	OgreStomp = { Use = "FireballExplosion", Pitch = 0.6 },
+	OgreRock = { Use = "FireballExplosion", Pitch = 0.8 },
+	BossWarn = { Use = "Smite", Pitch = 0.5 },
+	OgreDeath = { Use = "BattleShout", Pitch = 0.45 },
+}
+
 local function sound(
 	name: string,
 	volume: number,
 	jitter: number?,
 	extra: { Delay: number?, AtTarget: boolean?, Pitch: number? }?
 ): SoundDef
+	local pending = PENDING_UPLOAD[name]
+	local pitch = extra and extra.Pitch
+	if pending then
+		pitch = (pitch or 1) * pending.Pitch
+		name = pending.Use
+	end
 	local id = SOUND_IDS[name]
 	assert(id, `Sonido sin ID: {name}`)
 	return {
@@ -124,7 +152,7 @@ local function sound(
 		PitchJitter = jitter,
 		Delay = extra and extra.Delay,
 		AtTarget = extra and extra.AtTarget,
-		Pitch = extra and extra.Pitch,
+		Pitch = pitch,
 	}
 end
 
@@ -143,6 +171,9 @@ local VENOM = Color3.fromRGB(150, 255, 90)
 local BRUTE = Color3.fromRGB(255, 130, 90)
 local ROCK = Color3.fromRGB(165, 140, 115)
 local MobAttacks = MobData.Attacks
+-- Nube que deja un mob al desaparecer.
+local DEATH_PUFF: EffectDef =
+	{ Kind = "Burst", Color = Color3.fromRGB(200, 200, 200), Size = 5, Duration = 0.4, Ground = true, Height = 1 }
 
 local Cues: { [string]: Cue } = {
 	-- Warrior: dos tajos cruzados y un golpe de arriba hacia abajo.
@@ -475,22 +506,18 @@ local Cues: { [string]: Cue } = {
 		Sound = sound("Dodge", 0.45, 0.05),
 	},
 
-	-- Mobs y jefes (provisorio: reusan sonidos de las clases con otro tono hasta
-	-- generar los suyos con ElevenLabs; ver docs/AUDIO.md). El aviso en el suelo
-	-- lo dibuja MobFeedbackController; esto es lo que se ve al soltar el ataque.
-	MobSwing = {
+	-- Mobs y jefes (sonidos de ElevenLabs, ver docs/AUDIO.md). El aviso en el
+	-- suelo lo dibuja MobFeedbackController; esto es lo que se ve y oye al soltar
+	-- el ataque, al detectar al jugador y al morir.
+	GoblinClub = {
 		Effects = {
 			{ Kind = "Slash", Color = BRUTE, Size = 5, Span = 120, Roll = -10, Sweep = 1 },
 		},
-		Sound = sound("WarriorCombo2", 0.5, 0.06, { Pitch = 0.75 }),
+		Sound = sound("GoblinAttack", 0.5, 0.06),
 	},
-	MobBite = {
-		Effects = {
-			{ Kind = "Slash", Color = Color3.new(1, 1, 1), Size = 3, Span = 90, Roll = 90, Sweep = 1 },
-		},
-		Sound = sound("Impact", 0.45, 0.08, { Pitch = 1.35 }),
-	},
-	MobSpit = {
+	GoblinAggro = { Sound = sound("GoblinAggro", 0.5, 0.08) },
+	GoblinDeath = { Effects = { DEATH_PUFF }, Sound = sound("GoblinDeath", 0.5, 0.06) },
+	SpiderSpit = {
 		Projectile = {
 			Shape = "Orb",
 			Color = VENOM,
@@ -499,38 +526,39 @@ local Cues: { [string]: Cue } = {
 			From = "Fangs",
 			Impact = { Effects = { { Kind = "Burst", Color = VENOM, Size = 3, Duration = 0.25 } } },
 		},
-		Sound = sound("Corruption", 0.45, 0.06, { Pitch = 1.5 }),
+		Sound = sound("SpiderSpit", 0.5, 0.06),
 	},
-	MobGrowl = {
-		Sound = sound("BattleShout", 0.4, 0.05, { Pitch = 1.6 }),
+	SpiderBite = {
+		Effects = {
+			{ Kind = "Slash", Color = VENOM, Size = 3, Span = 90, Roll = 90, Sweep = 1 },
+		},
+		Sound = sound("WolfBite", 0.45, 0.06, { Pitch = 1.3 }),
 	},
-	MobCharge = {
+	SpiderAggro = { Sound = sound("SpiderAggro", 0.5, 0.08) },
+	SpiderDeath = { Effects = { DEATH_PUFF }, Sound = sound("SpiderDeath", 0.5, 0.06) },
+	WolfGrowl = { Sound = sound("WolfGrowl", 0.55, 0.05) },
+	WolfCharge = {
 		Effects = {
 			{ Kind = "Trail", Color = Color3.fromRGB(220, 220, 230), Duration = 0.6 },
 		},
-		Sound = sound("Charge", 0.55, 0.05, { Pitch = 0.85 }),
+		Sound = sound("WolfCharge", 0.6, 0.05),
 	},
-	MobDeath = {
+	WolfBite = {
 		Effects = {
-			{
-				Kind = "Burst",
-				Color = Color3.fromRGB(200, 200, 200),
-				Size = 5,
-				Duration = 0.4,
-				Ground = true,
-				Height = 1,
-			},
+			{ Kind = "Slash", Color = Color3.new(1, 1, 1), Size = 3, Span = 90, Roll = 90, Sweep = 1 },
 		},
+		Sound = sound("WolfBite", 0.5, 0.06),
 	},
-	BossWarn = {
-		Sound = sound("Smite", 0.6, 0, { Pitch = 0.5 }),
-	},
+	WolfDeath = { Effects = { DEATH_PUFF }, Sound = sound("WolfDeath", 0.5, 0.05) },
+	BossWarn = { Sound = sound("BossWarn", 0.65) },
+	OgreAggro = { Sound = sound("OgreRoar", 0.7, 0, { Pitch = 1.1 }) },
+	OgreDeath = { Effects = { DEATH_PUFF }, Sound = sound("OgreDeath", 0.8) },
 	OgreSmash = {
 		Effects = {
 			{ Kind = "Slash", Color = BRUTE, Size = 11, Span = 80, Roll = 90, Sweep = 1, Height = 2 },
 			{ Kind = "Ring", Color = ROCK, Delay = 0.08, Duration = 0.4, Size = 14, Ground = true },
 		},
-		Sound = sound("PaladinSmash", 0.8, 0.04, { Pitch = 0.6 }),
+		Sound = sound("OgreSmash", 0.8, 0.04),
 	},
 	OgreStomp = {
 		Effects = {
@@ -538,14 +566,14 @@ local Cues: { [string]: Cue } = {
 			{ Kind = "Ring", Color = ROCK, Delay = 0.1, Duration = 0.5, Size = 18, Ground = true },
 			{ Kind = "Burst", Color = ROCK, Size = 9, Duration = 0.35, Ground = true, Height = 1 },
 		},
-		Sound = sound("FireballExplosion", 0.8, 0.04, { Pitch = 0.6 }),
+		Sound = sound("OgreStomp", 0.85, 0.04),
 	},
 	OgreRock = {
 		Effects = {
 			{ Kind = "Column", Color = ROCK, Size = 18, Duration = 0.25, Ground = true },
 			{ Kind = "Burst", Color = ROCK, Delay = 0.1, Size = 12, Duration = 0.35, Ground = true, Height = 0.5 },
 		},
-		Sound = sound("FireballExplosion", 0.5, 0.1, { Pitch = 0.8 }),
+		Sound = sound("OgreRock", 0.55, 0.1),
 	},
 	OgreRoar = {
 		Effects = {
@@ -553,7 +581,7 @@ local Cues: { [string]: Cue } = {
 			{ Kind = "Ring", Color = BRUTE, Delay = 0.25, Duration = 0.6, Size = 22, Ground = true },
 			{ Kind = "Aura", Color = Color3.fromRGB(255, 60, 40), Duration = 1.5 },
 		},
-		Sound = sound("BattleShout", 0.9, 0, { Pitch = 0.55 }),
+		Sound = sound("OgreRoar", 0.9),
 	},
 
 	-- Impactos sobre el objetivo (llegan con el daño del servidor). Ver Impacts.
@@ -807,7 +835,9 @@ end
 for _, cue in Cues do
 	if cue.Effects then
 		for _, effect in cue.Effects do
-			table.freeze(effect)
+			if not table.isfrozen(effect) then -- algunas señales comparten efectos
+				table.freeze(effect)
+			end
 		end
 		table.freeze(cue.Effects)
 	end

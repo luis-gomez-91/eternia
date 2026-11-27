@@ -150,11 +150,26 @@ local function exclaim(mob: Model)
 	Debris:AddItem(gui, 1.05)
 end
 
+-- Señal propia del mob (detectar, morir) según su ficha en Data/Mobs.
+local function playOwn(mob: Model, field: "AggroCue" | "DeathCue")
+	local id = mob:GetAttribute("MobId")
+	local def = if typeof(id) == "string" then MobData.Mobs[id] else nil
+	local cueId = def and def[field]
+	local root = mob.PrimaryPart
+	if not cueId or not root then
+		return
+	end
+	if field == "DeathCue" then
+		-- En un punto fijo: el cuerpo desaparece antes de que termine el sonido.
+		FeedbackController.PlayAt(root.Position, cueId)
+	else
+		FeedbackController.PlayFrom(mob, cueId, CFrame.new(root.Position))
+	end
+end
+
 local function fadeOut(mob: Model)
 	local root = mob.PrimaryPart
-	if root then
-		FeedbackController.PlayFrom(mob, "MobDeath", CFrame.new(root.Position))
-	end
+	playOwn(mob, "DeathCue")
 	for _, part in mob:GetDescendants() do
 		if part:IsA("BasePart") and part ~= root then
 			TweenService:Create(part, TweenInfo.new(DEATH_FADE), { Transparency = 1 }):Play()
@@ -327,6 +342,7 @@ function MobFeedbackController:Start()
 		local payload = if typeof(data) == "table" then data :: { [string]: any } else {}
 		if event == "Aggro" then
 			exclaim(mob)
+			playOwn(mob, "AggroCue")
 		elseif event == "Warn" then
 			onWarn(mob, payload)
 		elseif event == "Release" then
