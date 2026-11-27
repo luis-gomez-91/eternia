@@ -36,15 +36,15 @@ Rol principal: **Daño**. Por qué: en la Fase 0 se juega solo o en grupos sin r
 - Propuesta: cofre personal con oro y una pieza Rara.
 
 ## Sonidos
-Ver [AUDIO.md](../../AUDIO.md). Fuente: ElevenLabs. Hoy usa sonidos de las clases con otro tono (provisorio).
+Ver [AUDIO.md](../../AUDIO.md). Fuente: ElevenLabs.
 | Sonido | Cuándo | Estado |
 |---|---|---|
-| Rugido | Al empezar la pelea | Por generar |
-| Aviso | Antes del Pisotón y la Lluvia de rocas | Provisorio: Castigo del Sacerdote a 0,5 |
-| Ataques | Garrotazo / Pisotón / Rocas | Provisorio: golpe de maza del Paladín a 0,6 / explosión de Bola de fuego a 0,6 y 0,8 |
-| Cambio de fase | Rugido de la fase 2 | Provisorio: Grito de batalla a 0,55 |
+| Rugido | Al empezar la pelea | En juego (OgreRoar a 1,1 de tono) |
+| Aviso | Antes del Pisotón y la Lluvia de rocas | En juego (BossWarn) |
+| Ataques | Garrotazo / Pisotón / Rocas | En juego (OgreSmash / OgreStomp / OgreRock) |
+| Cambio de fase | Rugido de la fase 2 | En juego (OgreRoar) |
 | Recibe golpe | | Usa los impactos de la clase que pega |
-| Muere | | Por generar |
+| Muere | | En juego (OgreDeath) |
 
 ## Notas de prueba
 - 26 nov 2026: la fase 2 entra al terminar el ataque en curso. Los ayudantes aparecen y pegan, y las rocas caen bien. Si todos salen de la arena, el ogro vuelve al centro con la vida llena, en fase 1 y sin ayudantes.

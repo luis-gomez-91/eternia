@@ -109,29 +109,28 @@ local SOUND_IDS = {
 	Corruption = "rbxassetid://87196410508863",
 	DrainLife = "rbxassetid://127601950191336",
 	ShadowBlast = "rbxassetid://102715922573898",
+	GoblinAggro = "rbxassetid://116341965291115",
+	GoblinAttack = "rbxassetid://132122307007895",
+	GoblinDeath = "rbxassetid://113627828051288",
+	SpiderAggro = "rbxassetid://116010512597551",
+	SpiderSpit = "rbxassetid://114334247349891",
+	SpiderDeath = "rbxassetid://127149618652800",
+	WolfGrowl = "rbxassetid://104088949958165",
+	WolfCharge = "rbxassetid://112988626286770",
+	WolfBite = "rbxassetid://135549966444463",
+	WolfDeath = "rbxassetid://93515786646167",
+	OgreRoar = "rbxassetid://71423377856871",
+	OgreSmash = "rbxassetid://78384165356996",
+	OgreStomp = "rbxassetid://98681106330906",
+	OgreRock = "rbxassetid://113569782966951",
+	BossWarn = "rbxassetid://107925523957396",
+	OgreDeath = "rbxassetid://136022581058572",
 }
 
 -- Sonidos ya generados (assets/audio) que falta subir a Roblox: mientras no
 -- tengan ID suenan con uno provisorio y otro tono. Al subirlos, pasar su ID a
 -- SOUND_IDS y borrar la fila de aquí.
-local PENDING_UPLOAD: { [string]: { Use: string, Pitch: number } } = {
-	GoblinAggro = { Use = "Dodge", Pitch = 1.6 },
-	GoblinAttack = { Use = "WarriorCombo2", Pitch = 0.75 },
-	GoblinDeath = { Use = "Dodge", Pitch = 0.7 },
-	SpiderAggro = { Use = "Corruption", Pitch = 1.8 },
-	SpiderSpit = { Use = "Corruption", Pitch = 1.5 },
-	SpiderDeath = { Use = "Corruption", Pitch = 0.8 },
-	WolfGrowl = { Use = "BattleShout", Pitch = 1.6 },
-	WolfCharge = { Use = "Charge", Pitch = 0.85 },
-	WolfBite = { Use = "Impact", Pitch = 1.35 },
-	WolfDeath = { Use = "Dodge", Pitch = 0.6 },
-	OgreRoar = { Use = "BattleShout", Pitch = 0.55 },
-	OgreSmash = { Use = "PaladinSmash", Pitch = 0.6 },
-	OgreStomp = { Use = "FireballExplosion", Pitch = 0.6 },
-	OgreRock = { Use = "FireballExplosion", Pitch = 0.8 },
-	BossWarn = { Use = "Smite", Pitch = 0.5 },
-	OgreDeath = { Use = "BattleShout", Pitch = 0.45 },
-}
+local PENDING_UPLOAD: { [string]: { Use: string, Pitch: number } } = {}
 
 local function sound(
 	name: string,

@@ -37,11 +37,11 @@ Propuesta: +12% por nivel. En la prueba es nivel 3.
 Ver [AUDIO.md](../../AUDIO.md). Fuente: ElevenLabs.
 | Sonido | Cuándo | Estado |
 |---|---|---|
-| Detectar | Ve al jugador | Por generar |
-| Aviso | Gruñido al empezar la embestida | Provisorio: Grito de batalla a 1,6 |
-| Ataque | Embestida / Mordida | Provisorio: Embestida del Warrior a 0,85 / impacto a 1,35 |
+| Detectar | Ve al jugador | En juego (WolfGrowl) |
+| Aviso | Gruñido al empezar la embestida | En juego (WolfGrowl) |
+| Ataque | Embestida / Mordida | En juego (WolfCharge / WolfBite) |
 | Recibe golpe | | Usa los impactos de la clase que pega |
-| Muere | | Por generar |
+| Muere | | En juego (WolfDeath) |
 
 ## Notas de prueba
 - 26 nov 2026: los dos lobos embestían a la vez apenas detectaban (36 de daño juntos). Ahora cada mob espera entre 0,4 y 1,2 s al azar antes de su primer ataque.

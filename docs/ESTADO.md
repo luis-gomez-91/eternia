@@ -2,7 +2,7 @@
 
 Resumen de lo hecho y lo pendiente. El diseño completo está en [PLAN.md](PLAN.md); el catálogo de sonidos, en [AUDIO.md](AUDIO.md); las reglas de arte, en [GUIA-VISUAL.md](GUIA-VISUAL.md) y su [anexo técnico](GUIA-VISUAL-TECNICA.md).
 
-**Fase actual:** 0 — Prototipo de combate · **Última actualización:** 26 nov 2026
+**Fase actual:** 0 — Prototipo de combate · **Última actualización:** 27 nov 2026
 
 ## Fases
 
@@ -58,7 +58,7 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [x] Avisos de ataques enemigos: zona roja en el suelo que se llena hasta el golpe; el daño cae donde se avisó, así que se evita saliendo o esquivando
 - [x] Los jugadores reciben daño y mueren; el esquivar los hace invulnerables ("Esquivado"); números rojos de daño recibido
 - [x] Jefe de prueba con 2 fases: Ogro del Claro (Garrotazo, Pisotón; en fase 2 Lluvia de rocas y 2 goblins de ayuda), barra de jefe arriba de la pantalla
-- [ ] Sonidos propios de mobs y jefe con ElevenLabs (hoy reusan los de las clases con otro tono)
+- [x] Sonidos propios de mobs y jefe con ElevenLabs (16, subidos a Roblox)
 
 ### Controles
 - [x] PC: teclas 1 a 6, Q esquivar, R definitiva. Los espacios 4 a 6 se ven bloqueados (Nv 10, 20 y 30) hasta las especializaciones de la Fase 2
@@ -125,3 +125,4 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Primeros sonidos propios con ElevenLabs (combo, Tajo, Grito, Embestida, esquivar, impacto y crítico) subidos a Roblox; place guardado en Roblox para poder subir assets; la precarga deja los sonidos vivos para que suenen sin retraso (de ~330 ms a 1 frame) |
 | 26 nov 2026 | Plan: hechizos con carga solo en algunos hechizos grandes de especialización (cargas de 0,5 a 1,5 s y canalizados), moviéndose al 50% y con esquivar que cancela; el resto sigue instantáneo. Lista por especialización en el plan |
 | 26 nov 2026 | Bola de fuego del Mage con carga de 1 s: barra de carga, brillo visible para todos, movimiento al 50%; esquivar, perder el objetivo o salirse de alcance cancela sin gastar. El servidor valida el tiempo de carga y el esquive. Daño 55 y salpicadura 20 (antes 35 y 15). Funciona en PC y móvil |
+| 27 nov 2026 | Subidos a Roblox los 16 sonidos de mobs y jefe (Goblin, Araña, Lobo y Ogro del Claro); ya no reusan los de las clases con otro tono |

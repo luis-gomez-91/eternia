@@ -33,13 +33,13 @@ Propuesta: +12% por nivel. En la prueba es nivel 2.
 - Propuesta para Fase 4: oro, Fragmentos de hierro y equipo Común de guantes o botas.
 
 ## Sonidos
-Ver [AUDIO.md](../../AUDIO.md). Fuente: ElevenLabs. Hoy usa sonidos de las clases con otro tono (provisorio).
+Ver [AUDIO.md](../../AUDIO.md). Fuente: ElevenLabs.
 | Sonido | Cuándo | Estado |
 |---|---|---|
-| Detectar | Ve al jugador | Por generar (hoy solo se ve un "!") |
-| Ataque | Garrotazo | Provisorio: combo 2 del Warrior a 0,75 de tono |
+| Detectar | Ve al jugador | En juego (GoblinAggro) |
+| Ataque | Garrotazo | En juego (GoblinAttack) |
 | Recibe golpe | | Usa los impactos de la clase que pega |
-| Muere | | Por generar |
+| Muere | | En juego (GoblinDeath) |
 
 ## Notas de prueba
 - 26 nov 2026: con 10 de daño y 2,2 s de espera, 3 goblins mataban en ~8 s a un jugador quieto; bajado a 8 y 2,6 s.

@@ -37,10 +37,10 @@ Propuesta: +12% por nivel. En la prueba es nivel 2. Tiene menos vida que el gobl
 Ver [AUDIO.md](../../AUDIO.md). Fuente: ElevenLabs.
 | Sonido | Cuándo | Estado |
 |---|---|---|
-| Detectar | Ve al jugador | Por generar |
-| Ataque | Escupitajo / Mordida | Provisorio: Corrupción del Brujo a 1,5 / impacto a 1,35 |
+| Detectar | Ve al jugador | En juego (SpiderAggro) |
+| Ataque | Escupitajo / Mordida | En juego (SpiderSpit / WolfBite a 1,3 de tono) |
 | Recibe golpe | | Usa los impactos de la clase que pega |
-| Muere | | Por generar |
+| Muere | | En juego (SpiderDeath) |
 
 ## Notas de prueba
 - 26 nov 2026: acierta desde ~25 studs a un jugador quieto. Falta probar que los pilares corten el escupitajo en una partida real.

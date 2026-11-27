@@ -221,96 +221,112 @@
     "variant": "bosses/BossWarn_a",
     "folder": "bosses",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. An ominous warning cue before a big attack, deep low drum hit with a short rising tension swell.",
-    "duration": 1.0
+    "duration": 1.0,
+    "assetId": "107925523957396"
   },
   "OgreDeath": {
     "variant": "bosses/OgreDeath_a",
     "folder": "bosses",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music. A huge ogre dying, long deep falling groan ending in a heavy body thud on the ground, no words.",
-    "duration": 2.0
+    "duration": 2.0,
+    "assetId": "136022581058572"
   },
   "OgreRoar": {
     "variant": "bosses/OgreRoar_c",
     "folder": "bosses",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music. A huge ogre monster's furious deep guttural roar, no words.",
-    "duration": 2.0
+    "duration": 2.0,
+    "assetId": "71423377856871"
   },
   "OgreRock": {
     "variant": "bosses/OgreRock_b",
     "folder": "bosses",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A large boulder crashing into the ground, heavy rock impact with crumbling debris.",
-    "duration": 0.9
+    "duration": 0.9,
+    "assetId": "113569782966951"
   },
   "OgreSmash": {
     "variant": "bosses/OgreSmash_c",
     "folder": "bosses",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A giant ogre swinging a huge tree-trunk club, very deep heavy whoosh ending in a ground thud.",
-    "duration": 0.9
+    "duration": 0.9,
+    "assetId": "78384165356996"
   },
   "OgreStomp": {
     "variant": "bosses/OgreStomp_c",
     "folder": "bosses",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A giant ogre stomping the ground, massive earth-shaking boom with rumbling debris.",
-    "duration": 1.2
+    "duration": 1.2,
+    "assetId": "98681106330906"
   },
   "GoblinAggro": {
     "variant": "mobs/GoblinAggro_b",
     "folder": "mobs",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music. A small goblin creature spotting an enemy, short nasty high-pitched screech and cackle, no words.",
-    "duration": 0.8
+    "duration": 0.8,
+    "assetId": "116341965291115"
   },
   "GoblinAttack": {
     "variant": "mobs/GoblinAttack_a",
     "folder": "mobs",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A crude wooden club swung hard by a small creature, blunt quick whoosh.",
-    "duration": 0.5
+    "duration": 0.5,
+    "assetId": "132122307007895"
   },
   "GoblinDeath": {
     "variant": "mobs/GoblinDeath_c",
     "folder": "mobs",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music. A small goblin creature dying, short pained squeal that fades out, no words.",
-    "duration": 0.9
+    "duration": 0.9,
+    "assetId": "113627828051288"
   },
   "SpiderAggro": {
     "variant": "mobs/SpiderAggro_b",
     "folder": "mobs",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A giant spider alerted, sharp hiss with fast clicking mandibles.",
-    "duration": 0.8
+    "duration": 0.8,
+    "assetId": "116010512597551"
   },
   "SpiderDeath": {
     "variant": "mobs/SpiderDeath_a",
     "folder": "mobs",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A giant spider dying, shrill chittering screech that fades out quickly.",
-    "duration": 0.9
+    "duration": 0.9,
+    "assetId": "127149618652800"
   },
   "SpiderSpit": {
     "variant": "mobs/SpiderSpit_c",
     "folder": "mobs",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A giant spider spitting a glob of venom, wet acidic launch with a short sizzle.",
-    "duration": 0.5
+    "duration": 0.5,
+    "assetId": "114334247349891"
   },
   "WolfBite": {
     "variant": "mobs/WolfBite_c",
     "folder": "mobs",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A wolf's quick snapping bite, sharp jaw snap.",
-    "duration": 0.5
+    "duration": 0.5,
+    "assetId": "135549966444463"
   },
   "WolfCharge": {
     "variant": "mobs/WolfCharge_c",
     "folder": "mobs",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music, no voice. A wolf lunging forward at full speed, fast paws on dirt and a vicious snarl.",
-    "duration": 0.7
+    "duration": 0.7,
+    "assetId": "112988626286770"
   },
   "WolfDeath": {
     "variant": "mobs/WolfDeath_a",
     "folder": "mobs",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music. A wolf's pained yelp and whimper fading out.",
-    "duration": 0.9
+    "duration": 0.9,
+    "assetId": "93515786646167"
   },
   "WolfGrowl": {
     "variant": "mobs/WolfGrowl_a",
     "folder": "mobs",
     "text": "Stylized fantasy action game sound effect, punchy and clean, dry close mic, no music. A wolf's short deep menacing growl, about to attack.",
-    "duration": 1.0
+    "duration": 1.0,
+    "assetId": "104088949958165"
   }
 }
