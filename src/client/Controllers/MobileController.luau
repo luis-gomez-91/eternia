@@ -26,6 +26,9 @@ local OUTER_RADIUS = 176
 local CENTER = Vector2.new(-100, -100)
 -- Tamaño de un botón mientras se mantiene apretado.
 local PRESSED_SCALE = 0.9
+-- Dejar el dedo apretado este tiempo en una habilidad muestra su nombre, y al
+-- soltar no se usa (los íconos no llevan texto).
+local LONG_PRESS = 0.4
 
 local COLORS = {
 	Attack = Color3.fromRGB(190, 60, 50),
@@ -46,7 +49,7 @@ local function arc(angle: number, radius: number): Vector2
 	return CENTER + Vector2.new(-math.cos(rad) * radius, -math.sin(rad) * radius)
 end
 
-type Button = { button: TextButton, label: TextLabel, timer: TextLabel, stroke: UIStroke }
+type Button = { button: TextButton, label: TextLabel, timer: TextLabel, stroke: UIStroke, icon: ImageLabel }
 
 local function makeButton(parent: Instance, name: string, center: Vector2, size: number, color: Color3): Button
 	local button = Instance.new("TextButton")
@@ -84,6 +87,18 @@ local function makeButton(parent: Instance, name: string, center: Vector2, size:
 	limit.MaxTextSize = if size >= ATTACK_SIZE then 18 else 12
 	limit.Parent = label
 
+	-- Ícono de la habilidad (Data/Abilities, campo Icon); oculto si no tiene.
+	local icon = Instance.new("ImageLabel")
+	icon.Name = "Icon"
+	icon.BackgroundTransparency = 1
+	icon.AnchorPoint = Vector2.new(0.5, 0.5)
+	icon.Position = UDim2.fromScale(0.5, 0.5)
+	icon.Size = UDim2.fromScale(0.8, 0.8)
+	icon.ScaleType = Enum.ScaleType.Fit
+	icon.Visible = false
+	icon.ZIndex = 0 -- debajo del % de la definitiva y del tiempo de espera
+	icon.Parent = button
+
 	-- Segundos de espera, encima de todo.
 	local timer = Instance.new("TextLabel")
 	timer.BackgroundTransparency = 1
@@ -96,7 +111,60 @@ local function makeButton(parent: Instance, name: string, center: Vector2, size:
 	timer.ZIndex = 2
 	timer.Parent = button
 
-	return { button = button, label = label, timer = timer, stroke = stroke }
+	return { button = button, label = label, timer = timer, stroke = stroke, icon = icon }
+end
+
+-- Muestra el ícono si hay; si no, el texto.
+local function setIcon(entry: Button, image: string?, text: string)
+	entry.icon.Visible = image ~= nil
+	entry.icon.Image = image or ""
+	entry.label.Text = if image then "" else text
+end
+
+-- Toque corto: usa la habilidad (al soltar, como Activated). Dedo apretado
+-- LONG_PRESS segundos: muestra el nombre arriba del botón y al soltar no la usa.
+local function onTapOrHold(entry: Button, bubble: TextLabel, getName: () -> string?, use: () -> ())
+	local button = entry.button
+	local pressId = 0
+	local held = false
+	local longPressed = false
+	button.InputBegan:Connect(function(input)
+		local kind = input.UserInputType
+		if kind ~= Enum.UserInputType.Touch and kind ~= Enum.UserInputType.MouseButton1 then
+			return
+		end
+		pressId += 1
+		local id = pressId
+		held = true
+		longPressed = false
+		task.delay(LONG_PRESS, function()
+			local name = getName()
+			if id ~= pressId or not held or not name then
+				return
+			end
+			longPressed = true
+			local position = button.Position
+			bubble.Text = name
+			bubble.Position = position - UDim2.fromOffset(0, button.Size.Y.Offset / 2 + 8)
+			bubble.Visible = true
+		end)
+	end)
+	button.InputEnded:Connect(function(input)
+		local kind = input.UserInputType
+		if kind == Enum.UserInputType.Touch or kind == Enum.UserInputType.MouseButton1 then
+			held = false
+			if longPressed then
+				bubble.Visible = false
+			end
+		end
+	end)
+	-- longPressed se limpia en el próximo toque, así no importa si Activated
+	-- llega antes o después de InputEnded.
+	button.Activated:Connect(function()
+		if not longPressed then
+			use()
+		end
+	end)
 end
 
 -- Botón que se mantiene apretado (ataque, saltar): avisa al apretar y al
@@ -184,6 +252,33 @@ local function build()
 	local scale = Instance.new("UIScale")
 	scale.Parent = holder
 
+	-- Nombre de la habilidad mientras se deja el dedo apretado.
+	local bubble = Instance.new("TextLabel")
+	bubble.Name = "NameBubble"
+	bubble.AnchorPoint = Vector2.new(0.5, 1)
+	bubble.AutomaticSize = Enum.AutomaticSize.X
+	bubble.Size = UDim2.fromOffset(0, 26)
+	bubble.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+	bubble.BackgroundTransparency = 0.1
+	bubble.Font = Enum.Font.GothamBold
+	bubble.TextSize = 14
+	bubble.TextColor3 = Color3.new(1, 1, 1)
+	bubble.Visible = false
+	bubble.ZIndex = 5
+	bubble.Parent = holder
+	Instance.new("UICorner", bubble).CornerRadius = UDim.new(0, 6)
+	local bubblePadding = Instance.new("UIPadding")
+	bubblePadding.PaddingLeft = UDim.new(0, 8)
+	bubblePadding.PaddingRight = UDim.new(0, 8)
+	bubblePadding.Parent = bubble
+
+	local function nameOf(slot: number | "Ultimate"): () -> string?
+		return function()
+			local info = AbilityController.Info(slot)
+			return info and info.name
+		end
+	end
+
 	local attack = makeButton(holder, "Attack", CENTER, ATTACK_SIZE, COLORS.Attack)
 	attack.label.Text = "Atacar"
 	onHold(attack.button, InputController.SetAttacking)
@@ -198,7 +293,7 @@ local function build()
 	local abilities: { [number]: Button } = {}
 	for slot, angle in { 28, 56, 84 } do
 		local button = makeButton(holder, `Ability{slot}`, arc(angle, INNER_RADIUS), INNER_SIZE, COLORS.Ability)
-		button.button.Activated:Connect(function()
+		onTapOrHold(button, bubble, nameOf(slot), function()
 			AbilityController.Use(slot)
 		end)
 		abilities[slot] = button
@@ -209,7 +304,7 @@ local function build()
 
 	local ultimate = makeButton(holder, "Ultimate", arc(42, OUTER_RADIUS), OUTER_SIZE + 6, COLORS.Ultimate)
 	ultimate.stroke.Color = ULTIMATE_COLOR
-	ultimate.button.Activated:Connect(function()
+	onTapOrHold(ultimate, bubble, nameOf("Ultimate"), function()
 		AbilityController.Use("Ultimate")
 	end)
 
@@ -229,7 +324,8 @@ local function build()
 			local info = AbilityController.Info(slot)
 			button.button.Visible = info ~= nil
 			if info then
-				button.label.Text = info.name
+				setIcon(button, info.icon, info.name)
+				button.icon.ImageTransparency = if info.remaining >= 1 then 0.6 else 0
 				button.timer.Text = if info.remaining >= 1 then tostring(math.ceil(info.remaining)) else ""
 				local ready = info.remaining <= 0 and info.usable
 				button.button.BackgroundTransparency = if ready then 0.15 else 0.6
@@ -245,7 +341,13 @@ local function build()
 		ultimate.button.Visible = info ~= nil
 		if info and info.charge then
 			local full = info.charge >= 1
-			ultimate.label.Text = if full then info.name else `{math.floor(info.charge * 100)}%`
+			-- Cargando: el % encima del ícono apagado. Llena: solo el ícono (o el nombre).
+			local percent = `{math.floor(info.charge * 100)}%`
+			setIcon(ultimate, info.icon, info.name)
+			ultimate.icon.ImageTransparency = if full then 0 else 0.6
+			if not full then
+				ultimate.label.Text = percent
+			end
 			ultimate.button.BackgroundTransparency = if full then 0.1 else 0.55
 			-- Llena: el borde late para avisar que se puede usar.
 			ultimate.stroke.Thickness = if full then 3 + math.sin(os.clock() * 6) else 2

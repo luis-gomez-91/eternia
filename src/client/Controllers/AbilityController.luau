@@ -351,6 +351,7 @@ end
 
 export type SlotInfo = {
 	name: string,
+	icon: string?, -- imagen del botón; sin ella se muestra el nombre
 	remaining: number, -- segundos de espera que faltan
 	total: number, -- espera completa de la que se está descontando
 	usable: boolean, -- hay recurso (o la barra de definitiva está llena)
@@ -369,6 +370,7 @@ function AbilityController.Info(slot: number | "Ultimate"): SlotInfo?
 	local charge = if slot == "Ultimate" then getUltimateCharge() else nil
 	return {
 		name = def.Name,
+		icon = def.Icon,
 		remaining = math.max(own, global, 0),
 		total = if own >= global then def.Cooldown else AbilityData.GlobalCooldown,
 		usable = if charge then charge >= 1 else getResource() >= def.Cost,
@@ -376,9 +378,19 @@ function AbilityController.Info(slot: number | "Ultimate"): SlotInfo?
 	}
 end
 
-type Slot = { frame: Frame, shade: Frame, timer: TextLabel, name: TextLabel, charge: Frame? }
+type Slot = {
+	frame: Frame,
+	shade: Frame,
+	timer: TextLabel,
+	name: TextLabel,
+	icon: ImageLabel,
+	charge: Frame?,
+}
 
-local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, Frame)
+-- Espacio con el mouse encima: su nombre se muestra arriba (los íconos no llevan texto).
+local hovered: (number | "Ultimate")? = nil
+
+local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, Frame, TextLabel)
 	local gui = Instance.new("ScreenGui")
 	gui.Name = "AbilityHud"
 	gui.ResetOnSpawn = false
@@ -457,6 +469,25 @@ local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, F
 		name.TextYAlignment = Enum.TextYAlignment.Bottom
 		name.Parent = frame
 
+		local icon = Instance.new("ImageLabel")
+		icon.Name = "Icon"
+		icon.BackgroundTransparency = 1
+		icon.AnchorPoint = Vector2.new(0.5, 0.5)
+		icon.Position = UDim2.fromScale(0.5, 0.5)
+		icon.Size = UDim2.fromScale(0.86, 0.86)
+		icon.ScaleType = Enum.ScaleType.Fit
+		icon.Visible = false
+		icon.Parent = frame
+
+		frame.MouseEnter:Connect(function()
+			hovered = i
+		end)
+		frame.MouseLeave:Connect(function()
+			if hovered == i then
+				hovered = nil
+			end
+		end)
+
 		local key = Instance.new("TextLabel")
 		key.BackgroundTransparency = 1
 		key.Position = UDim2.fromOffset(5, 3)
@@ -508,7 +539,7 @@ local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, F
 			charge = fill
 		end
 
-		slots[i] = { frame = frame, shade = shade, timer = timer, name = name, charge = charge }
+		slots[i] = { frame = frame, shade = shade, timer = timer, name = name, icon = icon, charge = charge }
 	end
 	-- Espacio vacío entre la barra de 6 y la definitiva.
 	local spacer = Instance.new("Frame")
@@ -517,8 +548,28 @@ local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, F
 	spacer.LayoutOrder = #order
 	spacer.Parent = row
 
+	-- Nombre del espacio que tiene el mouse encima.
+	local tooltip = Instance.new("TextLabel")
+	tooltip.Name = "Tooltip"
+	tooltip.AnchorPoint = Vector2.new(0.5, 1)
+	tooltip.AutomaticSize = Enum.AutomaticSize.X
+	tooltip.Size = UDim2.fromOffset(0, 24)
+	tooltip.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+	tooltip.BackgroundTransparency = 0.15
+	tooltip.Font = Enum.Font.GothamBold
+	tooltip.TextSize = 14
+	tooltip.TextColor3 = Color3.new(1, 1, 1)
+	tooltip.Visible = false
+	tooltip.ZIndex = 5
+	tooltip.Parent = gui
+	Instance.new("UICorner", tooltip).CornerRadius = UDim.new(0, 6)
+	local padding = Instance.new("UIPadding")
+	padding.PaddingLeft = UDim.new(0, 8)
+	padding.PaddingRight = UDim.new(0, 8)
+	padding.Parent = tooltip
+
 	gui.Parent = player:WaitForChild("PlayerGui")
-	return energyFill, energyText, slots, row
+	return energyFill, energyText, slots, row, tooltip
 end
 
 function AbilityController:Start()
@@ -540,7 +591,7 @@ function AbilityController:Start()
 		endCast()
 	end)
 
-	local energyFill, energyText, slots, row = buildHud()
+	local energyFill, energyText, slots, row, tooltip = buildHud()
 	local hud = row.Parent :: Frame
 	local hudSize = hud.Size
 	local hudPosition = hud.Position
@@ -564,6 +615,15 @@ function AbilityController:Start()
 		-- queda solo la barra de recurso, angosta para no pasar bajo el arco.
 		local touch = UserInputService.TouchEnabled
 		row.Visible = not touch
+		local hoveredInfo = if hovered and not touch then AbilityController.Info(hovered) else nil
+		tooltip.Visible = hoveredInfo ~= nil
+		if hoveredInfo and hovered then
+			local frame = slots[hovered].frame
+			local gui = tooltip.Parent :: ScreenGui
+			local corner = frame.AbsolutePosition - gui.AbsolutePosition
+			tooltip.Text = hoveredInfo.name
+			tooltip.Position = UDim2.fromOffset(corner.X + frame.AbsoluteSize.X / 2, corner.Y - 30)
+		end
 		hud.Size = if touch then UDim2.fromOffset(TOUCH_BAR_WIDTH, hud.Size.Y.Offset) else hudSize
 		hud.Position = if touch then TOUCH_BAR_POSITION else hudPosition
 		for i, slot in slots do
@@ -573,12 +633,19 @@ function AbilityController:Start()
 			if not info then
 				-- Bloqueado hasta la especialización.
 				slot.name.Text = if specLevel then `Nv {specLevel}` else ""
+				slot.name.Visible = true
+				slot.icon.Visible = false
 				slot.frame.BackgroundTransparency = 0.7
 				slot.shade.Size = UDim2.fromScale(1, 0)
 				slot.timer.Text = ""
 				continue
 			end
+			-- Con ícono no se escribe el nombre (se ve al pasar el mouse).
 			slot.name.Text = info.name
+			slot.name.Visible = info.icon == nil
+			slot.icon.Visible = info.icon ~= nil
+			slot.icon.Image = info.icon or ""
+			slot.icon.ImageTransparency = if info.usable then 0 else 0.5
 			slot.shade.Size = UDim2.fromScale(1, if info.remaining > 0 then info.remaining / info.total else 0)
 			slot.timer.Text = if info.remaining >= 1 then tostring(math.ceil(info.remaining)) else ""
 			local charge = slot.charge

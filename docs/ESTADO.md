@@ -66,7 +66,8 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [x] Móvil: botones en arco alrededor del pulgar derecho (ataque, saltar, 1 a 3, esquivar con cargas, definitiva con % y cambiar objetivo); reemplaza el botón de salto de Roblox. Probado en el simulador de iPhone 17 Pro y en un celular real
 - [x] Las habilidades con objetivo respetan el foco: van al enemigo fijado o no se usan si está lejos
 - [ ] Teclas reasignables (en el menú de opciones, más adelante)
-- [ ] Íconos provisorios de las 18 activas de clase y las 6 definitivas; confirmar en el celular que se leen mejor que el nombre ([PLAN.md](PLAN.md#íconos-de-habilidades))
+- [x] Íconos provisorios de las 18 activas de clase y las 6 definitivas, por datos (campo `Icon`); el nombre se ve al pasar el mouse o con el dedo apretado ([PLAN.md](PLAN.md#íconos-de-habilidades))
+- [ ] Confirmar en el celular que los íconos se leen mejor que el nombre y que el toque corto usa la habilidad (en el simulador no se pudo probar el toque corto)
 - [x] Prueba de hechizo con carga: Bola de fuego del Mage con 1 s, movimiento al 50% y esquivar que cancela sin gastar; probada en PC y móvil (reglas en [PLAN.md](PLAN.md#hechizos-con-carga))
 
 ### Publicación de prueba
@@ -128,3 +129,4 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 26 nov 2026 | Bola de fuego del Mage con carga de 1 s: barra de carga, brillo visible para todos, movimiento al 50%; esquivar, perder el objetivo o salirse de alcance cancela sin gastar. El servidor valida el tiempo de carga y el esquive. Daño 55 y salpicadura 20 (antes 35 y 15). Funciona en PC y móvil |
 | 27 nov 2026 | Subidos a Roblox los 16 sonidos de mobs y jefe (Goblin, Araña, Lobo y Ogro del Claro); ya no reusan los de las clases con otro tono |
 | 27 nov 2026 | Plan: íconos de habilidades (unos 170) con contorno grueso y sin texto, marco según el tipo, ID en los datos; provisorios en la Fase 0, los de especialización en la Fase 2 |
+| 27 nov 2026 | Íconos provisorios de las 18 activas de clase y las 6 definitivas: dibujados por código (`assets/icons/draw_icons.py`, figura plana con contorno grueso y colores de la clase), subidos a Roblox como Image e ID en `Data/Abilities`. Barra de PC con ícono y nombre al pasar el mouse; botones de móvil con ícono, nombre con el dedo apretado 0,4 s (al soltar no se usa) y % de la definitiva encima del ícono. Probado en Studio y en el simulador de iPhone 17 Pro |

@@ -1,0 +1,98 @@
+{
+  "Cleave": {
+    "file": "warrior/Cleave.png",
+    "assetId": "102258518348847"
+  },
+  "BattleShout": {
+    "file": "warrior/BattleShout.png",
+    "assetId": "90321338396394"
+  },
+  "Charge": {
+    "file": "warrior/Charge.png",
+    "assetId": "113502248977170"
+  },
+  "Whirlwind": {
+    "file": "warrior/Whirlwind.png",
+    "assetId": "106885372945371"
+  },
+  "HolyStrike": {
+    "file": "paladin/HolyStrike.png",
+    "assetId": "85159086930305"
+  },
+  "Consecration": {
+    "file": "paladin/Consecration.png",
+    "assetId": "138119949939336"
+  },
+  "HealingLight": {
+    "file": "paladin/HealingLight.png",
+    "assetId": "137661013544453"
+  },
+  "DawnHammer": {
+    "file": "paladin/DawnHammer.png",
+    "assetId": "102832106982855"
+  },
+  "PowerShot": {
+    "file": "ranger/PowerShot.png",
+    "assetId": "86630840999189"
+  },
+  "ArrowRain": {
+    "file": "ranger/ArrowRain.png",
+    "assetId": "131037842182703"
+  },
+  "Disengage": {
+    "file": "ranger/Disengage.png",
+    "assetId": "97313154568043"
+  },
+  "Volley": {
+    "file": "ranger/Volley.png",
+    "assetId": "119922445718736"
+  },
+  "ArcaneOrb": {
+    "file": "mage/ArcaneOrb.png",
+    "assetId": "129435169481355"
+  },
+  "Blink": {
+    "file": "mage/Blink.png",
+    "assetId": "110685310401359"
+  },
+  "Fireball": {
+    "file": "mage/Fireball.png",
+    "assetId": "140583281100370"
+  },
+  "MeteorShower": {
+    "file": "mage/MeteorShower.png",
+    "assetId": "113511834224457"
+  },
+  "Smite": {
+    "file": "priest/Smite.png",
+    "assetId": "122105416474092"
+  },
+  "Heal": {
+    "file": "priest/Heal.png",
+    "assetId": "74288907185323"
+  },
+  "HolyNova": {
+    "file": "priest/HolyNova.png",
+    "assetId": "77637409589940"
+  },
+  "DivineHymn": {
+    "file": "priest/DivineHymn.png",
+    "assetId": "101463983183502"
+  },
+  "Corruption": {
+    "file": "warlock/Corruption.png",
+    "assetId": "125290655755208"
+  },
+  "DrainLife": {
+    "file": "warlock/DrainLife.png",
+    "assetId": "79203382793777"
+  },
+  "ShadowBlast": {
+    "file": "warlock/ShadowBlast.png",
+    "assetId": "121404023717192"
+  },
+  "ShadowPact": {
+    "file": "warlock/ShadowPact.png",
+    "assetId": "136079240478939"
+  }
+}
