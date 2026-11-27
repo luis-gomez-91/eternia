@@ -2,7 +2,7 @@
 
 25 nov 2026 · @Luis
 
-> Avance y tareas: ver [ESTADO.md](ESTADO.md).
+> **Fase actual: 0 — Prototipo de combate.** Lo hecho y lo pendiente, con la tabla de fases, está en [ESTADO.md](ESTADO.md).
 
 ## Resumen
 
