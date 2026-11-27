@@ -91,16 +91,19 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 
 ## Decisiones pendientes
 
-- [ ] ¿Normal de mazmorra jugable solo, o siempre en grupo?
-- [ ] ¿Nivel máximo 50 al lanzamiento, o 40 con la quinta zona en la primera temporada?
-- [ ] ¿Nombres finales de zonas, mazmorras y jefes?
-- [ ] ¿Estilo visual: low-poly estilizado, o más detallado? Propuesta en borrador: low-poly estilizado ([GUIA-VISUAL.md](GUIA-VISUAL.md)); se cierra cuando se aprueben los 3 conceptos
-- [ ] ¿Tamaño del equipo y quién hace código, arte 3D, animación y música?
-- [ ] ¿Presupuesto para herramientas de pago (incluye ElevenLabs) y para contratar en Talent Hub?
-- [ ] ¿Música final: generada con ElevenLabs Music o hecha por un compositor?
-- [ ] ¿Precio del pase de temporada y de los Cristales?
-- [ ] ¿Beta temprana abierta a todos o solo por invitación de Discord?
-- [ ] ¿Idiomas al lanzamiento: solo español, o español e inglés?
+- [ ] ¿Presupuesto para herramientas de pago (ElevenLabs, Gemini) y para los encargos en Talent Hub? Lo define el dueño del proyecto: hace falta para encargar el modelado 3D
+
+### Tomadas (27 nov 2026)
+
+- [x] Normal de mazmorra jugable solo: sí, escalado de 1 a 4 jugadores y sin roles; el grupo queda para Difícil
+- [x] Nivel máximo 50 al lanzamiento, con recorte de reserva: si la Fase 3 se atrasa más de un mes, 40 y el Volcán Infernal en la Temporada 1 (ver riesgos en [PLAN.md](PLAN.md#riesgos-principales))
+- [x] Nombres de zonas, mazmorras y jefes: quedan los del plan y se fijan en el glosario de localización en la Fase 1
+- [x] Estilo visual: low-poly estilizado ([GUIA-VISUAL.md](GUIA-VISUAL.md)), confirmado con los conceptos 2D aprobados; los 3 conceptos en 3D lo validan en el juego
+- [x] Equipo: diseño y código con Claude Code; concept art, íconos, sonidos y música con IA; modelado 3D y animación por encargo en Talent Hub (ver [PLAN.md](PLAN.md#equipo))
+- [x] Música final: ElevenLabs Music; un compositor solo si la primera pista no llega al nivel
+- [x] Precios iniciales: los de referencia del plan (pase de temporada 400 Robux, Cristales de 80 a 1.700 Robux), ajustados con datos de la beta
+- [x] Beta temprana solo por invitación desde el Discord; la beta abierta queda para la Fase 7
+- [x] Idiomas al lanzamiento: español e inglés, como dice el plan
 
 ## Registro
 
@@ -144,3 +147,4 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 27 nov 2026 | Flujo de arte del plan actualizado: el concept art sale de Gemini con el script del proyecto y se aprueba antes de modelar; el modelado lo hace un artista o pasa por Blender, porque las IA de Roblox no respetan las fichas. Nueva skill `cerrar-cambio` (`.claude/skills/`) para revisar los documentos al terminar cada cambio |
 | 27 nov 2026 | Color de cada clase en los datos (`Color` en `Data/Classes`) y aplicado: efectos de sus habilidades (Warrior carmesí, Paladín bronce, Ranger mostaza, Mage cobalto, Sacerdote blanco cálido, Brujo morado), arma provisoria (guarda carmesí, empuñadura mostaza, maza y escudo bronce y acero, orbe cobalto), borde de los espacios de habilidad en PC y móvil y franja en el selector de clase. Los anillos de suelo del Warrior pasan a acero porque el carmesí se confundía con las zonas rojas de peligro. Probado en Studio y en el simulador de iPhone 17 Pro |
 | 27 nov 2026 | Ojos del Goblin provisorio cambiados de rojo a ámbar en Neon. El `#FFB428` de la guía técnica se veía amarillo con Neon, igual que el del lobo; se comparó lado a lado en Studio y se aprobó `#E67814`. Guía técnica y ficha del mob actualizadas. Después, Araña y Ogro también pasan a ámbar: el verde ácido del veneno se veía amarillo con Neon en la Araña y el amarillo se deja para el lobo. Fichas de los tres actualizadas |
+| 27 nov 2026 | Decisiones pendientes tomadas según las recomendaciones del plan: Normal jugable solo, nivel 50 con recorte de reserva a 40, nombres actuales, low-poly estilizado, equipo chico con 3D y animación por encargo en Talent Hub, música con ElevenLabs Music, precios de referencia, beta temprana por invitación y español e inglés. Sigue abierto solo el presupuesto. El plan suma la sección Equipo y corrige la herramienta de concept art (Gemini) |
