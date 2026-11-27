@@ -721,6 +721,27 @@ Van juntos y en 3 niveles, para que cada prueba se entienda y el arte final no o
 
 Volumen estimado: unas 250 animaciones (unas 110 de clases, 60 de mobs y 90 de jefes), además de sus efectos y sonidos.
 
+### Íconos de habilidades
+
+Cada habilidad lleva un ícono en su botón, porque en un botón de móvil de 44 px un nombre no se alcanza a leer. El nombre se ve al pasar el mouse o al dejar el dedo apretado, y en el libro de habilidades.
+
+- **Cuántos:** unos 170. Por clase son 27 (3 activas de clase y, por cada especialización, 3 activas, 4 pasivas y la definitiva), o sea 162 entre las 6 clases. A eso se suman el ataque básico de cada clase y el esquivar.
+- **Estilo:** sigue la [guía visual](GUIA-VISUAL.md#interfaz). Una figura central con contorno grueso, sin texto dentro, que se entienda a 44 px. Los colores son los de su clase y siguen los colores reservados de la guía: verde menta solo si cura, azul cielo si defiende y nunca el rojo de peligro.
+- **Tipo por marco:** el marco lo pone la interfaz, no la imagen. Cuadrado para las activas, redondo para las pasivas y naranja de definitiva para la R. Así una misma imagen sirve en la barra, en el árbol de puntos y en el libro de habilidades.
+- **Cómo se hacen:** con IA de imágenes, usando un texto base igual para todos, y retocados en Figma para unificar el contorno y el encuadre. Se pueden encargar a un artista de Talent Hub si la IA no llega al nivel de la guía.
+- **Formato:** PNG de 256 × 256 con fondo transparente alrededor de la figura. Se suben por tandas con Open Cloud, igual que los sonidos.
+- **Por datos:** el ID de cada ícono va en `Data/Abilities` (campo `Icon`). Una habilidad sin ícono muestra su nombre, así que cambiar o agregar un ícono no toca código.
+- **Prueba:** cada tanda se mira en el Poco X8 Pro y en el iPhone a tamaño real. Se aprueba si se distinguen las 6 habilidades de la barra sin leer nada.
+
+**Por fases**
+
+|   |   |
+|---|---|
+|Fase|Íconos|
+|0 — Prototipo|Provisorios para las 18 activas de clase y las 6 definitivas, para confirmar en móvil que se entienden mejor que el texto|
+|2 — Clases|Los de las 18 especializaciones (activas, pasivas y definitivas), hechos con la regla ya probada|
+|7 — Pulido|Revisión final para que todos se vean parejos|
+
 ## Idiomas y localización
 
 Eternia sale con 2 idiomas traducidos a mano y suma más con el tiempo. Todo el texto del juego vive en las tablas de localización de Roblox, nunca escrito directo en el código, así que agregar un idioma no obliga a tocar la interfaz.
@@ -918,7 +939,7 @@ Cada pieza del juego (zona, mazmorra, jefe, NPC, mob) pasa por los mismos 5 paso
 |Fase|Ficha y concepto|Caja gris jugable|Arte final|
 |0 — Prototipo|Guía visual en borrador; plantillas de fichas; jefe de prueba y 3 mobs|Subárea de prueba y jefe de prueba|Nada (solo feedback provisorio de combate)|
 |1 — Núcleo técnico|Guía visual final; Ciudadela y sus NPCs; Bosque Sombrío completo y su mazmorra con 3 jefes|Ciudadela|Personaje base y armaduras iniciales; kit de piezas del Bosque; Warrior y Mage con animaciones, efectos y sonidos finales como referencia de calidad|
-|2 — Clases|Aspecto de las 6 clases y efectos de sus habilidades; Arenas Rojas y su mazmorra con 3 jefes|Bosque Sombrío y mazmorra 1; zona de práctica|Ciudadela y Bosque Sombrío; animaciones, efectos y sonidos de las 6 clases y 18 especializaciones|
+|2 — Clases|Aspecto de las 6 clases, efectos e íconos de sus habilidades; Arenas Rojas y su mazmorra con 3 jefes|Bosque Sombrío y mazmorra 1; zona de práctica|Ciudadela y Bosque Sombrío; animaciones, efectos y sonidos de las 6 clases y 18 especializaciones|
 |3 — Mundo y mazmorras|Picos Helados, Pantano Maldito y Volcán Infernal con sus mazmorras y 9 jefes; NPCs de cada zona|Arenas Rojas y zonas 3 a 5 con sus mazmorras|Arenas Rojas y mazmorra 2 (para la beta del mes 7); música de zonas 1 y 2; animaciones, avisos y sonidos de los mobs y jefes de las zonas 1 y 2|
 |4 — Progresión|Aspecto del equipo por rareza, legendarios, monturas, mascotas e iconos|—|Picos Helados y Pantano Maldito con sus mazmorras, mobs y jefes animados; objetos; monturas y mascotas animadas|
 |5 — Endgame y PvP|Efectos visuales de los afijos de Sellos; mapas de Estandarte y Arena|Mapas de PvP|Volcán Infernal y mazmorra 5 con sus mobs y jefes animados; mapas de PvP; efectos de afijos y del PvP|
@@ -947,6 +968,7 @@ Las fichas viven en [fichas/](fichas/), y cada una enlaza a su concepto visual y
 - Una subárea gris con 3 tipos de mobs y un jefe con 2 fases.
 - Controles de PC y móvil.
 - Prueba de hechizo con carga: Bola de fuego del Mage con 1 s, movimiento al 50% y cancelación al esquivar, para confirmar en PC y móvil las reglas de [Hechizos con carga](#hechizos-con-carga).
+- Íconos provisorios para las 18 activas de clase y las 6 definitivas, para confirmar en móvil que se leen mejor que el nombre (ver [Íconos de habilidades](#íconos-de-habilidades)).
 - **Terminado cuando:** al probarlo en PC y en móvil, el combate se entiende sin explicación y dan ganas de seguir jugando.
 
 ### Fase 1 — Núcleo técnico (mes 1,5 a 3)
@@ -965,6 +987,7 @@ Las fichas viven en [fichas/](fichas/), y cada una enlaza a su concepto visual y
 
 - Las 6 clases y 18 especializaciones con sus habilidades, pasivas y definitivas.
 - Árbol de puntos, cambio de especialización y zona de práctica.
+- Íconos de las 18 especializaciones: activas, pasivas y definitivas.
 - **Terminado cuando:** cada especialización mata al muñeco de práctica en un tiempo dentro del 10% del promedio de su rol, y el tank y el sanador cumplen su rol en una prueba de jefe.
 
 ### Fase 3 — Mundo y mazmorras (mes 4,5 a 7)
