@@ -1,8 +1,9 @@
 --!strict
 -- Activas con las teclas 1 a 6 y la definitiva con R, y su barra en pantalla
--- (Energía o Maná arriba, un espacio por habilidad con su tiempo de espera y
--- la definitiva con su barra de carga). Los espacios 4 a 6 son de las
--- habilidades de especialización (Fase 2): por ahora se ven bloqueados.
+-- (vida y Energía o Maná arriba, sin texto; un espacio por habilidad con su
+-- tiempo de espera y la definitiva, cuyo ícono se enciende de abajo hacia arriba
+-- mientras carga y brilla al llenarse). Los espacios 4 a 6 son de las
+-- habilidades de especialización (Fase 2): no se muestran hasta desbloquearse.
 -- El cliente predice esperas y recurso con los mismos datos que el servidor
 -- para no mandar pedidos que se van a rechazar; el servidor sigue decidiendo.
 -- Los movimientos (Embestida, Parpadeo, Retirada) se hacen aquí para que
@@ -15,6 +16,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local StarterGui = game:GetService("StarterGui")
 local UserInputService = game:GetService("UserInputService")
 
 local AbilityData = require(ReplicatedStorage.Shared.Data.Abilities)
@@ -45,7 +47,20 @@ local RESOURCE_COLORS = {
 	Energy = Color3.fromRGB(240, 190, 50),
 	Mana = Color3.fromRGB(70, 140, 255),
 }
-local RESOURCE_NAMES = { Energy = "Energía", Mana = "Maná" }
+-- Vida propia: verde más oscuro que el menta de curación; con poca vida pasa al
+-- rojo claro del daño recibido (colores de la guía visual).
+local HEALTH_COLOR = Color3.fromRGB(60, 180, 90)
+local HEALTH_LOW_COLOR = Color3.fromRGB(255, 70, 60)
+local HEALTH_LOW_FRACTION = 0.3
+local HEALTH_BAR_HEIGHT = 12
+-- Rastro de daño: el trozo perdido queda claro un momento y después se achica.
+local TRAIL_COLOR = Color3.fromRGB(255, 235, 200)
+local TRAIL_HOLD = 0.4
+local TRAIL_SPEED = 0.8 -- fracción de la barra por segundo
+-- Más fina que la vida: la vida se lee primero.
+local RESOURCE_BAR_HEIGHT = 6
+-- Vida pegada encima del recurso, y un espacio antes de las habilidades.
+local BARS_HEIGHT = HEALTH_BAR_HEIGHT + RESOURCE_BAR_HEIGHT + 8
 -- El Parpadeo se detiene a esta distancia de una pared.
 local BLINK_WALL_MARGIN = 2
 -- Salto de la Retirada: velocidad hacia arriba al empezar.
@@ -356,6 +371,7 @@ export type SlotInfo = {
 	total: number, -- espera completa de la que se está descontando
 	usable: boolean, -- hay recurso (o la barra de definitiva está llena)
 	charge: number?, -- definitiva: carga de 0 a 1
+	globalOnly: boolean, -- la espera que corre es solo la global
 }
 
 -- Estado de un espacio para dibujarlo, o nil si está vacío.
@@ -375,11 +391,31 @@ function AbilityController.Info(slot: number | "Ultimate"): SlotInfo?
 		total = if own >= global then def.Cooldown else AbilityData.GlobalCooldown,
 		usable = if charge then charge >= 1 else getResource() >= def.Cost,
 		charge = charge,
+		globalOnly = global > own,
 	}
+end
+
+-- Bajo este tiempo la espera se muestra con un decimal.
+local DECIMAL_BELOW = 3
+
+-- Texto de la espera: segundos enteros, con un decimal en los últimos 3 s y
+-- nada si solo corre la espera global (con la sombra basta).
+function AbilityController.CooldownText(info: SlotInfo): string
+	if info.remaining <= 0 or info.globalOnly then
+		return ""
+	end
+	if info.remaining < DECIMAL_BELOW then
+		-- Redondeo hacia arriba a décimas: nunca muestra "0.0".
+		return string.format("%.1f", math.ceil(info.remaining * 10) / 10)
+	end
+	return tostring(math.ceil(info.remaining))
 end
 
 type Slot = {
 	frame: Frame,
+	litClip: Frame?, -- definitiva: recorte del ícono encendido según la carga
+	litIcon: ImageLabel?,
+	glow: UIStroke?, -- definitiva: borde que late cuando está llena
 	shade: Frame,
 	timer: TextLabel,
 	name: TextLabel,
@@ -391,7 +427,25 @@ type Slot = {
 -- Espacio con el mouse encima: su nombre se muestra arriba (los íconos no llevan texto).
 local hovered: (number | "Ultimate")? = nil
 
-local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, Frame, TextLabel)
+type Hud = {
+	root: Frame,
+	row: Frame,
+	layout: UIListLayout,
+	slots: { [number | "Ultimate"]: Slot },
+	tooltip: TextLabel,
+	healthBack: Frame,
+	healthFill: Frame,
+	healthTrail: Frame,
+	energyFill: Frame,
+}
+
+-- Mouse encima de la vida o dedo apretado sobre ella: se muestra el número.
+local healthHovered = false
+
+-- Caja de las barras de vida y recurso (las cargas del esquivar se pegan a ella).
+local barsFrame: Frame? = nil
+
+local function buildHud(): Hud
 	local gui = Instance.new("ScreenGui")
 	gui.Name = "AbilityHud"
 	gui.ResetOnSpawn = false
@@ -399,13 +453,52 @@ local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, F
 	local root = Instance.new("Frame")
 	root.AnchorPoint = Vector2.new(0.5, 1)
 	root.Position = UDim2.new(0.5, 0, 1, -62)
-	root.Size = UDim2.fromOffset((#KEYS + 1) * (SLOT_SIZE + 8) + 12, SLOT_SIZE + 16)
+	root.Size = UDim2.fromOffset((#KEYS + 1) * (SLOT_SIZE + 8) + 12, SLOT_SIZE + BARS_HEIGHT)
 	root.BackgroundTransparency = 1
 	root.Parent = gui
 
+	-- Vida propia (la barra de Roblox solo aparece al recibir daño)
+	local healthBack = Instance.new("Frame")
+	healthBack.Name = "Health"
+	healthBack.Size = UDim2.new(1, 0, 0, HEALTH_BAR_HEIGHT)
+	healthBack.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+	healthBack.BorderSizePixel = 0
+	healthBack.Parent = root
+	local healthTrail = Instance.new("Frame")
+	healthTrail.Name = "Trail"
+	healthTrail.BackgroundColor3 = TRAIL_COLOR
+	healthTrail.BorderSizePixel = 0
+	healthTrail.Size = UDim2.fromScale(1, 1)
+	healthTrail.Parent = healthBack
+	local healthFill = Instance.new("Frame")
+	healthFill.Name = "Fill"
+	healthFill.BackgroundColor3 = HEALTH_COLOR
+	healthFill.BorderSizePixel = 0
+	healthFill.Size = UDim2.fromScale(1, 1)
+	healthFill.ZIndex = 2
+	healthFill.Parent = healthBack
+	healthBack.MouseEnter:Connect(function()
+		healthHovered = true
+	end)
+	healthBack.MouseLeave:Connect(function()
+		healthHovered = false
+	end)
+	healthBack.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.Touch then
+			healthHovered = true
+		end
+	end)
+	healthBack.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.Touch then
+			healthHovered = false
+		end
+	end)
+	barsFrame = healthBack
+
 	-- Energía
 	local energyBack = Instance.new("Frame")
-	energyBack.Size = UDim2.new(1, 0, 0, 8)
+	energyBack.Position = UDim2.fromOffset(0, HEALTH_BAR_HEIGHT)
+	energyBack.Size = UDim2.new(1, 0, 0, RESOURCE_BAR_HEIGHT)
 	energyBack.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
 	energyBack.BorderSizePixel = 0
 	energyBack.Parent = root
@@ -415,20 +508,9 @@ local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, F
 	energyFill.BorderSizePixel = 0
 	energyFill.Size = UDim2.fromScale(0, 1)
 	energyFill.Parent = energyBack
-	local energyText = Instance.new("TextLabel")
-	energyText.BackgroundTransparency = 1
-	energyText.AnchorPoint = Vector2.new(0, 1)
-	energyText.Position = UDim2.fromOffset(0, -1)
-	energyText.Size = UDim2.new(1, 0, 0, 12)
-	energyText.Font = Enum.Font.GothamBold
-	energyText.TextSize = 11
-	energyText.TextColor3 = Color3.new(1, 1, 1)
-	energyText.TextStrokeTransparency = 0.5
-	energyText.TextXAlignment = Enum.TextXAlignment.Left
-	energyText.Parent = energyBack
 
 	local row = Instance.new("Frame")
-	row.Position = UDim2.fromOffset(0, 16)
+	row.Position = UDim2.fromOffset(0, BARS_HEIGHT)
 	row.Size = UDim2.new(1, 0, 0, SLOT_SIZE)
 	row.BackgroundTransparency = 1
 	row.Parent = root
@@ -523,8 +605,11 @@ local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, F
 		timer.ZIndex = 3
 		timer.Parent = frame
 
-		-- Definitiva: barra que sube desde abajo mientras se carga.
+		-- Definitiva: el ícono se enciende desde abajo mientras se carga.
 		local charge: Frame? = nil
+		local glow: UIStroke? = nil
+		local litClip: Frame? = nil
+		local litIcon: ImageLabel? = nil
 		if isUltimate then
 			frame.BackgroundColor3 = Color3.fromRGB(70, 40, 30)
 			local fill = Instance.new("Frame")
@@ -541,6 +626,29 @@ local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, F
 			stroke.Thickness = 2
 			stroke.Parent = frame
 			charge = fill
+			glow = stroke
+
+			-- Copia encendida del ícono, recortada desde abajo según la carga.
+			local clip = Instance.new("Frame")
+			clip.Name = "Lit"
+			clip.AnchorPoint = Vector2.new(0, 1)
+			clip.Position = UDim2.fromScale(0, 1)
+			clip.Size = UDim2.fromScale(1, 0)
+			clip.BackgroundTransparency = 1
+			clip.ClipsDescendants = true
+			clip.ZIndex = 1
+			clip.Parent = frame
+			local lit = Instance.new("ImageLabel")
+			lit.AnchorPoint = Vector2.new(0, 1)
+			lit.Position = UDim2.fromScale(0, 1)
+			lit.Size = UDim2.fromOffset(SLOT_SIZE, SLOT_SIZE)
+			lit.BackgroundTransparency = 1
+			lit.ScaleType = Enum.ScaleType.Crop
+			lit.ZIndex = 1
+			lit.Parent = clip
+			Instance.new("UICorner", lit).CornerRadius = UDim.new(0, 8)
+			litClip = clip
+			litIcon = lit
 		end
 
 		-- Borde con el color de la clase (GUIA-VISUAL.md); la definitiva tiene el suyo.
@@ -555,6 +663,9 @@ local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, F
 
 		slots[i] = {
 			frame = frame,
+			litClip = litClip,
+			litIcon = litIcon,
+			glow = glow,
 			shade = shade,
 			timer = timer,
 			name = name,
@@ -591,7 +702,22 @@ local function buildHud(): (Frame, TextLabel, { [number | "Ultimate"]: Slot }, F
 	padding.Parent = tooltip
 
 	gui.Parent = player:WaitForChild("PlayerGui")
-	return energyFill, energyText, slots, row, tooltip
+	return {
+		root = root,
+		row = row,
+		layout = layout,
+		slots = slots,
+		tooltip = tooltip,
+		healthBack = healthBack,
+		healthFill = healthFill,
+		healthTrail = healthTrail,
+		energyFill = energyFill,
+	}
+end
+
+-- Barra de vida del HUD, cuando ya existe (las cargas del esquivar se pegan a ella).
+function AbilityController.Bars(): Frame?
+	return barsFrame
 end
 
 function AbilityController:Start()
@@ -613,11 +739,18 @@ function AbilityController:Start()
 		endCast()
 	end)
 
-	local energyFill, energyText, slots, row, tooltip = buildHud()
-	local hud = row.Parent :: Frame
+	-- La vida propia va en la barra de abajo; la de Roblox quedaría repetida.
+	StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Health, false)
+	local built = buildHud()
+	local energyFill, slots, row, tooltip = built.energyFill, built.slots, built.row, built.tooltip
+	local healthFill, healthTrail = built.healthFill, built.healthTrail
+	local hud = built.root
 	local hudSize = hud.Size
 	local hudPosition = hud.Position
-	RunService.RenderStepped:Connect(function()
+	local trailFraction = 1
+	local lastHealthFraction = 1
+	local trailHoldUntil = 0
+	RunService.RenderStepped:Connect(function(dt: number)
 		local current = cast
 		castBack.Visible = current ~= nil
 		if current then
@@ -626,32 +759,63 @@ function AbilityController:Start()
 			castLabel.Text = current.def.Name
 		end
 
+		local character = player.Character
+		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+		local health = if humanoid then math.max(humanoid.Health, 0) else 0
+		local maxHealth = if humanoid then humanoid.MaxHealth else 0
+		local healthFraction = if maxHealth > 0 then health / maxHealth else 0
+		healthFill.Size = UDim2.fromScale(healthFraction, 1)
+		healthFill.BackgroundColor3 = if healthFraction <= HEALTH_LOW_FRACTION then HEALTH_LOW_COLOR else HEALTH_COLOR
+		-- Rastro: al perder vida se queda quieto un momento y después baja.
+		local now = os.clock()
+		if healthFraction < lastHealthFraction then
+			trailHoldUntil = now + TRAIL_HOLD
+		end
+		lastHealthFraction = healthFraction
+		if healthFraction >= trailFraction then
+			trailFraction = healthFraction
+		elseif now >= trailHoldUntil then
+			trailFraction = math.max(healthFraction, trailFraction - TRAIL_SPEED * dt)
+		end
+		healthTrail.Size = UDim2.fromScale(trailFraction, 1)
+
 		local energy, maxEnergy = getResource()
 		energyFill.Size = UDim2.fromScale(if maxEnergy > 0 then energy / maxEnergy else 0, 1)
 
 		local class = getClass()
 		local kind = if class then class.Resource else "Energy"
 		energyFill.BackgroundColor3 = RESOURCE_COLORS[kind]
-		energyText.Text = `{RESOURCE_NAMES[kind]} {math.floor(energy)}`
 		-- En pantallas táctiles las habilidades están en los botones del pulgar:
 		-- queda solo la barra de recurso, angosta para no pasar bajo el arco.
 		local touch = UserInputService.TouchEnabled
 		row.Visible = not touch
 		local hoveredInfo = if hovered and not touch then AbilityController.Info(hovered) else nil
-		tooltip.Visible = hoveredInfo ~= nil
-		if hoveredInfo and hovered then
+		tooltip.Visible = hoveredInfo ~= nil or healthHovered
+		if healthHovered then
+			local bar = built.healthBack
+			local gui = tooltip.Parent :: ScreenGui
+			local corner = bar.AbsolutePosition - gui.AbsolutePosition
+			tooltip.Text = `{math.ceil(health)} / {math.floor(maxHealth)}`
+			tooltip.Position = UDim2.fromOffset(corner.X + bar.AbsoluteSize.X / 2, corner.Y - 6)
+		elseif hoveredInfo and hovered then
 			local frame = slots[hovered].frame
 			local gui = tooltip.Parent :: ScreenGui
 			local corner = frame.AbsolutePosition - gui.AbsolutePosition
 			tooltip.Text = hoveredInfo.name
 			tooltip.Position = UDim2.fromOffset(corner.X + frame.AbsoluteSize.X / 2, corner.Y - 30)
 		end
-		hud.Size = if touch then UDim2.fromOffset(TOUCH_BAR_WIDTH, hud.Size.Y.Offset) else hudSize
+		-- Sin la fila de espacios, la caja se achica a las barras para que queden abajo.
+		-- En PC, las barras miden lo mismo que los espacios que se ven.
+		local rowWidth = built.layout.AbsoluteContentSize.X
+		hud.Size = if touch
+			then UDim2.fromOffset(TOUCH_BAR_WIDTH, BARS_HEIGHT)
+			else UDim2.fromOffset(if rowWidth > 0 then rowWidth else hudSize.X.Offset, hudSize.Y.Offset)
 		hud.Position = if touch then TOUCH_BAR_POSITION else hudPosition
 		for i, slot in slots do
 			local info = AbilityController.Info(i)
 			local specLevel = if typeof(i) == "number" then SPEC_LEVELS[i] else nil
-			slot.frame.Visible = info ~= nil or specLevel ~= nil
+			-- Bloqueados (sin habilidad todavía): no se muestran.
+			slot.frame.Visible = info ~= nil
 			local accent = slot.accent
 			if accent then
 				accent.Color = if class then class.Color else Color3.new(1, 1, 1)
@@ -675,12 +839,24 @@ function AbilityController:Start()
 			slot.icon.Image = info.icon or ""
 			slot.icon.ImageTransparency = if info.usable then 0 else 0.5
 			slot.shade.Size = UDim2.fromScale(1, if info.remaining > 0 then info.remaining / info.total else 0)
-			slot.timer.Text = if info.remaining >= 1 then tostring(math.ceil(info.remaining)) else ""
+			slot.timer.Text = AbilityController.CooldownText(info)
 			local charge = slot.charge
 			if charge and info.charge then
-				charge.Size = UDim2.fromScale(1, info.charge)
-				-- Llena: late para avisar que se puede usar.
-				charge.BackgroundTransparency = if info.charge >= 1 then 0.25 + 0.2 * math.sin(os.clock() * 6) else 0.45
+				local full = info.charge >= 1
+				-- Sin carga, el ícono apagado; la copia encendida sube con la carga.
+				charge.Visible = false
+				slot.icon.ImageTransparency = 0.7
+				local litClip, litIcon, glow = slot.litClip, slot.litIcon, slot.glow
+				if litClip and litIcon then
+					litClip.Size = UDim2.fromScale(1, info.charge)
+					litIcon.Image = info.icon or ""
+					litIcon.Visible = info.icon ~= nil
+				end
+				-- Llena: el borde late para avisar que se puede usar.
+				if glow then
+					glow.Thickness = if full then 3 + math.sin(os.clock() * 6) else 2
+					glow.Transparency = if full then 0 else 0.5
+				end
 				slot.frame.BackgroundTransparency = 0
 			else
 				-- Sin recurso suficiente: el espacio se ve apagado.

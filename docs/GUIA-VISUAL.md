@@ -48,6 +48,7 @@ Estos colores ya están en el juego (`Data/Feedback`, `EnemyUIController`, `MobF
 | Crítico | Dorado `#FFD23C` | Números con "!" |
 | Defensa y esquivar | Azul cielo `#8CD2FF` | "Esquivado", esquivar, escudos |
 | Definitiva | Naranja `#FF7828` | Botón y barra de la R |
+| Vida propia | Verde `#3CB45A`; con 30% o menos, rojo claro `#FF463C` y bordes de la pantalla en el mismo rojo | Barra de vida del jugador. Más oscuro que el menta, que sigue siendo solo de curación. El rastro de daño es crema `#FFEBC8` |
 | Veneno y magia vil | Verde ácido `#AFFF32` a `#C8F028` | Araña, Brujo. Amarillento a propósito, para no confundirse con la curación |
 
 **Colores de las clases** (efectos, arma provisoria, acento de su UI y fondo o brillo de sus íconos). Cada clase tiene un color principal para que se reconozca de un vistazo, elegido para no confundirse con los colores reservados. En los íconos es una guía, no una regla: manda el color del elemento (el fuego es naranja aunque sea del Mage, la curación es verde menta).
@@ -99,6 +100,7 @@ Las animaciones comunican el combate, no solo decoran. Cada ataque tiene **antic
 
 - Marcos simples de piedra y metal, esquinas redondeadas.
 - **Íconos de habilidades:** ilustración pintada que llena todo el cuadrado (opaca, sin transparencia ni marco), con luz dramática: un foco brillante y bordes que caen a oscuro. Un solo motivo grande que se reconozca a 44 px. **Sin texto dibujado dentro** (para traducir). El marco, el redondeo en móvil y el apagado los pone la interfaz. Inspirados en el estilo de los RPG clásicos, nunca copiando íconos de otro juego.
+- **HUD con poco texto:** las barras se leen por largo y color, sin números (el número sale al pasar el mouse o con el dedo apretado). Los estados se muestran con forma y brillo: puntos para las cargas (otro color mientras se recuperan), esperas en segundos con un decimal en los últimos 3 s, ícono que se enciende para la definitiva, bordes rojos para la vida baja. Lo bloqueado no se muestra.
 - Fuente Gotham (Bold y Black). **Mínimo 14 px** de texto en móvil.
 - PC y móvil hoy (consola, más adelante). En móvil, botones de 44 px o más en arco alrededor del pulgar derecho; el lado izquierdo queda libre para el joystick. Detalle por plataforma en el [anexo](GUIA-VISUAL-TECNICA.md#interfaz-por-plataforma).
 

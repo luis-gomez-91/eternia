@@ -1,17 +1,23 @@
 --!strict
--- Lo que se ve de los enemigos (tag "Enemy"): barra de vida con nombre,
--- números de daño flotantes y un destello al recibir un golpe. Sobre los
+-- Lo que se ve de los enemigos (tag "Enemy"): barra de vida, números de daño flotantes y un destello al recibir un golpe. Sobre los
 -- jugadores: números verdes de curación, rojos de daño recibido y "Esquivado".
+-- Solo el objetivo fijado muestra nombre y vida en números; los demás llevan una
+-- barra fina, para que no se tapen cuando hay varios juntos, y solo si están
+-- peleando o heridos: fuera de combate el escenario se ve limpio.
 -- Todo es visual; la vida real la decide el servidor en los atributos.
 
 local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 
 local Remotes = require(ReplicatedStorage.Shared.Remotes)
+local TargetController = require(script.Parent.TargetController)
 
 local BAR_WIDTH = 120
+local COMPACT_WIDTH = 70
+local COMPACT_HEIGHT = 6
 local NUMBER_LIFETIME = 0.8
 
 local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -23,6 +29,29 @@ screenFolder.Name = "EnemyUI"
 screenFolder.ResetOnSpawn = false
 
 local EnemyUIController = {}
+
+type Plate = {
+	gui: BillboardGui,
+	nameLabel: TextLabel,
+	back: Frame,
+	hpText: TextLabel,
+	full: boolean?,
+}
+
+local plates: { [Model]: Plate } = {}
+
+-- Completa (nombre, barra y números) o compacta (solo una barra fina).
+local function setFull(plate: Plate, full: boolean)
+	if plate.full == full then
+		return
+	end
+	plate.full = full
+	plate.gui.Size = if full then UDim2.fromOffset(BAR_WIDTH, 34) else UDim2.fromOffset(COMPACT_WIDTH, COMPACT_HEIGHT)
+	plate.nameLabel.Visible = full
+	plate.hpText.Visible = full
+	plate.back.Position = if full then UDim2.fromOffset(0, 18) else UDim2.fromOffset(0, 0)
+	plate.back.Size = if full then UDim2.new(1, 0, 0, 14) else UDim2.fromScale(1, 1)
+end
 
 -- Distancia desde el centro de la parte principal hasta encima del modelo.
 local function topOffset(model: Model, primary: BasePart): number
@@ -93,13 +122,19 @@ local function attachHealthBar(model: Model)
 	model:GetAttributeChangedSignal("Health"):Connect(refresh)
 	model:GetAttributeChangedSignal("MaxHealth"):Connect(refresh)
 
+	local plate: Plate = { gui = gui, nameLabel = nameLabel, back = back, hpText = hpText }
+	setFull(plate, TargetController.Get() == model)
+	plates[model] = plate
+
 	gui.Parent = screenFolder
-	model.Destroying:Connect(function()
+	local function remove()
 		gui:Destroy()
-	end)
+		plates[model] = nil
+	end
+	model.Destroying:Connect(remove)
 	model.AncestryChanged:Connect(function()
 		if not model:IsDescendantOf(workspace) then
-			gui:Destroy()
+			remove()
 		end
 	end)
 end
@@ -174,6 +209,18 @@ end
 
 function EnemyUIController:Start()
 	screenFolder.Parent = playerGui
+
+	RunService.Heartbeat:Connect(function()
+		local target = TargetController.Get()
+		for model, plate in plates do
+			local isTarget = model == target
+			setFull(plate, isTarget)
+			local health = model:GetAttribute("Health")
+			local maxHealth = model:GetAttribute("MaxHealth")
+			local hurt = typeof(health) == "number" and typeof(maxHealth) == "number" and health < maxHealth
+			plate.gui.Enabled = isTarget or hurt or model:GetAttribute("InCombat") == true
+		end
+	end)
 
 	local function onEnemy(instance: Instance)
 		if instance:IsA("Model") then

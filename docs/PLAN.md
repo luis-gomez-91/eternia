@@ -2,7 +2,7 @@
 
 25 nov 2026 · @Luis
 
-> **Fase actual: 0 — Prototipo de combate.** Lo hecho y lo pendiente, con la tabla de fases, está en [ESTADO.md](ESTADO.md).
+> **Fase actual: 1 — Núcleo técnico.** Lo hecho y lo pendiente, con la tabla de fases, está en [ESTADO.md](ESTADO.md).
 
 ## Resumen
 
@@ -813,7 +813,7 @@ El juego se construye en Roblox Studio, con el código en Git y el arte 3D en Bl
 - Todo el código vive en Git; nada se edita solo dentro de Studio sin pasar por Rojo.
 - Una rama por función y revisión antes de unirla a la principal.
 - 3 lugares (places) separados: desarrollo, pruebas y producción.
-- Antes de publicar en producción se prueba en pruebas con al menos 10 jugadores.
+- Antes de publicar en producción se prueba en el place de pruebas con varios clientes en Studio (Servidor y clientes) y en el simulador de dispositivos. Las pruebas con jugadores reales quedan postergadas hasta la beta temprana.
 
 ## Arquitectura técnica en Roblox
 
@@ -994,7 +994,7 @@ Las fichas viven en [fichas/](fichas/), y cada una enlaza a su concepto visual y
 - Sistema de feedback de combate por datos: animaciones, efectos y sonidos con precarga, avisos de ataques enemigos (zona roja en el suelo y sonido) y modo de gráficos bajos.
 - Sonidos finales de Warrior y Mage, impactos, interfaz y momentos clave (ver [AUDIO.md](AUDIO.md)).
 - Guía visual aprobada.
-- **Terminado cuando:** 30 jugadores juegan 1 hora sin errores de datos ni lag notable.
+- **Terminado cuando:** 1 hora de juego en Studio con servidor local y varios clientes, más bots que simulan 30 jugadores en el servidor, sin errores de datos ni lag notable (sin pruebas con jugadores reales).
 
 ### Fase 2 — Clases (mes 3 a 4,5)
 
