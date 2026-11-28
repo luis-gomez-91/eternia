@@ -142,11 +142,11 @@ Recomendación inicial, a validar con mediciones:
 
 | | PC | Móvil y tablet |
 |---|---|---|
-| Habilidades | Barra abajo con la tecla visible en cada espacio | Botones en arco alrededor del pulgar derecho |
+| Habilidades | Barra abajo con la tecla visible en cada espacio; solo los espacios desbloqueados | Botones en arco alrededor del pulgar derecho |
 | Escalado | Por resolución | UIScale por altura (referencia 400 px, entre 0,8 y 1,6) |
 | Zonas seguras | — | Las del dispositivo (muesca, barra de inicio) |
 | Tamaño mínimo | Texto de 14 px | Botones de 44 px reales, texto de 14 px |
-| Barras de vida | Sobre el enemigo y barra del jefe arriba | Igual, a la misma escala |
+| Barras de vida | Sobre el enemigo: nombre y números solo en el objetivo fijado, los demás con una barra fina. Barra del jefe arriba. La propia, de 12 px, pegada encima de la de Energía o Maná (6 px, más fina para que la vida se lea primero), sin números; las cargas del esquivar, dos puntos a su izquierda. Los enemigos que no son el objetivo, solo en combate o heridos | Igual, a la misma escala; la propia abajo a la izquierda del centro, lejos del arco del pulgar; las cargas del esquivar, puntos en su botón |
 
 - Consola (gamepad y distancia de TV) es una posible ampliación futura, fuera del alcance actual. [PLAN.md](PLAN.md) la nombra en "Controles", pero el juego todavía no tiene soporte de gamepad ni reglas de interfaz para TV.
 - Pendiente, en la UI provisoria (se corrige al hacer la UI final): el botón "Cambiar objetivo" mide unos 40 px reales en el simulador de iPhone (bajo el mínimo de 44) y varios textos usan de 11 a 13 px.

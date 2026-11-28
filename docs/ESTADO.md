@@ -2,14 +2,14 @@
 
 Resumen de lo hecho y lo pendiente. El diseño completo está en [PLAN.md](PLAN.md); el catálogo de sonidos, en [AUDIO.md](AUDIO.md); las reglas de arte, en [GUIA-VISUAL.md](GUIA-VISUAL.md) y su [anexo técnico](GUIA-VISUAL-TECNICA.md).
 
-**Fase actual:** 0 — Prototipo de combate · **Última actualización:** 27 nov 2026
+**Fase actual:** 1 — Núcleo técnico · **Última actualización:** 27 nov 2026
 
 ## Fases
 
 | Fase | Meses | Estado | Terminado cuando |
 |---|---|---|---|
-| 0 — Prototipo de combate | 0 a 1,5 | 🟡 En curso | Al probarlo en PC y móvil, el combate se entiende sin explicación y dan ganas de seguir |
-| 1 — Núcleo técnico | 1,5 a 3 | ⚪ Pendiente | 30 jugadores juegan 1 hora sin errores de datos ni lag notable |
+| 0 — Prototipo de combate | 0 a 1,5 | 🟢 Terminada | Al probarlo en PC y móvil, el combate se entiende sin explicación y dan ganas de seguir |
+| 1 — Núcleo técnico | 1,5 a 3 | 🟡 En curso | 1 hora en Studio con varios clientes y bots que simulan 30 jugadores, sin errores de datos ni lag notable |
 | 2 — Clases | 3 a 4,5 | ⚪ Pendiente | Cada especialización mata al muñeco dentro del 10% del promedio de su rol; tank y sanador cumplen en prueba de jefe |
 | 3 — Mundo y mazmorras | 4,5 a 7 | ⚪ Pendiente | Se llega del nivel 1 al 50 y se matan los 15 jefes (hito: beta temprana, zonas 1 y 2) |
 | 4 — Progresión y economía | 7 a 8 | ⚪ Pendiente | El oro ganado y gastado se equilibran en la analítica de la beta |
@@ -61,11 +61,11 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 - [x] Sonidos propios de mobs y jefe con ElevenLabs (16, subidos a Roblox)
 
 ### Controles
-- [x] PC: teclas 1 a 6, Q esquivar, R definitiva. Los espacios 4 a 6 se ven bloqueados (Nv 10, 20 y 30) hasta las especializaciones de la Fase 2
+- [x] PC: teclas 1 a 6, Q esquivar, R definitiva. Los espacios 4 a 6 no se muestran hasta las especializaciones de la Fase 2 (antes se veían bloqueados)
 - [x] Definitiva con barra de carga: se llena con el daño hecho, la curación y el daño recibido (doble); unas 2 por pelea contra el jefe de prueba. Una definitiva provisoria por clase: Torbellino, Martillo del alba, Andanada, Lluvia de meteoros, Himno divino y Pacto de sombras
-- [x] Móvil: botones en arco alrededor del pulgar derecho (ataque, saltar, 1 a 3, esquivar con cargas, definitiva con % y cambiar objetivo); reemplaza el botón de salto de Roblox. Probado en el simulador de iPhone 17 Pro y en un celular real
+- [x] Móvil: botones en arco alrededor del pulgar derecho (ataque, saltar, 1 a 3, esquivar con cargas, definitiva que se enciende al cargar y cambiar objetivo); reemplaza el botón de salto de Roblox. Probado en el simulador de iPhone 17 Pro y en un celular real
 - [x] Las habilidades con objetivo respetan el foco: van al enemigo fijado o no se usan si está lejos
-- [ ] Teclas reasignables (en el menú de opciones, más adelante)
+- [ ] Teclas reasignables (en el menú de opciones) — pasa a la Fase 1
 - [x] Íconos en los botones por datos (campo `Icon`); el nombre se ve al pasar el mouse o con el dedo apretado
 - [x] Íconos de las 18 activas de clase y las 6 definitivas: pintados con IA (Gemini), elegidos y subidos a Roblox ([PLAN.md](PLAN.md#íconos-de-habilidades))
 - [x] Efectos, arma provisoria y acento de la UI de cada clase con su color nuevo ([GUIA-VISUAL.md](GUIA-VISUAL.md#código-de-color-de-combate-reservado))
@@ -82,16 +82,39 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 ### Diseño (fuera del código)
 - [x] Guía visual en borrador: [GUIA-VISUAL.md](GUIA-VISUAL.md), con anexo técnico [GUIA-VISUAL-TECNICA.md](GUIA-VISUAL-TECNICA.md) (presupuestos orientativos, fichas y checklist)
 - [x] Conceptos 2D de los 3 conceptos de prueba y de la toma conjunta aprobados: [assets/concepts/](../assets/concepts/) (generados con Gemini desde las fichas del anexo)
-- [ ] 3 conceptos de prueba en 3D (Warrior con armadura, Goblin Saqueador, rincón del Claro del Molino) aprobados juntos con la checklist del anexo (la parte de rendimiento en la tablet, postergada)
+- [ ] 3 conceptos de prueba en 3D (Warrior con armadura, Goblin Saqueador, rincón del Claro del Molino) aprobados juntos con la checklist del anexo (la parte de rendimiento en la tablet, postergada) — pasa a la Fase 1
 - [ ] Medir en los dispositivos de prueba (tablet Redmi para rendimiento; Poco X8 Pro e iPhone para lectura): distancia de cámara, luz (Voxel o ShadowMap) y presupuestos por escena — **postergado**: por ahora solo Studio y simulador
 - [x] Plantillas de fichas (zona, mazmorra, jefe, NPC, mob) — ver [fichas/](fichas/)
 - [x] Fichas del jefe de prueba y los 3 mobs llenas (estado: En caja gris)
 - [x] Ojos ámbar del Goblin provisorio (`#E67814`), sin el rojo de peligro
 - [x] Ojos ámbar también en la Araña y el Ogro provisorios: ningún enemigo tiene ojos rojos
 
+## Fase 1 — Tareas
+
+### Pasan de la Fase 0
+- [ ] 3 conceptos de prueba en 3D (Warrior, Goblin Saqueador, rincón del Claro del Molino) aprobados con la checklist del anexo; son la base para aprobar la guía visual
+- [ ] Teclas reasignables en el menú de opciones
+
+### Del plan
+- [ ] Places de desarrollo, pruebas y producción
+- [ ] ProfileStore, inventario, loot personal, XP y niveles
+- [ ] Amenaza, IA de mobs y sistema de jefes por datos
+- [ ] UI base: vida, recurso, barra de habilidades, inventario
+- [ ] Localización: todo el texto en tablas, en español e inglés, y glosario de nombres iniciado
+- [ ] Sistema de feedback por datos con precarga, avisos de ataques enemigos (zona y sonido) y modo de gráficos bajos
+- [ ] Sonidos finales de Warrior y Mage, impactos, interfaz y momentos clave ([AUDIO.md](AUDIO.md))
+- [ ] Guía visual aprobada
+
+### Vistos al cerrar la Fase 0
+- [x] Vida propia siempre visible: barra abajo, sobre la de Energía o Maná (la de Roblox solo aparecía al recibir daño)
+- [x] Nombres de enemigos sin taparse: solo el objetivo fijado muestra nombre y números; los demás, una barra fina
+- [x] HUD con menos texto: barras sin números (la vida se lee al pasar el mouse o con el dedo apretado), rastro de daño, bordes rojos con vida baja, espacios bloqueados ocultos, cargas del esquivar como puntos y definitiva que se enciende de abajo hacia arriba y brilla al llenarse
+- [x] Barras finas de enemigos solo si están en combate o heridos
+- [x] Esperas con un decimal en los últimos 3 s; cargas del esquivar en otro color mientras se recuperan
+
 ## Decisiones pendientes
 
-- [ ] ¿Presupuesto para herramientas de pago (ElevenLabs, Gemini) y para los encargos en Talent Hub? Lo define el dueño del proyecto: hace falta para encargar el modelado 3D
+- [ ] Modelado 3D y animación con IA en vez de encargos en Talent Hub (lo prefiere el dueño): falta elegir la herramienta (recomendada: Meshy o Tripo desde los conceptos 2D, limpieza en Blender e importación con Open Cloud) y su presupuesto
 
 ### Tomadas (27 nov 2026)
 
@@ -148,3 +171,8 @@ Estados: ⚪ Pendiente · 🟡 En curso · 🟢 Terminada
 | 27 nov 2026 | Color de cada clase en los datos (`Color` en `Data/Classes`) y aplicado: efectos de sus habilidades (Warrior carmesí, Paladín bronce, Ranger mostaza, Mage cobalto, Sacerdote blanco cálido, Brujo morado), arma provisoria (guarda carmesí, empuñadura mostaza, maza y escudo bronce y acero, orbe cobalto), borde de los espacios de habilidad en PC y móvil y franja en el selector de clase. Los anillos de suelo del Warrior pasan a acero porque el carmesí se confundía con las zonas rojas de peligro. Probado en Studio y en el simulador de iPhone 17 Pro |
 | 27 nov 2026 | Ojos del Goblin provisorio cambiados de rojo a ámbar en Neon. El `#FFB428` de la guía técnica se veía amarillo con Neon, igual que el del lobo; se comparó lado a lado en Studio y se aprobó `#E67814`. Guía técnica y ficha del mob actualizadas. Después, Araña y Ogro también pasan a ámbar: el verde ácido del veneno se veía amarillo con Neon en la Araña y el amarillo se deja para el lobo. Fichas de los tres actualizadas |
 | 27 nov 2026 | Decisiones pendientes tomadas según las recomendaciones del plan: Normal jugable solo, nivel 50 con recorte de reserva a 40, nombres actuales, low-poly estilizado, equipo chico con 3D y animación por encargo en Talent Hub, música con ElevenLabs Music, precios de referencia, beta temprana por invitación y español e inglés. Sigue abierto solo el presupuesto. El plan suma la sección Equipo y corrige la herramienta de concept art (Gemini) |
+| 27 nov 2026 | **Fase 0 terminada**: el dueño probó el combate y le gusta, así que se cumple el criterio. Empieza la Fase 1. Pasan a la Fase 1 los 3 conceptos en 3D y las teclas reasignables; siguen postergadas las pruebas en dispositivos reales. En una prueba rápida en Studio se vio que la vida propia no se ve a vida llena y que los nombres de enemigos juntos se tapan. El dueño quiere el modelado 3D y la animación con IA en vez de Talent Hub; falta elegir herramienta y presupuesto |
+| 27 nov 2026 | Barra de vida propia en el HUD (verde `#3CB45A`, rojo claro con 30% o menos, texto de 14 px) pegada encima de la de Energía o Maná, sin el texto "Energía 71" (a pedido del dueño), y sin la de Roblox. Los enemigos que no son el objetivo fijado llevan solo una barra fina, sin nombre ni números. En móvil la caja del HUD se achica a las barras para que queden abajo y lejos de los botones. Probado en Studio y en el simulador de iPhone 17 Pro |
+| 27 nov 2026 | HUD más limpio, a pedido del dueño (intuitivo, poco invasivo, sin tanto texto): vida de 12 px pegada a la barra de recurso de 6 px, sin "Energía 71" ni "100 / 100" (el número sale al pasar el mouse o con el dedo apretado); rastro de daño crema que baja después de 0,4 s; bordes de la pantalla en rojo claro que laten con 30% de vida o menos (`LowHealthController`); espacios 4 a 6 ocultos hasta desbloquearse y barras al ancho de la fila; cargas del esquivar como dos puntos celestes a la izquierda de las barras (en móvil, puntos blancos en el botón, sin número); definitiva con el ícono que se enciende de abajo hacia arriba y aro que late al llenarse, sin %; barras finas de enemigos solo en combate o heridos. Probado en Studio y en el simulador de iPhone 17 Pro; en móvil los bordes rojos quedaban recortados por la muesca y se corrigió |
+| 27 nov 2026 | Barra de recurso más fina que la de vida (12 y 6 px). Esperas: segundos enteros y, en los últimos 3 s, un decimal ("2.4"), sin número si solo corre la espera global; el texto queda en 20 px en PC y 22 px en móvil. Cargas del esquivar que se recuperan en otro color: gris acero en PC y azul oscuro en el botón de móvil. Probado en Studio y en el simulador de iPhone 17 Pro |
+| 27 nov 2026 | Se quitan las pruebas con jugadores reales hasta la beta temprana: el criterio de la Fase 1 pasa a 1 hora en Studio con varios clientes y bots que simulan 30 jugadores, y antes de producción se prueba con varios clientes en Studio en vez de con 10 jugadores |

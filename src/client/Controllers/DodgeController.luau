@@ -3,7 +3,7 @@
 -- Cancela la carga de un hechizo.
 -- El movimiento se hace aquí para que responda al instante; el servidor lleva
 -- las cargas con las mismas reglas (Shared/Charges) y da la invulnerabilidad.
--- También dibuja las cargas abajo al centro.
+-- También dibuja las cargas: dos puntos a la izquierda de la barra de vida.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -57,22 +57,27 @@ local function tryDodge()
 	FeedbackController.PlayLocal(DODGE.Cue)
 end
 
-local function buildHud(): { Frame }
-	local gui = Instance.new("ScreenGui")
-	gui.Name = "DodgeHud"
-	gui.ResetOnSpawn = false
+-- Puntos de las cargas, pegados a la izquierda de las barras de vida y recurso.
+local PIP_SIZE = 10
+local PIP_COLOR = Color3.fromRGB(140, 210, 255) -- azul cielo de esquivar (GUIA-VISUAL.md)
+-- Mientras se recupera, gris acero: se distingue de una carga lista.
+local PIP_CHARGING_COLOR = Color3.fromRGB(120, 130, 145)
 
+local function buildHud(bars: Frame): { Frame }
 	local row = Instance.new("Frame")
-	row.AnchorPoint = Vector2.new(0.5, 1)
-	row.Position = UDim2.new(0.5, 0, 1, -24)
-	row.Size = UDim2.fromOffset(DODGE.Charges * 34, 28)
+	row.Name = "DodgeCharges"
+	row.AnchorPoint = Vector2.new(1, 0)
+	row.Position = UDim2.fromOffset(-6, 0)
+	-- Alto de las dos barras juntas (vida y recurso), para centrar los puntos.
+	row.Size = UDim2.new(0, DODGE.Charges * (PIP_SIZE + 4), 1, 6)
 	row.BackgroundTransparency = 1
-	row.Parent = gui
+	row.Parent = bars
 
 	local layout = Instance.new("UIListLayout")
 	layout.FillDirection = Enum.FillDirection.Horizontal
-	layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-	layout.Padding = UDim.new(0, 6)
+	layout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+	layout.VerticalAlignment = Enum.VerticalAlignment.Center
+	layout.Padding = UDim.new(0, 4)
 	layout.Parent = row
 
 	local fills: { Frame } = {}
@@ -80,36 +85,23 @@ local function buildHud(): { Frame }
 		local pip = Instance.new("Frame")
 		pip.Name = `Charge{i}`
 		pip.LayoutOrder = i
-		pip.Size = UDim2.fromOffset(28, 28)
+		pip.Size = UDim2.fromOffset(PIP_SIZE, PIP_SIZE)
 		pip.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
 		pip.BackgroundTransparency = 0.2
-		pip.ClipsDescendants = true
 		pip.Parent = row
 		Instance.new("UICorner", pip).CornerRadius = UDim.new(0.5, 0)
 
-		-- El relleno sube desde abajo mientras la carga se recupera.
+		-- El relleno crece desde el centro mientras la carga se recupera.
 		local fill = Instance.new("Frame")
-		fill.AnchorPoint = Vector2.new(0, 1)
-		fill.Position = UDim2.fromScale(0, 1)
+		fill.AnchorPoint = Vector2.new(0.5, 0.5)
+		fill.Position = UDim2.fromScale(0.5, 0.5)
 		fill.Size = UDim2.fromScale(1, 1)
-		fill.BackgroundColor3 = Color3.fromRGB(90, 190, 255)
+		fill.BackgroundColor3 = PIP_COLOR
 		fill.BorderSizePixel = 0
 		fill.Parent = pip
+		Instance.new("UICorner", fill).CornerRadius = UDim.new(0.5, 0)
 		fills[i] = fill
-
-		local label = Instance.new("TextLabel")
-		label.BackgroundTransparency = 1
-		label.Size = UDim2.fromScale(1, 1)
-		label.Font = Enum.Font.GothamBold
-		label.TextSize = 13
-		label.TextColor3 = Color3.new(1, 1, 1)
-		label.TextStrokeTransparency = 0.5
-		label.Text = "Q"
-		label.ZIndex = 2
-		label.Parent = pip
 	end
-
-	gui.Parent = player:WaitForChild("PlayerGui")
 	return fills
 end
 
@@ -147,13 +139,19 @@ function DodgeController:Start()
 	if UserInputService.TouchEnabled then
 		return
 	end
-	local fills = buildHud()
+	local bars = AbilityController.Bars()
+	while not bars do
+		task.wait()
+		bars = AbilityController.Bars()
+	end
+	local fills = buildHud(bars)
 	RunService.RenderStepped:Connect(function()
 		local current = meter:Get(os.clock())
 		for i, fill in fills do
 			local amount = math.clamp(current - (i - 1), 0, 1)
-			fill.Size = UDim2.fromScale(1, amount)
-			fill.BackgroundTransparency = if amount >= 1 then 0 else 0.55
+			fill.Size = UDim2.fromScale(amount, amount)
+			fill.BackgroundColor3 = if amount >= 1 then PIP_COLOR else PIP_CHARGING_COLOR
+			fill.BackgroundTransparency = 0
 		end
 	end)
 end

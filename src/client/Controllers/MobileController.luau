@@ -41,6 +41,10 @@ local COLORS = {
 	Utility = Color3.fromRGB(45, 45, 55),
 }
 local ULTIMATE_COLOR = Color3.fromRGB(255, 120, 40)
+-- Blanco: el botón de esquivar ya es azul y el celeste no se distinguiría.
+local DODGE_PIP_COLOR = Color3.new(1, 1, 1)
+-- Carga que se está recuperando: azul oscuro, se distingue de la lista.
+local DODGE_PIP_CHARGING = Color3.fromRGB(20, 45, 80)
 
 local player = Players.LocalPlayer
 
@@ -306,9 +310,52 @@ local function build()
 
 	local dodge = makeButton(holder, "Dodge", arc(8, OUTER_RADIUS), OUTER_SIZE, COLORS.Dodge)
 	dodge.button.Activated:Connect(DodgeController.Dodge)
+	dodge.label.Text = "Esquivar"
+	dodge.label.Size = UDim2.fromScale(0.86, 0.4)
+	-- Cargas: puntos abajo dentro del botón, sin número.
+	local dodgePips: { Frame } = {}
+	local pipRow = Instance.new("Frame")
+	pipRow.AnchorPoint = Vector2.new(0.5, 1)
+	pipRow.Position = UDim2.new(0.5, 0, 1, -6)
+	pipRow.Size = UDim2.fromOffset(24, 8)
+	pipRow.BackgroundTransparency = 1
+	pipRow.Parent = dodge.button
+	local pipLayout = Instance.new("UIListLayout")
+	pipLayout.FillDirection = Enum.FillDirection.Horizontal
+	pipLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	pipLayout.Padding = UDim.new(0, 4)
+	pipLayout.Parent = pipRow
+	for i = 1, 2 do
+		local pip = Instance.new("Frame")
+		pip.LayoutOrder = i
+		pip.Size = UDim2.fromOffset(8, 8)
+		pip.BackgroundColor3 = DODGE_PIP_COLOR
+		pip.Parent = pipRow
+		Instance.new("UICorner", pip).CornerRadius = UDim.new(0.5, 0)
+		dodgePips[i] = pip
+	end
 
 	local ultimate = makeButton(holder, "Ultimate", arc(42, OUTER_RADIUS), OUTER_SIZE + 6, COLORS.Ultimate)
 	ultimate.stroke.Color = ULTIMATE_COLOR
+	-- Copia encendida del ícono, recortada desde abajo según la carga (sin %).
+	local ultimateSize = OUTER_SIZE + 6
+	local litClip = Instance.new("Frame")
+	litClip.AnchorPoint = Vector2.new(0, 1)
+	litClip.Position = UDim2.fromScale(0, 1)
+	litClip.Size = UDim2.fromScale(1, 0)
+	litClip.BackgroundTransparency = 1
+	litClip.ClipsDescendants = true
+	litClip.ZIndex = 1
+	litClip.Parent = ultimate.button
+	local litIcon = Instance.new("ImageLabel")
+	litIcon.AnchorPoint = Vector2.new(0, 1)
+	litIcon.Position = UDim2.fromScale(0, 1)
+	litIcon.Size = UDim2.fromOffset(ultimateSize, ultimateSize)
+	litIcon.BackgroundTransparency = 1
+	litIcon.ScaleType = Enum.ScaleType.Crop
+	litIcon.ZIndex = 1
+	litIcon.Parent = litClip
+	Instance.new("UICorner", litIcon).CornerRadius = UDim.new(0.5, 0)
 	onTapOrHold(ultimate, bubble, nameOf("Ultimate"), function()
 		AbilityController.Use("Ultimate")
 	end)
@@ -334,7 +381,7 @@ local function build()
 				local classId = player:GetAttribute("Class")
 				local class = if typeof(classId) == "string" then Classes[classId] else nil
 				button.stroke.Color = if class then class.Color else Color3.new(1, 1, 1)
-				button.timer.Text = if info.remaining >= 1 then tostring(math.ceil(info.remaining)) else ""
+				button.timer.Text = AbilityController.CooldownText(info)
 				local ready = info.remaining <= 0 and info.usable
 				-- Apagado en espera o sin recurso, igual que la barra de PC.
 				button.icon.ImageTransparency = if ready then 0 else 0.55
@@ -345,20 +392,23 @@ local function build()
 		end
 
 		local charges = DodgeController.Charges()
-		dodge.label.Text = `Esquivar {math.floor(charges)}`
+		for i, pip in dodgePips do
+			local amount = math.clamp(charges - (i - 1), 0, 1)
+			pip.BackgroundColor3 = if amount >= 1 then DODGE_PIP_COLOR else DODGE_PIP_CHARGING
+			pip.BackgroundTransparency = 0
+		end
 		dodge.button.BackgroundTransparency = if charges >= 1 then 0.15 else 0.6
 
 		local info = AbilityController.Info("Ultimate")
 		ultimate.button.Visible = info ~= nil
 		if info and info.charge then
 			local full = info.charge >= 1
-			-- Cargando: el % encima del ícono apagado. Llena: solo el ícono (o el nombre).
-			local percent = `{math.floor(info.charge * 100)}%`
+			-- Cargando: el ícono apagado y su copia encendida sube con la carga.
 			setIcon(ultimate, info.icon, info.name)
-			ultimate.icon.ImageTransparency = if full then 0 else 0.6
-			if not full then
-				ultimate.label.Text = percent
-			end
+			ultimate.icon.ImageTransparency = 0.7
+			litClip.Size = UDim2.fromScale(1, info.charge)
+			litIcon.Image = info.icon or ""
+			litIcon.Visible = info.icon ~= nil
 			ultimate.button.BackgroundTransparency = if full then 0.1 else 0.55
 			-- Llena: el borde late para avisar que se puede usar.
 			ultimate.stroke.Thickness = if full then 3 + math.sin(os.clock() * 6) else 2
